@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 5 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wc8febbd32ed8c.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>5<a href="Wc7a8aa3fbdd3f.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title">Grammar for Pascal type definitions</div>
+		
+			<div class="exercise-description">A Pascal program is structured in blocks. A block consists of several sections,
+one of which is the type declaration section. In this section, the user can
+define new types, ranging from just alias of already existing types, to complex
+data structures.
+
+<div class="dltxfy-paragraph"><br/></div>The set of tokens is {<span class="dltxfy-verbspan">;</span>, <span class="dltxfy-verbspan">:</span>, <span class="dltxfy-verbspan">..</span>, <span class="dltxfy-verbspan">,</span>, <span class="dltxfy-verbspan">^</span>,
+<span class="dltxfy-verbspan">=</span>, <span class="dltxfy-verbspan">(</span>, <span class="dltxfy-verbspan">)</span>, <span class="dltxfy-verbspan">[</span>, <span class="dltxfy-verbspan">]</span>, <span class="dltxfy-verbspan">IDENT</span>, <span class="dltxfy-verbspan">NATURAL_LIT</span>,
+<span class="dltxfy-verbspan">REAL_LIT</span>, <span class="dltxfy-verbspan">CHAR_LIT</span>, <span class="dltxfy-verbspan">STRING_LIT</span>, <span class="dltxfy-verbspan">of</span>, <span class="dltxfy-verbspan">end</span>,
+<span class="dltxfy-verbspan">type</span>, <span class="dltxfy-verbspan">packed</span>, <span class="dltxfy-verbspan">array</span>, <span class="dltxfy-verbspan">set</span>, <span class="dltxfy-verbspan">file</span>,
+<span class="dltxfy-verbspan">record</span>, <span class="dltxfy-verbspan">case</span>}.
+Most of the tokens are keywords or special symbols, except for the
+uppercase-named ones, whose associated regular languages are:
+<ul>
+<li> The token <span class="dltxfy-verbspan">IDENT</span> stands for any identifier, i.e., a non-empty
+sequence of lowercase alphanumeric characters and underscore, not starting by a
+digit. We do not consider uppercase letters, since Pascal is case-insensitive.
+Since the user can define new types, type names are considered identifiers,
+even the basic ones such as &#x201C;integer&#x201D; or &#x201C;char&#x201D;.
+</li><li> The token <span class="dltxfy-verbspan">NATURAL_LIT</span> stands for unsigned integer numeric
+literals. Such literals can be represented in decimal (a non-empty set of
+decimal digits), in binary (a symbol <span class="dltxfy-verbspan">%</span> followed by a non-empty sequence
+of binary digits, i.e., <span class="dltxfy-verbspan">0</span>, <span class="dltxfy-verbspan">1</span>), or hexadecimal (a symbol <span class="dltxfy-verbspan">$</span>
+followed by a non-empty sequence of hexadecimal digits, i.e., <span class="dltxfy-verbspan">0</span>,
+<span class="dltxfy-verbspan">1</span>, <span class="dltxfy-verbspan">2</span>, <span class="dltxfy-verbspan">3</span>, <span class="dltxfy-verbspan">4</span>, <span class="dltxfy-verbspan">5</span>, <span class="dltxfy-verbspan">6</span>, <span class="dltxfy-verbspan">7</span>, <span class="dltxfy-verbspan">8</span>,
+<span class="dltxfy-verbspan">9</span>, <span class="dltxfy-verbspan">a</span>, <span class="dltxfy-verbspan">b</span>, <span class="dltxfy-verbspan">c</span>, <span class="dltxfy-verbspan">d</span>, <span class="dltxfy-verbspan">e</span>, <span class="dltxfy-verbspan">f</span>).
+</li><li> The token <span class="dltxfy-verbspan">REAL_LIT</span> refers to real numeric literals. Such literals
+either are an integer number (i.e., a non-empty sequence of decimal digits)
+followed by an exponent part, or they are a fractional number (i.e., a
+non-empty sequence of decimal digits with a dot <span class="dltxfy-verbspan">.</span>, where neither the
+integral nor the fractional part is empty) optionally followed by an exponent
+part. The exponent starts with <span class="dltxfy-verbspan">e</span>, then there is an optional sign
+(<span class="dltxfy-verbspan">+</span>, <span class="dltxfy-verbspan">-</span>), and finally a non-empty sequence of decimal digits.
+</li><li> The token <span class="dltxfy-verbspan">CHAR_LIT</span> represents a single character literal. They
+are delimited by single quotes (<span class="dltxfy-verbspan">&#39;</span>) or double quotes (<span class="dltxfy-verbspan">&#34;</span>), and
+contain a single character in between. To represent the single quote character
+it may be done like <span class="dltxfy-verbspan">&#39;&#39;&#39;&#39;</span> (the external single quotes are the delimiters)
+or like <span class="dltxfy-verbspan">&#34;&#39;&#34;</span> (the double quotes are the delimiters); and to represent the
+double quote charater it may be done like <span class="dltxfy-verbspan">&#39;&#34;&#39;</span> (the single quotes are the
+delimiters) or like <span class="dltxfy-verbspan">&#34;&#34;&#34;&#34;</span> (the external double quotes are the
+delimiters). Character literals can also be introduced without the delimiting
+single/double quotes. In this case, the character is represented with its
+numeric codepoint as follows: the number sign (<span class="dltxfy-verbspan">#</span>) followed by a
+non-empty sequence of decimal digits.
+</li><li> The token <span class="dltxfy-verbspan">STRING_LIT</span> is similar to the <span class="dltxfy-verbspan">CHAR_LIT</span>, except
+that no codepoints can be introduced with <span class="dltxfy-verbspan">#</span>, and that between the
+delimiters they may be zero or more than one characters instead of exactly
+one (as was the case in character literals). As before, when the delimiters are
+single quotes, a single quote is represented by the sequence <span class="dltxfy-verbspan">&#39;&#39;</span> (i.e.,
+two single quotes), and when the delimiters are double quotes, a double quote
+is represented by the sequence <span class="dltxfy-verbspan">&#34;&#34;</span> (i.e., two double quotes).
+</li></ul>
+
+<div class="dltxfy-paragraph"><br/></div>The type declaration section starts with the keyword <span class="dltxfy-verbspan">type</span>, followed by
+one or more type definitions. Each type definition consists of an identifier,
+the token &#x201C;<span class="dltxfy-verbspan">=</span>&#x201D;, a <em>type denoter</em>, and a semicolon.
+
+<div class="dltxfy-paragraph"><br/></div>Type denoters can be grouped in three categories:
+<ul>
+<li> <b>ordinal types</b>: types that are countable and ordered. They can be
+classified in two kinds:
+<ul>
+<li> base types, such as <span class="dltxfy-verbspan">integer</span>, <span class="dltxfy-verbspan">real</span>, <span class="dltxfy-verbspan">bool</span> or
+<span class="dltxfy-verbspan">char</span>. They are just identifier.
+</li><li> user-defined types. They include the following possibilities:
+<ul>
+<li> enumerate types, consisting of one or more elements, each of which is an
+identifier. For instance, <span class="dltxfy-verbspan">(dog,cat,rat,pig)</span> and
+<span class="dltxfy-verbspan">(worker,student,unemployed,retired)</span> are enumerate types.
+</li><li> subrange types, which denote a range of values by specifying the lowest
+and highest value. For instance, <span class="dltxfy-verbspan">1..5</span>, <span class="dltxfy-verbspan">&#39;0&#39;..&#39;9&#39;</span>, and
+<span class="dltxfy-verbspan">dog..rat</span> are subrange types. The specified values can be any constant,
+i.e., a literal value or an identifier (as in the case of <span class="dltxfy-verbspan">dog</span> and
+<span class="dltxfy-verbspan">rat</span>). We don&#x2019;t need to check that the two values have the same type,
+because it will be done in the semantic analysis.
+</li></ul>
+</li></ul>
+</li><li> <b>structured types</b>: types composed of other types. They can be
+packed, in which case they are preceeded by the keyword <span class="dltxfy-verbspan">packed</span>. There
+are four types:
+<ul>
+<li>  array types. Unlike most languages, they can be indexed by any ordinal
+type, and not just integers. Also, they can contain any type. Examples of
+arrays are <span class="dltxfy-verbspan">array [20] of char</span>, <span class="dltxfy-verbspan"> array[1..10] of integer</span>, and even
+<span class="dltxfy-verbspan">array[(straight, flush, full, poker)] of real</span>, as enumerations are
+ordinal types. If the range expression (the expression inside brackets) is just
+a number, it is assumed that the range goes from <span title="1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> to that number. Arrays can
+contain nested arrays, as in <span class="dltxfy-verbspan">array [10] of array [dog..rat] of real</span>. In
+that case, there is an alternative notation that consists of placing the index
+types of all the nested arrays separated by commas inside a single set of
+brackets. Hence, the previous example is equivalent to <span class="dltxfy-verbspan">array [10,dog..rat] of real</span>.
+</li><li> record types, consisting of a list of zero or more field declarations.
+Fields are identifiers and can be of <em>any</em> type. If two fields have the
+same type, they can be declared together. For instance, <span class="dltxfy-verbspan">length : integer</span>
+and <span class="dltxfy-verbspan">name, first_name : string</span> are field declarations. Furthermore, a
+record can have an optional final element called the variant part. It can be
+used when we want to create a record type that has fields for different kinds
+of data, but we know that we will never need to use all of the fields in a
+single record instance. It has the following structure:
+<pre>
+case variant_selector of
+     constant: (field list)
+     constant: (field list)
+     ...
+</pre>
+where the <em>variant selector</em> is a type identifier, and the constants are
+values of that type (this is checked by the semantic analysis). The variant
+selector might have what is called a tag (an identifier), as in <span class="dltxfy-verbspan">tag : type_id</span>.
+It serves to consult the value of the variant selector (otherwise, it is
+invisible to the user). Each case consists of one or more constant values,
+separated by commas, and the list of fields that the record should have when
+the value of the aforementioned type is one of these constants. There must be
+at least one case. The list of fields of each case is just like the list of
+fields of a record, with an optional variant part at the end.
+
+<div class="dltxfy-paragraph"><br/></div>Field declarations (and the variant section, when given), and cases inside the
+variant section must be separed by semicolons, with an optional semicolon at
+the end. The record declaration ends with the keyword <span class="dltxfy-verbspan">end</span>. The following
+are examples of record declarations:
+<pre>
+   Employee = record
+     Name : string;
+     Phone : string;
+     Wage : real;
+   end;
+
+  (* Point that can be represented in cartesian or polar
+  coordinates *)
+  Point = record
+       case boolean of
+          true : (r : real;
+                  angle : real);
+          false : (x : real;
+                   y : real;);
+  end;
+
+  (* Point that can be represented in cartesian or polar
+  coordinates depending on the value of &#39;polarCoords&#39; *)
+  Point2 = record
+       case polarCoords : boolean of
+          true : (r, angle : real);
+          false : (x, y : real;);
+  end;
+</pre>
+</li><li> set types, contain values of an ordinal type. For instance, <span class="dltxfy-verbspan">set of integer</span>,
+<span class="dltxfy-verbspan">set of 1..10</span>, and <span class="dltxfy-verbspan">set of myEnum</span> are valid set types.
+</li><li> file types, are used to read and write from files. For instance:
+<pre>
+ file1 = file of integer; (* Allows to write integers into the file *)
+ file2 = file of String; (* Allows to write integers into the file *)
+</pre>
+The type of the file can be any type denoter.
+</li></ul>
+</li><li> <b>pointer type</b>: they consist of a type identifier, preceeded by
+the token <span class="dltxfy-verbspan">^</span> to denote that they are a pointer.
+</li></ul>
+
+<div class="dltxfy-paragraph"><br/></div>Remarks about AST construction:
+<ul>
+<li> The list of type definitions must have the token <span class="dltxfy-verbspan">type</span> as root,
+with one child per definition.
+</li><li> Each type definition must have the token <span class="dltxfy-verbspan">=</span> as root, with the new
+type&#x2019;s identifier as first child and the type denoter as second child.
+</li><li> A subrange type must have the token <span class="dltxfy-verbspan">..</span> as root, with the constants
+as children.
+</li><li> An enumerate type must have a special node named <span class="dltxfy-verbspan">enumerated_type</span>
+as root, with the identifiers as children.
+</li><li> A packed structured type must have the token <span class="dltxfy-verbspan">packed</span> as root, with
+the rest of the structured type&#x2019;s tree as only child.
+</li><li> An array type must have the token <span class="dltxfy-verbspan">array</span> as root, with the list of
+index types as first child and the type denoter of the array elements as second
+child. In turn, the list of index types must have a special node named
+<span class="dltxfy-verbspan">index_type_list</span> as root, with the types as children.
+</li><li> A record type must have the token <span class="dltxfy-verbspan">record</span> as root, with the list of
+fields as children. The list of fields must have a special node named
+<span class="dltxfy-verbspan">field_list</span> as root, with one child per field declaration. If there is a
+variant part, it must be added as last child of <span class="dltxfy-verbspan">field_list</span>. A field
+declaration must have the token <span class="dltxfy-verbspan">:</span> as root, with the list of field
+identifiers as first child and the type denoter as second child. In turn, the
+list of type identifiers must have a special node named <span class="dltxfy-verbspan">id_list</span> as root,
+with the identifiers as children. The variant part must have the token
+<span class="dltxfy-verbspan">case</span> as root, with the variant selector as first child and the list of
+variants as second child. In case the variant selector has a tag, it must have
+the token <span class="dltxfy-verbspan">:</span> as root, with the tag as first child and the type identifier
+as second child. The list of variants must have a special node named
+<span class="dltxfy-verbspan">variant_list</span> as root, with the variants as children. Each variant must
+have the token <span class="dltxfy-verbspan">:</span> as root, with the list of constants as first child and
+the list of fields as second child. The list of constants must have a special
+node named <span class="dltxfy-verbspan">constant_list</span> as root, with the constants as children. The
+list of fields must have a special node named <span class="dltxfy-verbspan">field_list</span> as root, with
+one child per field declaration.
+</li><li> A set type must have the token <span class="dltxfy-verbspan">set</span> as root, with the ordinal type
+as only child.
+</li><li> A file type must have the token <span class="dltxfy-verbspan">file</span> as root, with the type
+denoter as only child.
+</li><li> A pointer type must have the token <span class="dltxfy-verbspan">^</span> as root, with the pointed
+type identifier as only child.
+</li></ul></div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Nil Mamano
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/antlrsyn.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wc4e836758d0ba.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+// Write your syntactic and lexical descriptions here...</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "antlrsyn",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

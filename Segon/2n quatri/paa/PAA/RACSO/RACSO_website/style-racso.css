@@ -1,0 +1,475 @@
+.stats {
+	margin: 0px auto;
+	max-width: 16em;
+	line-height: 1.3em;
+}
+.stats-group {
+	margin-left: 2em;
+}
+
+.global-stats {
+	text-align: center;
+}
+.global-stats-filter {
+	width: 5em;
+}
+.global-stats-chart {
+	padding-left: 0;
+	padding-right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+.global-stats-chart-div {
+	margin: 20px;
+}
+.global-stats-chart-smalldiv-table {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+}
+.global-stats-chart-smalldiv-row {
+	display: table-row;
+}
+.global-stats-chart-smalldiv-cell {
+	width: 50%;
+	display: table-cell;
+}
+
+.group-list {
+	margin: 20px 20px;
+	line-height: 1.3em;
+}
+.group-list-edit-group {
+	margin-left: 2em;
+}
+.group-create-help {
+	max-width: 50em;
+}
+
+.user-categorying {
+	margin: 20px 20px;
+	line-height: 1.3em;
+}
+.user-categorying-edit-group {
+	margin-left: 2em;
+}
+.user-categorying-help {
+	max-width: 50em;
+}
+.user-categorying-action {
+	margin-right: 0.5em;
+}
+
+.exercise-edit-group {
+	margin-left: 2em;
+}
+.delatexifying-exercise-title {
+	min-width: 50em;
+}
+.delatexifying-exercise-description {
+	width: 50em;
+}
+.delatexify-warnings {
+	color: red;
+	font-size: 80%;
+}
+.exercise-list-edit-group {
+	margin-left: 2em;
+}
+.big-fat-button {
+	margin: 0 1em;
+	font-size: 140%;
+}
+.exam-edit-group {
+	margin-left: 2em;
+}
+
+.exercise-link {
+	text-decoration: none;
+}
+.exercise {
+	margin: 20px 20px;
+	line-height: 1.3em;
+}
+.exercise-intro {
+	display: inline;
+}
+.exercise-title {
+	display: inline;
+	font-size: 1.4em;
+}
+.exercise-action {
+	margin-top: 1em;
+	margin-right: 1em;
+}
+.exercise-details {
+	font-size: 80%;
+	margin: 0.5em 0px;
+}
+.exercise-detail {
+	font-style: italic;
+}
+.submission-details {
+	white-space: nowrap;
+}
+.submission-detail {
+	font-weight: bold;
+}
+.exercise-rawoutput {
+	line-height: 1em;
+	margin-left: 2em;
+}
+.exercise-judge {
+	font-family: monospace;
+}
+.exercise-accepting-verdict {
+	color: green;
+	font-family: monospace;
+	font-weight: bold;
+}
+.exercise-rejecting-verdict {
+	color: #f00;
+	font-family: monospace;
+	font-weight: bold;
+}
+.exercise-accepting-verdictlong {
+	color: green;
+}
+.exercise-rejecting-verdictlong {
+	color: #f00;
+}
+.exercise-no-submissions {
+	margin-top: 20px;
+}
+.yourself-user {
+	font-weight: bold;
+}
+.guest-user {
+	font-weight: bold;
+	font-style: italic;
+}
+.exercise-list {
+	margin: 20px 20px;
+	line-height: 1.3em;
+}
+.exercise-group-description {
+	max-width: 700px;
+}
+.exercise-format {
+	padding-left: 0.25em;
+	font-size: 65%;
+}
+.exercise-list-description {
+	max-width: 700px;
+}
+.exercise-block {
+	margin-bottom: 0.5em;
+}
+.exercise-list-block {
+	margin-bottom: 0.5em;
+	padding-left: 1em;
+	border-left: 3px solid rgba(0, 0, 0, 0);
+}
+.exercise-list-block:hover {
+	border-left: 3px solid #5c5c5c;
+}
+.exercise-list-title {
+	display: block;
+	margin: 0.5em 0px;
+}
+
+.exercise-description {
+	max-width: 50em;
+	margin: 1em 0px;
+}
+.accepted-exercise {
+	color: green;
+	font-family: monospace;
+	font-weight: bold;
+}
+.rejected-exercise {
+	color: #f00;
+	font-family: monospace;
+	font-weight: bold;
+}
+.untried-exercise {
+	font-family: monospace;
+}
+.edit-exercise {
+	margin-right: 0.5em;
+}
+.single-char-button {
+	margin-right: 0.5em;
+}
+.grading-exam-exercise {
+	margin-right: 0.5em;
+	width: 4em;
+}
+.timing-exam {
+	width: 4em;
+}
+.exercise-budgets {
+	width: 6em;
+}
+
+.edit-exam {
+	margin-right: 0.5em;
+}
+
+.exercise-id {
+	font-family: monospace;
+	font-size: 90%;
+	white-space: nowrap;
+}
+.exercise-list-new-exam {
+	padding-left: 1em;
+}
+
+.topCell {
+	vertical-align: top;
+}
+.separatedCell {
+	padding-left: 1em;
+}
+.nobreakCell {
+	white-space: nowrap;
+}
+
+.exam-link {
+	text-decoration: none;
+}
+.exam-link:hover {
+	text-decoration: underline;
+}
+.exam-list {
+	margin: 20px 20px;
+	line-height: 1.3em;
+}
+.exam-description {
+	max-width: 700px;
+	margin-bottom: 20px;
+}
+.exam-status {
+	font-size: 75%;
+	font-style: italic;
+}
+.exam-block {
+	margin-bottom: 0.5em;
+}
+.exam {
+	margin: 20px 20px;
+	line-height: 1.3em;
+}
+.exam-clock {
+	font-weight: bold;
+}
+.exam-grade {
+	font-weight: bold;
+}
+.exam-exercise-grading {
+	white-space: nowrap;
+}
+.exam-correct-exercise {
+	color: green;
+	font-weight: bold;
+}
+.exam-incorrect-exercise {
+	color: #f00;
+	font-weight: bold;
+}
+.exam-warnings {
+	color: red;
+}
+.exam-table {
+	border: 3px solid black;
+	border-collapse: collapse;
+}
+.exam-table th {
+	border: 1px solid black;
+	border-bottom: 3px solid black;
+	font-family: monospace;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+.exam-table th:first-child + th {
+	border-left: 3px solid black;
+	border-right: 3px solid black;
+}
+.exam-table td {
+	border: 1px solid black;
+	font-family: monospace;
+	text-align: center;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+.exam-table td:first-child {
+	text-align: left;
+}
+.exam-table td:first-child + td {
+	border-left: 3px solid black;
+	border-right: 3px solid black;
+}
+.exam-table-student-user {
+	white-space: nowrap;
+}
+.exam-table-student-free-ip-user {
+	white-space: nowrap;
+	font-weight: bold;
+}
+.exam-table-non-student-user {
+	white-space: nowrap;
+	font-weight: bold;
+	text-decoration: underline;
+}
+.exam-table-accepted-entry {
+	background-color: #0a0;
+}
+.exam-table-nonaccepted-entry {
+	background-color: #f00;
+}
+.exam-table-untried-entry {
+	white-space: nowrap;
+}
+.exam-table-entry-text {
+	white-space: nowrap;
+	color: #000;
+	text-decoration: none;
+}
+.exam-table-overall {
+	font-weight: bold;
+	text-align: right !important;
+	border: 3px solid black !important;
+}
+.exam-stats {
+	text-align: center;
+}
+.exam-table-overall-mean {
+	border-top: 3px solid black !important;
+	white-space: nowrap;
+}
+.exam-table-overall-entry {
+	border-top: 3px solid black !important;
+	border-right: 1px solid black !important;
+	min-width: 4em;
+}
+.comment-date {
+	display: block;
+	font-family: monospace;
+	font-size: 80%;
+}
+.comment-options {
+	margin-left: 18px;
+}
+.comment-contents {
+	display: block;
+	min-width: 40em;
+	margin-top: 8px;
+	margin-bottom: 16px;
+	margin-left: 18px;
+	padding: 11px;
+	border-radius: 6px;
+	box-shadow: 0px 1px 10px 1px #777;
+}
+.comment-contents:hover {
+	box-shadow: 0px 1px 10px 1px #05d;
+}
+
+.snoopying {
+	margin: 20px 20px;
+	line-height: 1.3em;
+}
+.snoopy {
+	border-right: 3px solid black;
+	border-bottom: 3px solid black;
+	border-collapse: collapse;
+}
+.snoopy th {
+	border-top: 3px solid black;
+	border-left: 1px solid black;
+	border-bottom: 3px solid black;
+}
+.snoopy th:first-child {
+	border-top: none;
+	border-left: none;
+	border-right: 3px solid black;
+}
+.snoopy th .name {
+	display: inline-block;
+	word-wrap: break-word;
+	width: 5em;
+	font-family: monospace;
+	font-weight: normal;
+}
+.snoopy td {
+	border: 1px solid black;
+	text-align: center;
+	font-family: monospace;
+}
+.snoopy td:first-child {
+	border-left: 3px solid black;
+	border-right: 3px solid black;
+	min-width: 2em;
+}
+.snoopy .group {
+	text-align: left !important;
+	color: white;
+	background-color: black;
+	padding-left: 1em;
+}
+.snoopy .accepted-entry {
+	background-color: #0a0;
+}
+.snoopy .nonaccepted-entry {
+	background-color: #f00;
+}
+.snoopy .untried-entry {
+	white-space: nowrap;
+}
+.snoopy .entry-text {
+	white-space: nowrap;
+	color: #000;
+	text-decoration: none;
+}
+.snoopy .accepting-verdicts {
+	color: green;
+	font-weight: bold;
+}
+.snoopy .rejecting-verdicts {
+	color: #f00;
+	font-weight: bold;
+}
+.gsnoopy {
+	border: 3px solid black;
+	border-collapse: collapse;
+}
+.gsnoopy th {
+	border-left: 1px solid black;
+	border-bottom: 3px solid black;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+.gsnoopy td {
+	border: 1px solid black;
+	text-align: center;
+	font-family: monospace;
+	padding-left: 10px;
+	padding-right: 10px;
+	white-space: nowrap;
+}
+.gsnoopy .accepting-verdict {
+	color: green;
+}
+.gsnoopy .rejecting-verdict {
+	color: #f00;
+}
+.gsnoopying {
+	position: relative;
+	display: inline-block;
+}
+.gsnoopy-navigation-previous {
+}
+.gsnoopy-navigation-next {
+	position: absolute;
+	right: 0px;
+}

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 1 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				1<a href="Wc474ab9c73db1.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title">Simplified grammar for C expressions</div>
+		
+			<div class="exercise-description">The table below shows the list of <span class="dltxfy-verbspan">C</span> operators, sorted by priority (from highest to lowest).
+
+<div class="dltxfy-paragraph"><br/></div><center>
+<table class="dltxfy-table"><tbody><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-2bbars">
+Category       </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-2bbars"> Operator                                               </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-2bbars"> Associativity </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+
+
+Postfix unary  </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">() [] -&gt; . ++ --</span>                                </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Prefix unary   </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan"> + - ! ~ ++ -- (</span><em>type</em><span class="dltxfy-verbspan">) * &amp; sizeof </span> </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Right </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Multiplicative </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">* / %</span>                                           </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Additive       </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">+ -</span>                                             </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Shift          </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">&lt;&lt; &gt;&gt;</span>                                           </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Relational     </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">&lt; &lt;= &gt; &gt;=</span>                                       </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Equality       </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">== !=</span>                                           </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Bitwise AND    </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">&amp;</span>                                               </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Bitwise XOR    </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">^</span>                                               </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Bitwise OR     </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">|</span>                                               </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Logical AND    </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">&amp;&amp;</span>                                              </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Logical OR     </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">||</span>                                              </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Conditional    </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">?:</span>                                              </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Right </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Assignment     </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan"> = += -= *= /= %= &gt;&gt;= &lt;&lt;= &amp;= ^= |= </span>             </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Right </td></tr><tr><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars">
+Comma          </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-1rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> <span class="dltxfy-verbspan">,</span>                                               </td><td class="dltxfy-cell-calign dltxfy-cell-0lbars dltxfy-cell-0rbars dltxfy-cell-0tbars dltxfy-cell-0bbars"> Left </td></tr></tbody></table>
+</center>
+
+<div class="dltxfy-paragraph"><br/></div>The grammar of <span class="dltxfy-verbspan">C</span> expressions is not LL(1) because it has some conflicts:
+the cast operator (<span class="dltxfy-verbspan">(</span><em>type</em><span class="dltxfy-verbspan">) expr</span>) shares the first token
+&#x201C;<span class="dltxfy-verbspan">(</span>&#x201D; with a parenthesized expression. Moreover, the size-of operator
+(<span class="dltxfy-verbspan">sizeof</span>), can be applied to an expression (possibly starting with
+parenthesis) and to a type such as <span class="dltxfy-verbspan">int</span>, enclosed in parentheses. Thus,
+both cases share the first token &#x201C;<span class="dltxfy-verbspan">(</span>&#x201D;. We resolve these issues by
+disregarding the cast and size-of operators.
+
+<div class="dltxfy-paragraph"><br/></div>The set of tokens is <span title="\{"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo></mrow><annotation encoding="application/x-tex">\{</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span></span></span></span></span><span class="dltxfy-verbspan">IDENT</span>, <span class="dltxfy-verbspan">NATURAL_LIT</span>, <span class="dltxfy-verbspan">FLOAT_LIT</span>,
+<span class="dltxfy-verbspan">CHAR_LIT</span>, <span class="dltxfy-verbspan">STRING_LIT</span>, <span class="dltxfy-verbspan">(</span>, <span class="dltxfy-verbspan">)</span>, <span class="dltxfy-verbspan">[</span>, <span class="dltxfy-verbspan">]</span>,
+<span class="dltxfy-verbspan">-&gt;</span>, <span class="dltxfy-verbspan">.</span>, <span class="dltxfy-verbspan">++</span>, <span class="dltxfy-verbspan">--</span>, <span class="dltxfy-verbspan">+</span>, <span class="dltxfy-verbspan">-</span>, <span class="dltxfy-verbspan">!</span>,
+<span class="dltxfy-verbspan">~</span>, <span class="dltxfy-verbspan">*</span>, <span class="dltxfy-verbspan">&amp;</span>, <span class="dltxfy-verbspan">/</span>, <span class="dltxfy-verbspan">%</span>, <span class="dltxfy-verbspan">&lt;&lt;</span>, <span class="dltxfy-verbspan">&gt;&gt;</span>,
+<span class="dltxfy-verbspan">&lt;</span>, <span class="dltxfy-verbspan">&lt;=</span>, <span class="dltxfy-verbspan">&gt;</span>, <span class="dltxfy-verbspan">&gt;=</span>, <span class="dltxfy-verbspan">==</span>, <span class="dltxfy-verbspan">!=</span>, <span class="dltxfy-verbspan">^</span>,
+<span class="dltxfy-verbspan">|</span>, <span class="dltxfy-verbspan">&amp;&amp;</span>, <span class="dltxfy-verbspan">||</span>, <span class="dltxfy-verbspan">?</span>, <span class="dltxfy-verbspan">:</span>,
+<span class="dltxfy-verbspan">ASSIGN_OP</span>,<span class="dltxfy-verbspan">,</span><span title="\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mclose">}</span></span></span></span></span> (mind the last token, which is a comma). The
+regular language corresponding to each of the uppercase-named tokens is
+described as follows:
+<ul>
+<li> The token <span class="dltxfy-verbspan">IDENT</span> represents any identifier, such as a variable or
+function name. Identifiers are non-empty sequences of alphanumeric characters
+and underscore, not starting by a digit.
+</li><li> The token <span class="dltxfy-verbspan">NATURAL_LIT</span> refers to unsigned integer numeric literals.
+Such literals either start with a non-zero decimal digit and in such a case
+describe a natural number in base <span title="10"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn></mrow><annotation encoding="application/x-tex">10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">10</span></span></span></span></span> with any amount of digits between <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span>
+and <span title="9"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn></mrow><annotation encoding="application/x-tex">9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">9</span></span></span></span></span>, or start with <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span> and in such a case describe a natural number in base
+<span title="8"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn></mrow><annotation encoding="application/x-tex">8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span></span></span></span></span> with any amount of digits between <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span> and <span title="7"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn></mrow><annotation encoding="application/x-tex">7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span></span></span></span></span>, or start with <span class="dltxfy-verbspan">0x</span> or
+<span class="dltxfy-verbspan">0X</span> and are followed by the description of an hexadecimal number with one
+or more digits and symbols between <span class="dltxfy-verbspan">a</span> and <span class="dltxfy-verbspan">f</span>, perhaps uppercase.
+Integer numbers have two optional suffixes: the length specifier (<span class="dltxfy-verbspan">l</span>,
+<span class="dltxfy-verbspan">ll</span>, <span class="dltxfy-verbspan">L</span>, <span class="dltxfy-verbspan">LL</span>) and the unsignedness (<span class="dltxfy-verbspan">u</span>, <span class="dltxfy-verbspan">U</span>).
+These suffixes can appear in any order.
+</li><li> The token <span class="dltxfy-verbspan">FLOAT_LIT</span> refers to floating point numeric literals.
+Such literals are a non-empty sequence of decimal digits with an optional
+occurrence of a point (<span class="dltxfy-verbspan">.</span>) somewhere, and followed by an optional
+exponent. Either the point or the exponent must occur. The exponent starts with
+<span class="dltxfy-verbspan">e</span> or <span class="dltxfy-verbspan">E</span>, then there is an optional sign (<span class="dltxfy-verbspan">+</span>, <span class="dltxfy-verbspan">-</span>), and
+finally a non-empty sequence of decimal digits. Floating point numbers have an
+optional suffix to specify the precision: float (<span class="dltxfy-verbspan">f</span>, <span class="dltxfy-verbspan">F</span>), double
+(no suffix), or long double (<span class="dltxfy-verbspan">l</span>, <span class="dltxfy-verbspan">L</span>).
+</li><li> The token <span class="dltxfy-verbspan">CHAR_LIT</span> refers to the character literals. Such literals
+are delimited by single quotes (<span class="dltxfy-verbspan">&#39;</span>), and either contain a single
+character different from <span class="dltxfy-verbspan">&#39;</span>, from <span class="dltxfy-verbspan">\</span> and from new line, or contain
+an escape sequence. An escape sequence is composed of a symbol <span class="dltxfy-verbspan">\</span>
+followed by one of the following: a single lowercase letter among <span class="dltxfy-verbspan">a</span>,
+<span class="dltxfy-verbspan">b</span>, <span class="dltxfy-verbspan">t</span>, <span class="dltxfy-verbspan">n</span>, <span class="dltxfy-verbspan">v</span>, <span class="dltxfy-verbspan">f</span>, and <span class="dltxfy-verbspan">r</span>, a single symbol
+among <span class="dltxfy-verbspan">&#39;</span>, <span class="dltxfy-verbspan">&#34;</span>, <span class="dltxfy-verbspan">\</span> and <span class="dltxfy-verbspan">?</span>, a number composed of up to
+three octal digits, or a lowercase letter <span class="dltxfy-verbspan">x</span> followed by a number
+composed of up to two hexadecimal digits.<br/>
+We do not consider wide characters, and neither check that the numeric escape
+sequences represent a valid value (i.e., a number less than <span title="128"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>128</mn></mrow><annotation encoding="application/x-tex">128</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">128</span></span></span></span></span> in decimal).
+Moreover, we also ignore the use of trigraphs, and thus, a character literal
+such as <span class="dltxfy-verbspan">&#39;??=&#39;</span> (which in <span class="dltxfy-verbspan">C</span> may represent <span class="dltxfy-verbspan">#</span>) is considered
+invalid since in our interpretation it contains three distinct characters
+instead of just one.
+</li><li> The token <span class="dltxfy-verbspan">STRING_LIT</span> refers to the string literals. Such literals
+are delimited by double quotes (<span class="dltxfy-verbspan">&#34;</span>), and contain any amount of the
+following: a character different from <span class="dltxfy-verbspan">&#34;</span>, from <span class="dltxfy-verbspan">\</span> and from new
+line, an escape sequence as detailed above, or a symbol <span class="dltxfy-verbspan">\</span> followed by a
+new line.<br/>
+As in the case of character literals, for string literals we do not consider
+trigraph nor wide characters, and do not validate the value of the numeric
+escape sequences.
+</li><li> The token <span class="dltxfy-verbspan">ASSIGN_OP</span> represents all the assignment operators:
+<span class="dltxfy-verbspan">=</span>, <span class="dltxfy-verbspan">+=</span>, <span class="dltxfy-verbspan">-=</span>, <span class="dltxfy-verbspan">*=</span>, <span class="dltxfy-verbspan">/=</span>, <span class="dltxfy-verbspan">%=</span>, <span class="dltxfy-verbspan">&gt;&gt;=</span>,
+<span class="dltxfy-verbspan">&lt;&lt;=</span>, <span class="dltxfy-verbspan">&amp;=</span>, <span class="dltxfy-verbspan">^=</span>, and <span class="dltxfy-verbspan">|=</span>.
+</li></ul>
+Remarks about operators&#x2019; syntax and AST construction:
+<ul>
+<li> All operators, including function call (<span class="dltxfy-verbspan">()</span>) and array indexed
+access (<span class="dltxfy-verbspan">[]</span>), can be applied to arbitrary expressions and not just
+identifiers. For instance, <span class="dltxfy-verbspan">(NATURAL_LIT + NATURAL_LIT)()</span> is a
+syntactically valid expression, even though it is semantically nonsensical.
+Nevertheless, other expressions such as <span class="dltxfy-verbspan">(*IDENT)()</span> could be semantically
+valid, if <span class="dltxfy-verbspan">IDENT</span> was a pointer to a function.
+</li><li> Selection by reference (<span class="dltxfy-verbspan">.</span>) and through pointer (<span class="dltxfy-verbspan">-&gt;</span>)
+operators must always be followed by an identifier. For instance,
+<span class="dltxfy-verbspan">IDENT.IDENT[NATURAL_LIT]-&gt;IDENT</span> and <span class="dltxfy-verbspan">(NATURAL_LIT * NATURAL_LIT).IDENT</span>
+are syntactically valid expressions, even though the latter is semantically
+nonsensical. On the other hand, <span class="dltxfy-verbspan">IDENT.NATURAL_LIT</span> or
+<span class="dltxfy-verbspan">IDENT-&gt;(IDENT)</span> are not syntactically correct, because the operators are
+not followed by an identifier. ASTs corresponding to these operators must have
+the operator as root, the expression upon which it is applied as first child
+and the referenced/pointed identifier as second child. Note that the implicit
+parenthesization of <span class="dltxfy-verbspan">IDENT.IDENT.IDENT</span> is <span class="dltxfy-verbspan">(IDENT.IDENT).IDENT</span>.
+</li><li> Function calls have 0 or more parameters in the parentheses, separated by
+commas. The AST corresponding to a function call must have the token
+&#x201C;<span class="dltxfy-verbspan">(</span>&#x201D; as root, the function identifier (or expression) invoked as first
+child, and a special node named <span class="dltxfy-verbspan">param_list</span> as second child. In turn,
+this node must have one child for each parameter. Parameters are arbitrary
+expressions, except that the comma operator (<span class="dltxfy-verbspan">,</span>) can not appear (without
+parentheses), because it would be confused with the commas that separate the
+parameters.
+</li><li> Array indexed access operator can contain any expression within the
+brackets <span class="dltxfy-verbspan">[ ]</span>. The AST corresponding to an array access must have the
+token <span class="dltxfy-verbspan">[</span> as root, the array identifier (or expression) accessed as first
+child and the index expression as second child.
+</li><li> The ternary conditional operator (<span class="dltxfy-verbspan">?:</span>) allows an arbitrary
+expression as its middle operand. Thus, <span class="dltxfy-verbspan">IDENT ? IDENT , IDENT : IDENT</span> is
+a valid expression, and its implicit parenthesization is <span class="dltxfy-verbspan">IDENT ? (IDENT , IDENT) : IDENT</span>.
+Moreover, since it is a right-associative operator, the implicit
+parenthesization of <span class="dltxfy-verbspan">IDENT ? IDENT : IDENT ? IDENT : IDENT</span> is
+<span class="dltxfy-verbspan">IDENT ? IDENT : (IDENT ? IDENT : IDENT)</span>. The AST corresponding to a
+ternary conditional operator must have the token <span class="dltxfy-verbspan">?</span> as root and the three
+operands as children.
+</li><li> Assignments are expressions. Even though an assignment is only
+semantically correct if the left operator is an <em>lvalue</em>, we allow
+arbitrary expressions as both operands. For instance,
+<span class="dltxfy-verbspan">IDENT[NATURAL_LIT].IDENT ASSIGN_OP IDENT</span> and <span class="dltxfy-verbspan">NATURAL_LIT ASSIGN_OP IDENT</span>
+are examples of syntactically valid expressions, even though the latter is
+semantically nonsensical because <span class="dltxfy-verbspan">NATURAL_LIT</span> is not an lvalue.
+</li><li> The comma operator (<span class="dltxfy-verbspan">,</span>) must be regarded as any other
+left-associative operator. For instance, the AST of <span class="dltxfy-verbspan">IDENT,IDENT,IDENT</span> is
+&#x201C;<span class="dltxfy-verbspan">,(IDENT</span>,<span class="dltxfy-verbspan">,(IDENT</span>,<span class="dltxfy-verbspan">IDENT))</span>&#x201D;.
+</li><li> A sequence of string literals is treated as a single string literal.
+Thus, <span class="dltxfy-verbspan">STRING_LIT STRING_LIT STRING_LIT</span> is a valid expression. The AST
+corresponding to a sequence of one or more string literals must have a special
+node <span class="dltxfy-verbspan">string</span> as root, with one child per string literal.
+(Note that sequences of string literals are usually concatenated into a single
+string literal by the <span class="dltxfy-verbspan">C</span>-preprocessor, and thus, in contrast to our
+approach, the parser does not have to deal with this case.)
+</li></ul></div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Nil Mamano
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/antlrsyn.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wc9bc26eb370c0.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+// Write your syntactic and lexical descriptions here...</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "antlrsyn",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

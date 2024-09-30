@@ -1,0 +1,15 @@
+.fsm_canvas {
+	background: white;
+	border-radius: 5px;
+}
+
+.fsm_output_data {
+	margin-top: 12px;
+	margin-bottom: 12px;
+	padding-left: 32px;
+}
+
+.fsm_error_message {
+	color: #f00;
+	font-weight: bold;
+}

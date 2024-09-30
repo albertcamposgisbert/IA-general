@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 3 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wc7b88c33c1be7.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>3<a href="Wc7150c7c9cbda.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title"><b>Sports league</b></div>
+		
+			<div class="exercise-description">Note: this problem is based on a similar one from the <em>Logic in Information Technology</em> subject at Barcelona School of Informatics.
+
+<div class="dltxfy-paragraph"><br/></div>Solve the following exercise by means of a reduction to <b>SAT</b>:
+<ul>
+<li class="dltxfy-noitem"> A league comprises of <span title="n"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> teams (with <span title="n"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> even) and <span title="n-1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> rounds.
+At each round, each team plays with another team, so that in the end every
+team has played with every other team once. Each team has a stadium. Matches
+can be played either at home (in its own stadium) or away (in the opponent&#x2019;s
+stadium). Furthermore, we have the following constraints:
+<ul>
+<li> Fairness: every team must play either <span title="n/2"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">n/2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mord">/2</span></span></span></span></span> or <span title="n/2-1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n/2-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mord">/2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> games away.
+</li><li> No tripititions: no team should play at home or away three times in a row.
+</li><li> Stadium availability: certain stadiums are not available at certain
+rounds, so the corresponding teams must play away that round.
+</li><li> Shared stadium: certain pairs of teams share a stadium, so they cannot
+play both at home at the same round. When they play against each other, one
+of them takes the role of home team and the other away team. Shared stadiums
+are never unavailable.
+</li></ul>
+</li></ul>
+The input of the exercise and the output with the solution (when the input is
+solvable) are as follows:
+<ul>
+<li>
+<pre>
+n: int
+unavailable_stadiums: array of array [2] of int
+shared_stadiums: array of array [2] of int
+</pre>
+The input details the number <span title="n"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> of teams, the list of pairs <span title="(i,j)"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo separator="true">,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(i,j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mclose">)</span></span></span></span></span> indicating
+that the stadium of team <span title="i\in\{0,\ldots,n-1\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">i\in\{0,\ldots,n-1\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6986em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">}</span></span></span></span></span> at round <span title="j\in\{0,\ldots,n-2\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>n</mi><mo>−</mo><mn>2</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">j\in\{0,\ldots,n-2\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">}</span></span></span></span></span>
+is unavailable, and the list of pairs <span title="(i,j)"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo separator="true">,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(i,j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mclose">)</span></span></span></span></span> indicating whether the distinct
+teams <span title="i,j\in\{0,\ldots,n-1\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">i,j\in\{0,\ldots,n-1\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">}</span></span></span></span></span> share a stadium.
+</li><li>
+<pre>
+matches: array of array of struct {
+   opponent: int
+   visitant: int
+}
+</pre>
+The output contains the details of the matches. It is a two-dimensional array
+with one row per team (<span title="n"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> rows in total) and one column per round
+(<span title="n-1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> columns in total). The entry <span title="(i,j)"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo separator="true">,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(i,j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mclose">)</span></span></span></span></span> is a struct with two fields. The
+field <span class="dltxfy-verbspan">matches[i][j].opponent</span> is the identifier of the team against which
+the team with identifier <span title="i"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span> played in the round <span title="j"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span></span></span>. The field
+<span class="dltxfy-verbspan">matches[i][j].visitant</span> is either <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span> or <span title="1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span>, a <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span> meaning that the
+team <span title="i"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span> played at home in the round <span title="j"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span></span></span>, whereas a <span title="1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> meaning that it
+played away.
+</li></ul></div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Nil Mamano (adaptation)
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/redsat.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wc1a82195626d1.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+reduction
+{
+  // Write here your reduction to SAT...
+}
+
+reconstruction
+{
+  // Write here your solution reconstruction...
+}</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "redsat",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

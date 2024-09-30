@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 32 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wc2bffca3c8c26.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>32:
+			
+		</h2>
+		<div class="exercise-title">choose<span title="\{"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo></mrow><annotation encoding="application/x-tex">\{</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span></span></span></span></span><b>CLIQUE</b>,<b>DS</b>,<b>VC</b>,<b>3C</b>,<b>UHC</b>,<b>SAT</b><span title="\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mclose">}</span></span></span></span></span> <span title="\leq"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≤</mo></mrow><annotation encoding="application/x-tex">\leq</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719em;vertical-align:-0.136em;"></span><span class="mrel">≤</span></span></span></span></span> <b>Firing Married Couples</b></div>
+		
+			<div class="exercise-description">Consider the following problem:
+<ul>
+<li> <b>Firing Married Couples</b>:
+The recent restructuring of the company has not made it more profitable.
+According to the managers, the productivity is still terribly low because some
+of the employees are married couples: the managers argue that having the spouse
+working at the same place necessarily becomes a distraction for both members of
+the couple. For this reason, John Doe has been asked to end the distractions by
+firing one member of each couple. This uneasy task is made even more
+complicated by the following restriction: since the company is working on
+several projects, the layoffs must be done in such a way that at least one of
+the employees working on each project is not fired.
+
+<div class="dltxfy-paragraph"><br/></div>John Doe has the list of married couples in the company and knows the different
+projects each employee is working on (one person might be involved in several
+projects). With this information, is it possible to fire one member of each
+couple such that no project loses all its workers?
+</li></ul>
+Prove to John Doe that he is facing an NP-hard problem with a reduction from
+one of the following problems:
+<ol>
+<li> <b>CLIQUE</b>: given a natural <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> and an undirected graph <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span>, is there a
+subset <span title="S"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> of nodes with size at least <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> such that any two distinct nodes of
+<span title="S"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> are connected by an edge in <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span>?
+</li><li> <b>DOMINATING SET</b>: given a natural <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> and an undirected graph <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span>, is
+there a subset <span title="S"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> of size at most <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> of nodes that dominates <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span>? In other
+words, is there a subset <span title="S"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> of nodes with size at most <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> such that any node
+of <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span> is either in <span title="S"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> or adjacent to a node in <span title="S"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span>?
+</li><li> <b>VERTEX COVER</b>: given a natural <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> and an undirected graph <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span>, is
+there a cover for <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span> of size at most <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span>? In other words, is there a subset
+<span title="S"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span> of nodes with size at most <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> such that each edge of <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span> involves a node
+from <span title="S"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></span>?
+</li><li> <b>3-COLORABILITY</b>: given an undirected graph <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span>, is <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span> <span title="3"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span></span>-colorable?
+In other words, is there a mapping <span title="M"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> from the nodes of <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span> to <span title="\{1,2,3\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>3</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{1,2,3\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">3</span><span class="mclose">}</span></span></span></span></span>
+satisfying <span title="M(u)\neq M(v)"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo><mo mathvariant="normal">≠</mo><mi>M</mi><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">M(u)\neq M(v)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mrel"><span class="mord vbox"><span class="thinbox"><span class="rlap"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="inner"><span class="mord"><span class="mrel"></span></span></span><span class="fix"></span></span></span></span></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mclose">)</span></span></span></span></span> for each edge <span title="\{u,v\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><mi>u</mi><mo separator="true">,</mo><mi>v</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{u,v\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathnormal">u</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mclose">}</span></span></span></span></span> of <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span>?
+</li><li> <b>UNDIRECTED HAMILTONIAN CIRCUIT</b>: given an undirected graph <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span>, is
+there a cycle that visits each node of <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span> exactly once? In other words, is it
+possible to order the nodes of <span title="G"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span> such that there is an edge between each <span title="2"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span>
+contiguous nodes and an edge between the last and the first nodes?
+</li><li> <b>SAT</b>: given a boolean formula <span title="F"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi></mrow><annotation encoding="application/x-tex">F</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span></span></span></span></span> in conjunctive normal form, is <span title="F"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi></mrow><annotation encoding="application/x-tex">F</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span></span></span></span></span>
+satisfiable?
+</li></ol>
+The input and output of the reduction conform to the following data types,
+where for each field of the input it is shown in parentheses the starting
+problems where such field is present:
+<ul>
+<li>
+<pre>
+in: struct {
+     (1,2,3)      k: int
+     (1,2,3,4,5)  numnodes: int
+     (1,2,3,4,5)  edges: array of array [2] of int
+     (1,2,3,4,5)  adjacents: array of array of int
+     (1,2,3,4,5)  adjacencymatrix: array of array of int
+     (6)          numvars: int
+     (6)          clauses: array of array of int
+    }
+</pre>
+The input may include a natural number <span class="dltxfy-verbspan">in.k</span>, an undirected graph, or a
+boolean formula in conjunctive normal form. The graph is given by means of four
+different kinds of information: the number of nodes <span class="dltxfy-verbspan">in.numnodes</span>, the
+list of edges <span class="dltxfy-verbspan">in.edges</span>, for each node the list of its adjacent nodes
+<span class="dltxfy-verbspan">in.adjacents</span>, and the adjacency matrix <span class="dltxfy-verbspan">in.adjacencymatrix</span>. The
+nodes are integers between <span title="1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> and <span class="dltxfy-verbspan">in.numnodes</span>, and thus, the <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span>&#x2019;th
+position of <span class="dltxfy-verbspan">in.adjacents</span> does not contain useful data and should be
+ignored; for any other position <span title="p"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span></span>, <span class="dltxfy-verbspan">in.adjacents[p]</span> is the list of
+nodes adjacent to <span title="p"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span></span>. For the same reason, the <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span>&#x2019;th row and column of
+<span class="dltxfy-verbspan">in.adjacencymatrix</span> do not contain useful data and should be ignored; for
+any other row <span title="r"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span></span></span></span></span> and column <span title="c"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span>, <span class="dltxfy-verbspan">in.adjacencymatrix[r][c]</span> is <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span> when
+there is no edge between the nodes <span title="r"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span></span></span></span></span> and <span title="c"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span>, and <span title="1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> otherwise. The boolean
+formula is described with the number <span class="dltxfy-verbspan">in.numvars</span> of variables occurring
+in the formula, and with the list of clauses <span class="dltxfy-verbspan">in.clauses</span>. Each clause is
+a list of literals, and each literal is a positive or negative integer: a
+positive integer <span title="x"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span> represents the <span title="x"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span>&#x2019;th variable, and a negative integer
+<span title="-x"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">-x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord mathnormal">x</span></span></span></span></span> represents the negation of the <span title="x"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span>&#x2019;th variable. Such an <span title="x"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span> takes values
+between <span title="1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> and <span class="dltxfy-verbspan">in.numvars</span>.
+
+<div class="dltxfy-paragraph"><br/></div><em>Note</em>: The input graph has at least one node (<span title="2"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span> in CLIQUE and UHC, <span title="4"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span> in 3C), no
+repeated edges, nor self-loop edges, the value of <span class="dltxfy-verbspan">in.k</span> is at most the
+number of nodes of the graph (and at least <span title="2"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span> in CLIQUE), and the boolean
+formula has at least one clause, with every clause having at least one literal
+and no repeated literals.
+</li><li>
+<pre>
+out: struct {
+       couples: array of struct {
+         wifeprojects: array of string
+         husbandprojects: array of string
+       }
+       singles: array of struct {
+         projects: array of string
+       }
+     }
+</pre>
+The output is a list of married couples <span class="dltxfy-verbspan">out.couples</span> and singles
+<span class="dltxfy-verbspan">out.singles</span>. For each couple the field <span class="dltxfy-verbspan">wifeprojects</span> is the list
+of projects where the wife is involved, and the field <span class="dltxfy-verbspan">husbandprojects</span> is
+the list of projects where the husband is involved. For each single, the field
+<span class="dltxfy-verbspan">projects</span> is the list of projects where he/she is involved.
+
+<div class="dltxfy-paragraph"><br/></div><em>Note</em>: If the output has no married couples, then the layoffs are
+possible. If neither the wife nor the husband are involved in any project, then
+both of them can be fired. No single will be fired, so any project where a
+single is involved will always have an employee involved after the firings.
+</li></ul></div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Carles Creus
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/rednp.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wc8a8c1056b110.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+main(
+     // Choose the problem to reduce from by uncommenting the
+     // corresponding line:
+     //   CLIQUE
+     //   DOMINATINGSET
+     //   VERTEXCOVER
+     //   THREECOLORABILITY
+     //   UNDIRECTEDHAMILTONIANCIRCUIT
+     //   SAT
+    )
+{
+  // Write your reduction here...
+}</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "rednp",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

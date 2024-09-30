@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 11 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wc40a77fb8fe3.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>11<a href="Wc1e989527949a.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title"><b>Grid exploration</b></div>
+		
+			<div class="exercise-description">Solve the following exercise by means of a reduction to <b>SAT</b>:
+<ul>
+<li class="dltxfy-noitem"> Given a grid made of <em>walkable</em> cells and walls,
+and a walkable cell <span title="s"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></span>, find a path from <span title="s"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></span> and through adjacent
+cells such that every walkable cell is visited at least once.
+The path must not contain more than <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> cells.
+The ending point of the path does not matter.
+
+<div class="dltxfy-paragraph"><br/></div>For instance, for the grid
+<pre>
+    ·   #   ·   #   #
+
+    ·   ·   ·   ·   ·
+
+    ·   #   ·   #   ·
+
+    ·   ·   ·   ·   ·
+
+    #   #   ·   #   s
+</pre>
+in which walls have been indicated with a <span class="dltxfy-verbspan">#</span>, the following path
+<pre>
+    1)                       2)                       3)
+
+    ·   #   ·   #   #        ·   #   ·   #   #        ·   #   ·   #   #
+                                                      ^
+    ·   ·   ·   ·   ·        ·   ·   ·   ·   ·        ·   ·   ·   ·   ·
+                                                      ^
+    ·   #   ·   #   ·        ·   #   ·   #   ·        ·   #   o   #   ·
+                                     ^                ^       v
+    ·   ·   · &lt; · &lt; ·        ·   ·   o   o   o        · &lt; · &lt; o   o   o
+            v       ^                ^
+    #   #   ·   #   s        #   #   o   #   o        #   #   o   #   o
+
+
+
+    4)                       5)                       6)
+
+    o   #   ·   #   #        o   #   o   #   #        o   #   o   #   #
+    v       ^                        v
+    o &gt; · &gt; ·   ·   ·        o   o   o &gt; · &gt; ·        o   o   o   o   o
+                                             v
+    o   #   o   #   ·        o   #   o   #   ·        o   #   o   #   o
+
+    o   o   o   o   o        o   o   o   o   o        o   o   o   o   o
+
+    #   #   o   #   o        #   #   o   #   o        #   #   o   #   o
+</pre>
+visits all walkable cells, and has <span title="21"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn></mrow><annotation encoding="application/x-tex">21</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">21</span></span></span></span></span> cells (note that the initial <span title="s"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></span> in the
+path is also counted).
+</li></ul>
+The input of the exercise and the output with the solution (when the input is
+solvable) are as follows:
+<ul>
+<li>
+<pre>
+grid: array of array of int
+k: int
+s: struct {
+   r: int
+   c: int
+}
+</pre>
+The input has the matrix <span class="dltxfy-verbspan">grid</span>, the maximum number <span title="k"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> of cells
+in the path (counting <span title="s"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></span>), and the initial cell <span title="s"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></span>. The <span class="dltxfy-verbspan">grid</span>
+contains the locations of the walls: <span class="dltxfy-verbspan">grid[i][j]</span> has a <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span> to
+denote that cell <span title="(i,j)"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo separator="true">,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(i,j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mclose">)</span></span></span></span></span> is walkable, and a <span title="1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> to denote that the
+cell has a wall. The starting cell <span title="s"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></span> is a struct with two fields:
+<span class="dltxfy-verbspan">r</span> indicates the row,
+and <span class="dltxfy-verbspan">c</span> indicates the column.
+For instance, in the previous example we would have
+<span class="dltxfy-verbspan">s.r</span><span title="{} = {}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow></mrow><mo>=</mo><mrow></mrow></mrow><annotation encoding="application/x-tex">{} = {}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0em;"></span><span class="mord"></span></span></span></span></span><span class="dltxfy-verbspan">s.c</span><span title="{} = 4"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow></mrow><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">{} = 4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span>. It is guaranteed that every walkable
+cell is reachable from the cell <span title="s"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></span>.
+</li><li>
+<pre>
+path: array of struct {
+   r: int
+   c: int
+}
+</pre>
+The output consists of an array of variable length, containing the sequence
+of cells that form the path. Each element in the path is a struct with
+a pair of numbers <span class="dltxfy-verbspan">r</span> and <span class="dltxfy-verbspan">c</span>, with the same meaning as in <span class="dltxfy-verbspan">s</span>.
+The <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span>&#x2019;th element of the array must be <span class="dltxfy-verbspan">s</span>.
+</li></ul></div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Nil Mamano
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/redsat.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wc7fc84f4da9ac.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+reduction
+{
+  // Write here your reduction to SAT...
+}
+
+reconstruction
+{
+  // Write here your solution reconstruction...
+}</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "redsat",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

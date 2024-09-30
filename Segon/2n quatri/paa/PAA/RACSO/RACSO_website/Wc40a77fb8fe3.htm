@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 10 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wccbd99ccc34e0.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>10<a href="Wc1bea7ae5ffa4.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title"><b>Ukelele song</b></div>
+		
+			<div class="exercise-description">A computational problem of interest in the music field is how to lay out the
+notes of a song in the fretboard of a string instrument, like a guitar, in a way that certain
+criteria are optimized. These criteria can be heuristics that estimate the playing ease. For instance,
+&#x201C;consecutive notes should not be very far away in the fretboard&#x201D;, &#x201C;chords should have ergonomic positions for the hand&#x201D;, and so on.
+Here, we consider a very simple variant.
+
+<div class="dltxfy-paragraph"><br/></div>Solve the following exercise by means of a reduction to <b>SAT</b>:
+<ul>
+<li class="dltxfy-noitem"> Determine if a song can be played in an ukelele in a way
+that is <em>easy</em>, according to the criteria detailed below.
+A song is a sequence of single notes (or, more precisely, pitches, since we want to distinguish between notes in different octaves).
+
+<div class="dltxfy-paragraph"><br/></div>An ukelele has 4 strings, each of which has 12 frets. A string can be played open, without pressing the string against any fret,
+or at any of the 12 frets. Each combination of string and fret, called a position,
+produces a pitch. The open string is considered the fret 0, yielding a total
+of 52 positions. However, many of them correspond to the same pitch. It is for this reason that there may be
+more than one way to play the same song, with different degrees of difficulty. In fact, there are only 21 different
+pitches; if we identify them from lowest to highest, then the pitches found in each position are:
+<pre>
+                                   Frets
+             0   1   2   3   4   5   6   7   8   9  10  11  12
+   Strings ---------------------------------------------------
+        1  | 9  10  11  12  13  14  15  16  17  18  19  20  21
+        2  | 4   5   6   7   8   9  10  11  12  13  14  15  16
+        3  | 0   1   2   3   4   5   6   7   8   9  10  11  12
+        4  | 7   8   9  10  11  12  13  14  15  16  17  18  19
+</pre>
+In particular, the lowest pitch corresponds to the third string open, whereas the highest pitch corresponds
+to the first string, twelfth fret.
+Note that, for example, the pitch 10 can be played in 4 different positions.
+
+<div class="dltxfy-paragraph"><br/></div>In this problem, we are given a sequence of pitches (numbers between 0 and 21) and must
+assign a string (a number between 1 and 4) and a fret (a number between 0 and 12) to
+each one.
+One such assignment determines a way to play the song. We say that a way to play a song is
+<em>easy</em> if of any two consecutive positions are in the same string or
+adjacent strings, and no further than 2 frets away. Thus, for instance, after playing
+the string 2 on the fret 6, the next position must be in the string 1, 2, or 3, and between the
+frets 4 and 8. However, this only applies when both of the positions are <b>not</b>
+open. Open positions are easier to play because they do not require to press any fret,
+and thus we allow them without any constraint with the previous or following positions.
+</li></ul>
+The input of the exercise and the output with the solution (when the input is
+solvable) are as follows:
+<ul>
+<li>
+<pre>
+pitches: array of int
+</pre>
+The input is an array of pitch identifiers (numbers between <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span> and <span title="21"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn></mrow><annotation encoding="application/x-tex">21</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">21</span></span></span></span></span>)
+describing a song.
+</li><li>
+<pre>
+assignments: array of struct {
+   string: int
+   fret: int
+}
+</pre>
+The output consists of an array <span class="dltxfy-verbspan">assignments</span> of the same length of the input. Each of its elements is a struct with two fields:
+<span class="dltxfy-verbspan">string</span> is the string assigned to the <span title="i"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span>&#x2019;th note of the input (a number between <span title="1"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> and <span title="4"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span>)
+and <span class="dltxfy-verbspan">fret</span> is the assigned fret (a number between <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span> and <span title="12"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>12</mn></mrow><annotation encoding="application/x-tex">12</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">12</span></span></span></span></span>).
+</li></ul>
+<i>Note</i>: this problem can be solved in asymptotic polynomial time without reducing to SAT.</div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Nil Mamano
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/redsat.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wc60284253d9eb.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+reduction
+{
+  // Write here your reduction to SAT...
+}
+
+reconstruction
+{
+  // Write here your solution reconstruction...
+}</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "redsat",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

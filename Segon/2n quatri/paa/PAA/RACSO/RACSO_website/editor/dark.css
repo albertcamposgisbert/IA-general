@@ -1,0 +1,30 @@
+.cm-s-dark.CodeMirror {line-height:1.2; background: #000000; color: #d6d5d4;}
+.cm-s-dark div.CodeMirror-selected {background: #4F4F4F !important;}
+.cm-s-dark .CodeMirror-gutters {background: #4e4e4e; border-right: 0px;}
+.cm-s-dark .CodeMirror-linenumber {color: #dadada;}
+.cm-s-dark .CodeMirror-cursor {border-left: 1px solid #807d7c !important;}
+
+.cm-s-dark span.cm-comment { color: #999;font-style: italic; }
+.cm-s-dark span.cm-keyword { color: #c2e;font-weight: bold; }
+.cm-s-dark span.cm-string { color: #28f;font-weight: bold; }
+.cm-s-dark span.cm-number { color: #28f;font-weight: bold; }
+.cm-s-dark span.cm-variable {color: #d6d5d4;}
+.cm-s-dark span.cm-meta { color: #e62;font-weight: bold; }
+.cm-s-dark span.cm-operator {color: #d6d5d4;}
+.cm-s-dark span.cm-invalidchar { color: #f00;font-weight: bold;border-bottom:1px dotted; }
+
+.cm-s-dark .CodeMirror-activeline-background {background: #1a1a1a !important;}
+.cm-s-dark .CodeMirror-matchingbracket {text-decoration: underline; color: green !important;}
+
+
+.cm-s-dark span.cm-atom {color: #a16a94;}
+.cm-s-dark span.cm-builtin { line-height: 1em; font-weight: bold; color: #077; }
+.cm-s-dark span.cm-special { line-height: 1em; font-weight: bold; color: #0aa; }
+.cm-s-dark span.cm-property {color: #01a252;}
+.cm-s-dark span.cm-attribute {color: #01a252;}
+.cm-s-dark span.cm-variable-2 {color: #01a0e4;}
+.cm-s-dark span.cm-def {color: #e8bbd0;}
+.cm-s-dark span.cm-bracket {color: #d6d5d4;}
+.cm-s-dark span.cm-tag {color: #db2d20;}
+.cm-s-dark span.cm-link {color: #a16a94;}
+.cm-s-dark span.cm-error {background: #db2d20; color: #807d7c;}

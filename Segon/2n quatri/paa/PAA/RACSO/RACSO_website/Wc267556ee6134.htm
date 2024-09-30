@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 28 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wce204b92c0a0a.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>28<a href="Wc28a5bdd9da37.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title">Conflict resolution: two valid alternatives with the same lookahead</div>
+		
+			<div class="exercise-description">We have the following grammar for variable declarations:
+<pre>
+  var_declarations^: var_declaration*;
+  var_declaration: TYPE^ IDENT &#39;=&#39;! expr &#39;;&#39;!;
+  expr: ordinal_expr | structure;
+
+  ordinal_expr: enumeration | range;
+  enumeration^: &#39;(&#39;! id_list &#39;)&#39;!;
+  id_list: IDENT (&#39;,&#39;! IDENT)*;
+  range: constant &#39;...&#39;^ constant;
+  constant: NATURAL_LIT | IDENT;
+
+  structure: list | set;
+  list^: &#39;[&#39;! term (&#39;,&#39;! term)* &#39;]&#39;!;
+  set^: &#39;{&#39;! term (&#39;,&#39;! term)* &#39;}&#39;!;
+  term: ordinal_expr | IDENT;
+
+  TYPE: &#39;ord&#39; | &#39;list&#39; | &#39;set&#39;;
+  IDENT: (&#39;a&#39;..&#39;z&#39;|&#39;A&#39;..&#39;Z&#39;|&#39;_&#39;)(&#39;a&#39;..&#39;z&#39;|&#39;A&#39;..&#39;Z&#39;|&#39;_&#39;|&#39;0&#39;..&#39;9&#39;)*;
+  NATURAL_LIT: (&#39;0&#39;..&#39;9&#39;)+;
+</pre>
+However, we have detected a problem: the second alternative of the <span class="dltxfy-verbspan">term</span>
+variable is never executed. This happens because
+<span class="dltxfy-verbspan">IDENT</span><span title="\in\text{First}("><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∈</mo><mtext>First</mtext><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">\in\text{First}(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">First</span></span><span class="mopen">(</span></span></span></span></span><span class="dltxfy-verbspan">ordinal_expr</span><span title=")"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mclose">)</span></span></span></span></span>.
+Consequently, when the parser has to parse the variable <span class="dltxfy-verbspan">term</span> and has
+<span class="dltxfy-verbspan">IDENT</span> as lookahead, it chooses the <span class="dltxfy-verbspan">ordinal_expr</span> alternative
+because it appears first. Fix the grammar so that it has the desired behavior,
+i.e., that <span class="dltxfy-verbspan">IDENT</span> can be consumed inside <span class="dltxfy-verbspan">term</span>. The AST
+construction must not be altered.</div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Nil Mamano
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/antlrsyn.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wcc16f6346373c.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+var_declarations^: var_declaration*;
+var_declaration: TYPE^ IDENT &#39;=&#39;! expr &#39;;&#39;!;
+expr: ordinal_expr | structure;
+
+ordinal_expr: enumeration | range;
+enumeration^: &#39;(&#39;! id_list &#39;)&#39;!;
+id_list: IDENT (&#39;,&#39;! IDENT)*;
+range: constant &#39;...&#39;^ constant;
+constant: NATURAL_LIT | IDENT;
+
+structure: list | set;
+list^: &#39;[&#39;! term (&#39;,&#39;! term)* &#39;]&#39;!;
+set^: &#39;{&#39;! term (&#39;,&#39;! term)* &#39;}&#39;!;
+term: ordinal_expr | IDENT;
+
+TYPE: &#39;ord&#39; | &#39;list&#39; | &#39;set&#39;;
+IDENT: (&#39;a&#39;..&#39;z&#39;|&#39;A&#39;..&#39;Z&#39;|&#39;_&#39;)(&#39;a&#39;..&#39;z&#39;|&#39;A&#39;..&#39;Z&#39;|&#39;_&#39;|&#39;0&#39;..&#39;9&#39;)*;
+NATURAL_LIT: (&#39;0&#39;..&#39;9&#39;)+;</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "antlrsyn",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

@@ -1,0 +1,49 @@
+.CodeMirror {
+	height: auto;
+}
+.CodeMirror-scroll {
+	min-height: 300px;
+	/*
+	max-height: 500px;
+	overflow-y: hidden;
+	*/
+	overflow-x: auto;
+}
+
+.editor-container {
+	background: #aeaeae;
+	color: #000;
+	padding: 5px;
+	/*
+	border-style: solid;
+	border-width: 2px;
+	border-color: #4e4e4e;
+	*/
+	border-radius: 5px;
+}
+
+.simpleoptions {
+	background: inherit;
+	color: inherit;
+	font-family: monospace;
+}
+.simpleoptions input {
+	font-family: monospace;
+}
+.simpleoptions textarea {
+	font-family: monospace;
+}
+.simpleoptions-elem {
+	background: inherit;
+	color: inherit;
+	font-family: inherit;
+	margin-right: 15px;
+	margin-top: 5px;
+}
+.simpleoptions-sep {
+	/*
+	font-family: initial;
+	border-left: thick solid #4e4e4e;
+	font-size: 100%;
+	*/
+}

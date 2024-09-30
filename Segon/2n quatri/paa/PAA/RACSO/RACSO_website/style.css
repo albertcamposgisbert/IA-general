@@ -1,0 +1,430 @@
+body {
+	background-color: #efefef;
+	padding: 0px;
+	padding-bottom: 2em;
+	margin: 0px;
+}
+
+pre {
+	font-family: monospace;
+}
+
+a[href$=".pdf"] {
+	background-image: url(/juezwsgi/pics/pdf.svg);
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding-right: 20px;
+}
+
+a.external {
+	background-image: url(/juezwsgi/pics/external-ltr.svg);
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding-right: 18px;
+}
+
+.icon-python {
+	display: inline-block;
+	width: 7em;
+	height: 2.8em;
+	background-size: 7em 2.8em;
+	background-image: url(/juezwsgi/pics/python-powered-w.svg);
+}
+
+.banner {
+	background-color: #ff6600;
+	width: 100%;
+	font-family: Verdana, sans-serif;
+	font-size: 85%;
+	border-spacing: 5px;
+	margin-bottom: 10px;
+}
+.banner td {
+	padding: 0px;
+}
+.banner .logo {
+	font-family: Verdana, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	margin-right: 0.5em;
+	padding: 0px 2px;
+	border: solid black;
+	border-width: 3px;
+	text-decoration: none;
+}
+.banner .link {
+	color: black;
+	cursor: pointer;
+}
+.banner .separator {
+	background-color: black;
+	margin-left: 0.4em;
+	margin-right: 0.4em;
+	padding: 2px 1px;
+	font-size: 100%;
+}
+.banner .thick-separator {
+	background-color: black;
+	margin-left: 0.4em;
+	margin-right: 0.4em;
+	padding: 3px 2px;
+	font-size: 100%;
+}
+.banner .user {
+	text-align: right;
+}
+
+.cookie {
+	position: fixed;
+	bottom: 0;
+	z-index: 9;
+	font-size: 66%;
+	padding: 0.2em 0;
+	margin: 0;
+	text-align: center;
+}
+
+.user-options > ul,
+.user-options > ul > li {
+	display: inline;
+}
+.user-options ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	background-color: #ff6600;
+	z-index: 50;
+}
+.user-options ul li {
+	white-space: nowrap;
+	position: relative;
+}
+.user-options ul ul li {
+	line-height: 1.2em;
+	padding: 0.5em 0.75em;
+}
+.user-options ul ul li:hover {
+	background-color: #ff9933;
+}
+.user-options ul ul {
+	display: none;
+	border: 2px solid #000;
+}
+.user-options > ul > li:hover > ul {
+	text-align: left;
+	display: block;
+	position: absolute;
+	right: 5px;
+	top: 100%;
+}
+.user-options > ul > li > ul > li:hover > ul {
+	text-align: left;
+	display: block;
+	position: absolute;
+	right: 100%;
+	top: -2px;
+}
+.user-options > ul > li > ul > li > ul > li:hover > ul {
+	text-align: left;
+	display: block;
+	position: absolute;
+	right: 100%;
+	top: -2px;
+}
+.user-options > ul > li > ul > li > ul > li > ul > li:hover ul {
+	text-align: left;
+	display: block;
+	position: absolute;
+	right: 100%;
+	top: -2px;
+}
+
+.jstree,
+.jstree > li {
+	display: inline;
+}
+.jstree,
+.jstree ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.jstree ul {
+	display: none;
+	border: 2px solid #000;
+	background-color: #efefef;
+	z-index: 50;
+	position: absolute;
+	left: 50%;
+	top: 100%;
+}
+.jstree ul ul {
+	left: 100%;
+	top: -2px;
+}
+.jstree li {
+	position: relative;
+	white-space: nowrap;
+}
+.jstree li li {
+	padding: 0.5em 0.75em;
+	line-height: 1.2em;
+}
+.jstree li li:hover {
+	background-color: #a8a8a8;
+}
+.jstree .leaf {
+	cursor: pointer;
+}
+
+.csstree *,
+.csstree ::before,
+.csstree ::after {
+	box-sizing: border-box;
+}
+.csstree {
+	--spacing: 1.5rem;
+	--radius: 8px;
+}
+.csstree li {
+	display: block;
+	position: relative;
+	padding-left: calc(2 * var(--spacing) - var(--radius) - 2px);
+}
+.csstree ul {
+	margin-left: calc(var(--radius) - var(--spacing));
+	padding-left: 0;
+}
+.csstree ul li {
+	border-left: 2px solid #ddd;
+}
+.csstree ul li:last-child {
+	border-color: transparent;
+}
+.csstree ul li::before {
+	content: '';
+	display: block;
+	position: absolute;
+	top: calc(var(--spacing) / -2);
+	left: -2px;
+	width: calc(var(--spacing) + 2px);
+	height: calc(var(--spacing) + 1px);
+	border: solid #ddd;
+	border-width: 0 0 2px 2px;
+}
+.csstree summary {
+	display: inline-block;
+	list-style: none;
+	cursor: pointer;
+}
+.csstree summary::marker,
+.csstree summary::-webkit-details-marker {
+	display: none;
+}
+.csstree summary:focus {
+	outline: none;
+}
+.csstree summary:focus-visible {
+	outline: 1px dotted #000;
+}
+.csstree li::after,
+.csstree summary::before {
+	content: '';
+	display: block;
+	position: absolute;
+	top: calc(var(--spacing) / 2 - var(--radius));
+	left: calc(var(--spacing) - var(--radius) - 1px);
+	width: calc(2 * var(--radius));
+	height: calc(2 * var(--radius));
+	border-radius: 50%;
+	background: #ddd;
+}
+.csstree summary::before {
+	content: '+';
+	z-index: 50;
+	background: #555;
+	color: #fff;
+	line-height: calc(2 * var(--radius) - 2px);
+	text-align: center;
+	font-weight: bold;
+}
+.csstree details[open] > summary::before {
+	content: '−';
+}
+
+.admin-user .banner {
+	background-color: #2c2c2c;
+	color: #ddd;
+}
+.admin-user .banner .logo {
+	border: solid #ddd;
+}
+.admin-user .banner .link {
+	color: #ddd;
+}
+.admin-user .banner .separator {
+	background-color: #ddd;
+}
+.admin-user .banner .thick-separator {
+	background-color: #ddd;
+}
+.admin-user .user-options ul {
+	background-color: #2c2c2c;
+	color: #ddd;
+}
+.admin-user .user-options ul ul li:hover {
+	background-color: #5c5c5c;
+}
+.admin-user .user-options ul ul {
+	border: 2px solid #5c5c5c;
+}
+
+.logging {
+	margin-top: 3em;
+	text-align: center;
+}
+.logging div {
+	margin-bottom: 0.5em;
+}
+.logging-error {
+	color: red;
+	font-weight: bold;
+}
+
+.welcome {
+	margin: 3em auto;
+	max-width: 50em;
+	line-height: 1.3em;
+}
+
+.user-editing {
+	margin: 20px 20px;
+	line-height: 1.3em;
+}
+.user-editing .logging {
+	margin-top: 0em;
+	max-width: 20em;
+}
+.user-editing-group {
+	margin-left: 2em;
+}
+.user-editing-help {
+	max-width: 50em;
+}
+.user-editing-action {
+	margin-right: 0.5em;
+}
+.user-editing-name {
+	display: inline-block;
+	margin-bottom: 0.5em;
+}
+.user-editing-permissions {
+	display: block;
+	font-size: 80%;
+}
+.user-editing-permissions span {
+	font-weight: bold;
+}
+.user-editing-email {
+	display: block;
+	font-size: 80%;
+}
+.user-editing-email span {
+	font-family: monospace;
+}
+.user-editing-date {
+	display: block;
+	font-size: 80%;
+	margin-bottom: 1em;
+}
+.user-editing-date span {
+	font-family: monospace;
+}
+
+.loader-kino {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	display: inline-block;
+	position: relative;
+	border: 10px solid;
+	border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.35) rgba(0, 0, 0, 0.5);
+	box-sizing: border-box;
+	animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.loader-g {
+	color: #777;
+	font-size: 28px;
+	text-indent: -9999em;
+	overflow: hidden;
+	width: 1em;
+	height: 1em;
+	border-radius: 50%;
+	position: relative;
+	transform: translateZ(0);
+	animation: multiShadowSpin 1.7s infinite ease, round 1.7s infinite ease;
+}
+
+@keyframes multiShadowSpin {
+	0% {
+		box-shadow:
+			0 -0.83em 0 -0.4em,
+			0 -0.83em 0 -0.42em,
+			0 -0.83em 0 -0.44em,
+			0 -0.83em 0 -0.46em,
+			0 -0.83em 0 -0.477em;
+	}
+	5%,
+	95% {
+		box-shadow:
+			0 -0.83em 0 -0.4em,
+			0 -0.83em 0 -0.42em,
+			0 -0.83em 0 -0.44em,
+			0 -0.83em 0 -0.46em,
+			0 -0.83em 0 -0.477em;
+	}
+	10%,
+	59% {
+		box-shadow:
+			0 -0.83em 0 -0.4em,
+			-0.087em -0.825em 0 -0.42em,
+			-0.173em -0.812em 0 -0.44em,
+			-0.256em -0.789em 0 -0.46em,
+			-0.297em -0.775em 0 -0.477em;
+	}
+	20% {
+		box-shadow:
+			0 -0.83em 0 -0.4em,
+			-0.338em -0.758em 0 -0.42em,
+			-0.555em -0.617em 0 -0.44em,
+			-0.671em -0.488em 0 -0.46em,
+			-0.749em -0.34em 0 -0.477em;
+	}
+	38% {
+		box-shadow:
+			0 -0.83em 0 -0.4em,
+			-0.377em -0.74em 0 -0.42em,
+			-0.645em -0.522em 0 -0.44em,
+			-0.775em -0.297em 0 -0.46em,
+			-0.82em -0.09em 0 -0.477em;
+	}
+	100% {
+		box-shadow:
+			0 -0.83em 0 -0.4em,
+			0 -0.83em 0 -0.42em,
+			0 -0.83em 0 -0.44em,
+			0 -0.83em 0 -0.46em,
+			0 -0.83em 0 -0.477em;
+	}
+}
+
+@keyframes round {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

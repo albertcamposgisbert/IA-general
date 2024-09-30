@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 25 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wcf2145f05c14e.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>25<a href="Wc38b55bf01173.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title">Parenthesized expressions over unary signs and <span class="dltxfy-verbspan">not</span>, binary <span class="dltxfy-verbspan">+</span>, <span class="dltxfy-verbspan">-</span>, <span class="dltxfy-verbspan">*</span>, <span class="dltxfy-verbspan">/</span>, <span class="dltxfy-verbspan">^</span>, <span class="dltxfy-verbspan">&lt;</span>, <span class="dltxfy-verbspan">&gt;</span>, <span class="dltxfy-verbspan">=</span>, <span class="dltxfy-verbspan">and</span> and <span class="dltxfy-verbspan">or</span>, function calls, indexed access and field access</div>
+		
+			<div class="exercise-description">The set of tokens of the language is
+{<span class="dltxfy-verbspan">+</span>,<span class="dltxfy-verbspan">-</span>,<span class="dltxfy-verbspan">*</span>,<span class="dltxfy-verbspan">/</span>,<span class="dltxfy-verbspan">&lt;</span>,<span class="dltxfy-verbspan">&gt;</span>,<span class="dltxfy-verbspan">=</span>,<span class="dltxfy-verbspan">not</span>,<span class="dltxfy-verbspan">and</span>,<span class="dltxfy-verbspan">or</span>,<span class="dltxfy-verbspan">IDENT</span>,<span class="dltxfy-verbspan">NUMBER</span>,<span class="dltxfy-verbspan">[</span>,<span class="dltxfy-verbspan">]</span>,<span class="dltxfy-verbspan">(</span>,<span class="dltxfy-verbspan">)</span>,<span class="dltxfy-verbspan">.</span>,<span class="dltxfy-verbspan">^</span>,<span class="dltxfy-verbspan">,</span>}
+(mind the last token, which is a comma). The token <span class="dltxfy-verbspan">NUMBER</span> represents
+unsigned integers, i.e., non-empty sequences of digits. The token <span class="dltxfy-verbspan">IDENT</span>
+represents function identifiers, variables, and field identifiers. Such tokens
+are non-empty sequences of alphanumeric characters and underscore, not starting
+by a digit. A function can receive an arbitary number of arguments, possibly 0,
+enclosed in parentheses and separated by commas. A variable can be an array
+indexable with <span class="dltxfy-verbspan">[]</span>, a struct with fields accessible with <span class="dltxfy-verbspan">.</span> or a
+numeric value. An arbitrary expression, including the value returned by a
+function call, an array elemement or a a struct field, is considered a variable
+itself, and therefore can be any of the aformentioned things (but not function
+names). Thus, semantically nonsensical expressions such as <span class="dltxfy-verbspan">1[2]</span> or
+<span class="dltxfy-verbspan">(not 3).field</span> must be accepted. Function parameters and array indices
+can be arbitrary expressions, whereas a struct field is always an <span class="dltxfy-verbspan">IDENT</span>.
+
+<div class="dltxfy-paragraph"><br/></div>Examples of correct expressions are
+<ul>
+<li> &#x201C;<span class="dltxfy-verbspan">not not (1&gt;2*pi or not e^3&lt;4/x)</span>&#x201D;
+</li><li> &#x201C;<span class="dltxfy-verbspan">-1=+x and +2=-y[3] and 4=f(x*5,6/z) or s.f=7</span>&#x201D;
+</li><li> &#x201C;<span class="dltxfy-verbspan">f1(1,x) - f2(2*x)</span>&#x201D;
+</li><li> &#x201C;<span class="dltxfy-verbspan">a[1+x()]</span>&#x201D;
+</li><li> &#x201C;<span class="dltxfy-verbspan">a[1][2][3]</span>&#x201D;
+</li><li> &#x201C;<span class="dltxfy-verbspan">s.a[1].b</span>&#x201D;
+</li><li> &#x201C;<span class="dltxfy-verbspan">x^y</span>&#x201D;
+</li><li> &#x201C;<span class="dltxfy-verbspan">f1().a / f2()[0] / g(1)</span>&#x201D;
+</li><li> &#x201C;<span class="dltxfy-verbspan">(func()) + t((5)) * array[(5)] - (6 + 7)</span>&#x201D;
+</li><li> &#x201C;<span class="dltxfy-verbspan">((name)[6]).field + ((namebis)).fieldbis</span>&#x201D;
+</li></ul>
+and examples of incorrect expressions are
+<ul>
+<li> &#x201C;<span class="dltxfy-verbspan">1&lt;2=2</span>&#x201D;,
+</li><li> &#x201C;<span class="dltxfy-verbspan">[1]</span>&#x201D;,
+</li><li> &#x201C;<span class="dltxfy-verbspan">a[]</span>&#x201D;,
+</li><li> &#x201C;<span class="dltxfy-verbspan">b^</span>&#x201D;,
+</li><li> &#x201C;<span class="dltxfy-verbspan">a[7]()</span>&#x201D;,
+</li><li> &#x201C;<span class="dltxfy-verbspan">f()()</span>&#x201D;,
+</li><li> &#x201C;<span class="dltxfy-verbspan">f(())</span>&#x201D;,
+</li></ul>
+The generated AST must correspond to an interpretation of all of the following:
+<ul>
+<li> Unary operators <span class="dltxfy-verbspan">+</span>,<span class="dltxfy-verbspan">-</span>, and <span class="dltxfy-verbspan">not</span> have the highest
+precedence.
+</li><li> All arithmetic operators are left-associative except <span class="dltxfy-verbspan">^</span>, which is
+right-associative, and follow the usual precedence rules.
+</li><li> Comparison operators are not associative (e.g., &#x201C;<span class="dltxfy-verbspan">1=2=3</span>&#x201D; is not
+valid) and have less precedence than arithmetic operators.
+</li><li> Logical operators have the lowest precedence, with <span class="dltxfy-verbspan">and</span> being more
+sticky than <span class="dltxfy-verbspan">or</span>. The resulting AST must have at most one token <span class="dltxfy-verbspan">or</span>
+(resp. <span class="dltxfy-verbspan">and</span>) for each disjunction (resp. conjunction) of boolean
+expressions.
+</li><li> Function calls must be represented by a subtree with the symbol <span class="dltxfy-verbspan">(</span>
+as root, the function identifier as first child, and another special node named
+<span class="dltxfy-verbspan">params</span> as second child. The <span class="dltxfy-verbspan">params</span> node has one child for each
+parameter.
+</li><li> Array access must be represented by a subtree with the symbol <span class="dltxfy-verbspan">[</span> as
+root, the array as first child and the index as second child. Note that the
+implicit parenthesization of &#x201C;<span class="dltxfy-verbspan">a[1][2]</span>&#x201D; is &#x201C;<span class="dltxfy-verbspan">(a[1])[2]</span>&#x201D;.
+</li><li> Field access must be represented by a subtree with the symbol &#x201C;.&#x201D; as
+root, the struct being accessed as first child and the field as second child.
+Note that the implicit parenthesization of &#x201C;<span class="dltxfy-verbspan">st.fi.z</span>&#x201D; is
+&#x201C;<span class="dltxfy-verbspan">(st.fi).z</span>&#x201D;.
+</li></ul>
+Note that expressions such as &#x201C;<span class="dltxfy-verbspan">not 1</span>&#x201D;,  &#x201C;<span class="dltxfy-verbspan">1 &lt; (not 2=2)</span>&#x201D;,
+&#x201C;<span class="dltxfy-verbspan">1 + (2&lt;3)</span>&#x201D; and &#x201C;<span class="dltxfy-verbspan">1.m + (1+2)[_variable1] + 3()</span>&#x201D; may be
+semantically nonsensical, but are syntactically correct and should be
+recognized. For example, for input
+<center>
+<span class="dltxfy-verbspan">myfunc(not 1-2 or 3&lt;k).mem</span>
+</center>
+the resulting AST must be
+<center>
+<span class="dltxfy-verbspan">.</span>(<span class="dltxfy-verbspan">(</span>(<span class="dltxfy-verbspan">myfunc</span>,<span class="dltxfy-verbspan">params</span>(<span class="dltxfy-verbspan">or</span>(<span class="dltxfy-verbspan">-</span>(<span class="dltxfy-verbspan">not</span>(<span class="dltxfy-verbspan">1</span>),<span class="dltxfy-verbspan">2</span>),<span class="dltxfy-verbspan">&lt;</span>(<span class="dltxfy-verbspan">3</span>,<span class="dltxfy-verbspan">k</span>)))),<span class="dltxfy-verbspan">mem</span>)
+</center></div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Carles Creus, Nil Mamano
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/antlrsyn.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wc1bde819a2c45.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+// Write your syntactic and lexical descriptions here...</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "antlrsyn",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

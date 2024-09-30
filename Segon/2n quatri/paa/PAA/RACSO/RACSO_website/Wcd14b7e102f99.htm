@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 13 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wc1e989527949a.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>13<a href="Wcd59b91d244a7.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title"><b>Train schedules</b></div>
+		
+			<div class="exercise-description">Note: this problem has been taken from <em>Puzzle Baron&#x2019;s Logic Puzzles</em>.
+
+<div class="dltxfy-paragraph"><br/></div>Solve the following exercise by means of a reduction to <b>SAT</b>:
+<ul>
+<li class="dltxfy-noitem"> A group of train conductors has just received their individual
+assignments for next week&#x2019;s schedule. Using only the clues provided,
+match each conductor to his train, scheduled day, and departure/arrival
+stations:
+<ol>
+<li> The train conductors are Bryan, Eugene, Greg, Herman, Luke, Nathan, and Thomas.
+</li><li> The scheduled days are June 10, 11, 12, 13, 14, 15, and 16.
+</li><li> The departure stations are Buttonwillow, Coulterville, Daly City, Farley, Jackman, Kent, and Manson.
+</li><li> The arrival stations are Paradise, Quimby, Ripley, Urbandale, Vinalhaven, Yreka, and Zwingle.
+</li><li> Each train conductor has a different scheduled day, a different departure station and a different arrival station.
+</li><li> The conductor working on June 15 is either the person arriving at Paradise or the conductor departing from Daly City (but not both).
+</li><li> Of the person departing from Coulterville and Thomas, that are two distinct persons, one will arrive at Paradise and the other is scheduled to leave on June 14.
+</li><li> Nathan is either the person working on June 15 or the conductor arriving at Urbandale (but not both).
+</li><li> The person arriving at Quimby will leave 2 days after the conductor arriving at Zwingle.
+</li><li> Neither the conductor working on June 14 nor the person arriving at Vinalhaven is Nathan.
+</li><li> The conductor departing from Manson will leave sometime after the person departing from Kent.
+</li><li> The person departing from Jackman will leave 3 days after the person departing from Farley.
+</li><li> Greg won&#x2019;t arrive at Yreka.
+</li><li> The conductor arriving at Urbandale will leave 4 days after the conductor departing from Daly City.
+</li><li> Luke will leave 1 day before the conductor arriving at Vinalhaven.
+</li><li> Eugene is either the person arriving at Paradise or the person departing from Daly City (but not both).
+</li><li> Of the conductor departing from Buttonwillow and the conductor arriving at Ripley, that are two distinct conductors, one is scheduled to leave on June 11 and the other is scheduled to leave on June 14.
+</li><li> Of the conductor arriving at Yreka and the person working on June 10, that are two distinct people, one will depart from Farley and the other is Luke.
+</li><li> The person departing from Kent will leave 2 days before Bryan.
+</li></ol>
+</li></ul>
+The input of the exercise and the output with the solution (when the input is
+solvable) are as follows:
+<ul>
+<li> This problem has no parameters, and therefore, there is no real input.
+Nevertheless, in order to ease the reduction, some input variables are
+defined with the identifiers for the days, conductors, and departure/arrival
+stations:
+<pre>
+                   INPUT VARIABLES FOR ...              |
+     DAYS      CONDUCTORS   DEPARTURES     ARRIVALS     |   ID VALUE
+     ---------------------------------------------------+-----------
+     June10    Bryan        Buttonwillow   Paradise     |   0
+     June11    Eugene       Coulterville   Quimby       |   1
+     June12    Greg         DalyCity       Ripley       |   2
+     June13    Herman       Farley         Urbandale    |   3
+     June14    Luke         Jackman        Vinalhaven   |   4
+     June15    Nathan       Kent           Yreka        |   5
+     June16    Thomas       Manson         Zwingle      |   6
+</pre>
+Note that, for convenience, all the identifiers are numbers in <span title="\{0,\ldots,6\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mn>6</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{0,\ldots,6\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">6</span><span class="mclose">}</span></span></span></span></span>,
+and that conductor and station names have been sorted alphabetically.
+</li><li>
+<pre>
+schedules: array [7] of struct {
+   conductor: int
+   departure: int
+   arrival: int
+}
+</pre>
+The output consists of an array with <span title="7"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn></mrow><annotation encoding="application/x-tex">7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span></span></span></span></span> elements, one for each day:
+at index <span title="i"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span> (starting at <span title="0"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span>) there is the data for June <span title="10+i"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mo>+</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">10+i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">10</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span>.
+The data for a day consists of the conductor, the departure station, and
+the arrival station identifiers. Thus, for instance, if the element of
+<span class="dltxfy-verbspan">schedules</span> at index <span title="3"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span></span> is a struct containing the identifier <span title="5"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn></mrow><annotation encoding="application/x-tex">5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span></span>
+as conductor, the departure station <span title="3"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span></span>, and the arrival station <span title="2"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span>,
+it means that in June <span title="13"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>13</mn></mrow><annotation encoding="application/x-tex">13</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">13</span></span></span></span></span>, Nathan is assigned to go from Farley to Ripley.
+</li></ul>
+<i>Note</i>: this problem can be solved in asymptotic constant time without reducing to SAT.</div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Nil Mamano
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/redsat.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wcb4914bb87991.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+reduction
+{
+  // Write here your reduction to SAT...
+}
+
+reconstruction
+{
+  // Write here your solution reconstruction...
+}</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "redsat",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

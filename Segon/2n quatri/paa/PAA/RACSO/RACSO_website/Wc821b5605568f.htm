@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 3 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wc474ab9c73db1.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>3<a href="Wc8febbd32ed8c.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title">Simplified grammar for C statements</div>
+		
+			<div class="exercise-description">The set of tokens is <span title="\{"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo></mrow><annotation encoding="application/x-tex">\{</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span></span></span></span></span><span class="dltxfy-verbspan">IDENT</span>, <span class="dltxfy-verbspan">expr</span>, <span class="dltxfy-verbspan">decl</span>, <span class="dltxfy-verbspan">if</span>,
+<span class="dltxfy-verbspan">else</span>, <span class="dltxfy-verbspan">switch</span>, <span class="dltxfy-verbspan">while</span>, <span class="dltxfy-verbspan">do</span>, <span class="dltxfy-verbspan">for</span>, <span class="dltxfy-verbspan">goto</span>,
+<span class="dltxfy-verbspan">continue</span>, <span class="dltxfy-verbspan">break</span>, <span class="dltxfy-verbspan">return</span>, <span class="dltxfy-verbspan">case</span>, <span class="dltxfy-verbspan">default</span>,
+<span class="dltxfy-verbspan">:</span>, <span class="dltxfy-verbspan">;</span>, <span class="dltxfy-verbspan">{</span>, <span class="dltxfy-verbspan">}</span>, <span class="dltxfy-verbspan">(</span>, <span class="dltxfy-verbspan">)</span> <span title="\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mclose">}</span></span></span></span></span>.
+The token <span class="dltxfy-verbspan">IDENT</span> refers to an identifier (such as a label name), that is,
+a non-empty sequence of alphanumeric characters and underscore, not starting by a
+digit. We also dispose of tokens <span class="dltxfy-verbspan">expr</span> and <span class="dltxfy-verbspan">decl</span>, which denote
+expressions and declarations respectively. Thus, instead of parsing those, we
+use these &#x2018;tokens&#x2019;. Note that the expressions and declarations represented by
+them are not empty.
+
+<div class="dltxfy-paragraph"><br/></div>The most elemental statements are: nothing, an expression, or a list of
+declarations and statements enclosed in curly brackets (<span class="dltxfy-verbspan">{</span> and <span class="dltxfy-verbspan">}</span>).
+
+<div class="dltxfy-paragraph"><br/></div>All statements must end in a semicolon (<span class="dltxfy-verbspan">;</span>), except for the
+aforementioned list in curly brackets, which does not need a semicolon after
+the closing bracket. A statement does not need to have its own ending semicolon
+if it ends in another statement, because that statement will have its own
+semicolon or be a block <span class="dltxfy-verbspan">{...}</span>, which does not require one. For instance,
+the statement &#x201C;<span class="dltxfy-verbspan">expr;</span>&#x201D; has an ending semicolon, so in the if statement
+&#x201C;<span class="dltxfy-verbspan">if(expr) expr;</span>&#x201D;, it is not required to add another semicolon.
+
+<div class="dltxfy-paragraph"><br/></div>A statement can be labeled, in which case it is preceded by a label identifier
+(<span class="dltxfy-verbspan">IDENT</span>) and the token &#x201C;<span class="dltxfy-verbspan">:</span>&#x201D;. Alternatively, instead of a label
+identifier we can have the keyword <span class="dltxfy-verbspan">case</span> followed by an expression, or
+the keyword <span class="dltxfy-verbspan">default</span> (these options are only semantically valid in the
+context of a switch statement, but this doesn&#x2019;t have to be considered by the
+parser).
+
+<div class="dltxfy-paragraph"><br/></div>There are also the following types of statements:
+<ul>
+<li> An <b>if</b> statement starts with the keyword <span class="dltxfy-verbspan">if</span>, followed by
+the condition (i.e., an expression) in parentheses, and a statement.
+Optionally, this statement can be followed by the keyword <span class="dltxfy-verbspan">else</span> and
+another statement.
+</li><li> A <b>switch</b> statement starts with the keyword <span class="dltxfy-verbspan">switch</span>,
+followed by an expression in paretheses and then a statement.
+</li><li> A <b>while</b> statement starts with the keyword <span class="dltxfy-verbspan">while</span>, followed
+by the condition (an expression) in paretheses and then a statement.
+</li><li> A <b>do-while</b> statement starts with the keyword <span class="dltxfy-verbspan">do</span>, followed
+by a statement, the keyword <span class="dltxfy-verbspan">while</span> and a condition (an expression) in
+parentheses.
+</li><li> A <b>for</b> statement starts with the keyword <span class="dltxfy-verbspan">for</span>, followed by
+a list of three expressions enclosed in parentheses and separated by
+semicolons, and then a statement. Any of the expressions can be missing, but
+the separating semicolons must remain.
+</li><li> A <b>goto</b> statement starts with the keyword <span class="dltxfy-verbspan">goto</span>, followed
+by a label identifier.
+</li><li> A <b>return</b> statement starts with the keyword <span class="dltxfy-verbspan">return</span>
+followed by an optional expression.
+</li></ul>
+Moreover, the statements <b>continue</b> and <b>break</b> consist of just
+the keywords <span class="dltxfy-verbspan">continue</span> and <span class="dltxfy-verbspan">break</span>, respectively.
+
+<div class="dltxfy-paragraph"><br/></div>Remarks about AST construction:
+<ul>
+<li> An empty statement must be represented by a special node named <span class="dltxfy-verbspan">nop</span>
+(<em>no operation</em>).
+</li><li> A statement consisting of an expression must be represented simply by the
+<span class="dltxfy-verbspan">expr</span> literal token.
+</li><li> A list of statements and declarations enclosed in curly brackets must be
+represented by a tree with a special node named <span class="dltxfy-verbspan">block</span> as root, and the
+element of the list as children.
+</li><li> A labeled statement must be represented by a tree with a special node
+named <span class="dltxfy-verbspan">label</span> as root, the label identifier as first child and the
+statement itself as second child.
+</li><li> A <b>case</b> statement (a statement starting with <span class="dltxfy-verbspan">case</span>) must be
+represented by a tree with the token <span class="dltxfy-verbspan">case</span> as root and the expression and
+the statement as children.
+</li><li> A <b>default</b> statement (a statement starting with <span class="dltxfy-verbspan">default</span>)
+must be represented by a tree with the token <span class="dltxfy-verbspan">default</span> as root and the
+statement as only child.
+</li><li> An <b>if</b> statement must be represented by a tree with the token
+<span class="dltxfy-verbspan">if</span> as root and the condition and statement as children. In case an else
+clause is present, the corresponding statement must appear as third child.
+</li><li> A <b>switch</b> statement must be represented by a tree with the token
+<span class="dltxfy-verbspan">switch</span> as root and the expression and statement as children.
+</li><li> A <b>while</b> statement must be represented by a tree with the token
+<span class="dltxfy-verbspan">while</span> as root and the condition and statement as children.
+</li><li> A <b>do-while</b> statement must be represented by a tree with the
+token <span class="dltxfy-verbspan">do</span> as root and the statement and condition as children.
+</li><li> A <b>for</b> statement must be represented by a tree with the token
+<span class="dltxfy-verbspan">for</span> as root and four children, one for each expression of the list and
+one for the statement. In case any of the expressions are missing, the
+corresponding son must consist of a special node named <span class="dltxfy-verbspan">nop</span>.
+</li><li> A <b>goto</b> statement must be represented by a tree with the token
+<span class="dltxfy-verbspan">goto</span> as root and the label identifier as only child.
+</li><li> A <b>return</b> statement must be represented by a tree with the token
+<span class="dltxfy-verbspan">return</span> as root. If an expression is given, then it must appear as child.
+Otherwise, a special node named <span class="dltxfy-verbspan">nop</span> must appear as child.
+</li><li> A <b>continue</b> or <b>break</b> statement must be represented by a
+node with just the corresponding keyword.
+</li></ul></div>
+			<div class="exercise-details">
+				<span class="exercise-detail">Authors:</span> Nil Mamano
+				
+					/
+					<span class="exercise-detail">Documentation:</span> <a href="documentation/antlrsyn.pdf"></a>
+				
+				
+			</div>
+			<table>
+				<tr>
+					<td class="topCell">
+						<form method="post" action="Wc862063ad0087.htm">
+							
+							<textarea id="codemirror-area" name="submission" wrap="soft" rows="20" cols="80">
+// Write your syntactic and lexical descriptions here...</textarea>
+							
+								To be able to submit you need to either <a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, or <a class="link" href="guest/default.htm">become a guest</a>.
+							
+							
+							
+						</form>
+					</td>
+					<td class="topCell separatedCell">
+						<div class="submission-details">
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<script type="text/javascript">
+				(function() {
+					racsoEditor('codemirror-area', {
+						mode: "antlrsyn",
+					});
+				}());
+				
+			</script>
+			<script type="text/javascript" src="utc-date-rewriter.js"></script>
+		
+	</div>
+
+		
+	</body>
+</html>

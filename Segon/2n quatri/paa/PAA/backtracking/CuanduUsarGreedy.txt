@@ -1,0 +1,15 @@
+**Algoritmo Voraz (Greedy):**
+
+1. **Problema de la mochila fraccionaria:** Tienes una mochila con una capacidad de peso limitada y un conjunto de objetos, cada uno con un peso y un valor. El objetivo es llenar la mochila para maximizar el valor total. Sin embargo, puedes tomar fracciones de los objetos, no necesitas tomarlos enteros. Un algoritmo voraz podría resolver este problema seleccionando los objetos con la mayor relación valor/peso hasta que la mochila esté llena.
+
+2. **Problema de programación de trabajos con fechas límite:** Tienes un conjunto de trabajos, cada uno con una fecha límite y un beneficio que obtienes si el trabajo se completa antes de la fecha límite. El objetivo es programar los trabajos para maximizar el beneficio total. Un algoritmo voraz podría resolver este problema seleccionando siempre el trabajo con la fecha límite más próxima que aún se puede completar a tiempo.
+
+3. **Problema de la ruta más corta:** Tienes un grafo con pesos en las aristas y quieres encontrar la ruta más corta desde un nodo a otro. Un algoritmo voraz como el algoritmo de Dijkstra puede resolver este problema seleccionando siempre el nodo más cercano que aún no ha sido visitado.
+
+**Backtracking:**
+
+1. **Problema de las ocho reinas:** Quieres colocar ocho reinas en un tablero de ajedrez de 8x8 de tal manera que ninguna reina pueda atacar a otra. El backtracking puede resolver este problema probando todas las posibles posiciones para las reinas y retrocediendo cuando se encuentra una posición que no funciona.
+
+2. **Problema del laberinto:** Tienes un laberinto representado como una matriz de celdas, algunas de las cuales son paredes. El objetivo es encontrar un camino desde la entrada hasta la salida. El backtracking puede resolver este problema probando todas las posibles direcciones en cada paso y retrocediendo cuando se llega a un callejón sin salida.
+
+3. **Problema de la suma de subconjuntos:** Tienes un conjunto de números y un número objetivo, y quieres encontrar un subconjunto de los números que sumen el número objetivo. El backtracking puede resolver este problema probando todas las posibles combinaciones de números y retrocediendo cuando la suma de una combinación supera el número objetivo.

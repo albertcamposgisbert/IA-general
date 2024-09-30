@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exercise 2 | RACSO</title>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="icon" href="favicon.ico" sizes="any">
+		<link rel="icon" href="favicon.png" type="image/png">
+		
+	<link rel="stylesheet" type="text/css" href="style-racso.css">
+	<link rel="stylesheet" type="text/css" href="delatexify/build/delatexify.css">
+	
+		<script type="text/javascript" src="editor/codemirror-5.65.1/lib/codemirror.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/hint/show-hint.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/display/fullscreen.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/addon/selection/active-line.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/lua/lua.js"></script>
+<script type="text/javascript" src="editor/codemirror-5.65.1/mode/stex/stex.js"></script>
+<script type="text/javascript" src="editor/latexhint.js"></script>
+<script type="text/javascript" src="editor/antlr.js"></script>
+<script type="text/javascript" src="editor/cfg.js"></script>
+<script type="text/javascript" src="editor/dfa.js"></script>
+<script type="text/javascript" src="editor/operations.js"></script>
+<script type="text/javascript" src="editor/pda.js"></script>
+<script type="text/javascript" src="editor/redk.js"></script>
+<script type="text/javascript" src="editor/rednp.js"></script>
+<script type="text/javascript" src="editor/redwp.js"></script>
+<script type="text/javascript" src="editor/wordreachability.js"></script>
+<script type="text/javascript" src="editor/cfgderivations.js"></script>
+<script type="text/javascript" src="editor/finitestatemachine.js"></script>
+<script type="text/javascript" src="editor/main.js"></script>
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/lib/codemirror.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/hint/show-hint.css">
+<link rel="stylesheet" type="text/css" href="editor/codemirror-5.65.1/addon/display/fullscreen.css">
+<link rel="stylesheet" type="text/css" href="editor/finitestatemachine.css">
+<link rel="stylesheet" type="text/css" href="editor/extra.css">
+<link rel="stylesheet" type="text/css" href="editor/dark.css">
+<link rel="stylesheet" type="text/css" href="editor/light.css">
+		<script type="text/javascript" src="common.js"></script>
+	
+
+	</head>
+	<body>
+		<table class="banner">
+			<tr>
+				<td>
+					<span><a class="logo link" href="index/default.htm">RACSO</a><a class="link" href="Wc4de018ff0ea.htm">DFA</a><span class="separator"></span><a class="link" href="Wc8ed1eda3435a.htm">CFG</a><span class="separator"></span>Operations:
+		  <a class="link" href="Wc3b38f6bb568.htm">Reg</a>,
+		  <a class="link" href="Wc222ecb919537.htm">CF</a><span class="separator"></span><a class="link" href="Wc29a1289699c4.htm">PDA</a><span class="separator"></span>Reductions:
+		  <a class="link" href="Wcbe7b42ff9194.htm">K</a>,
+		  <a class="link" href="Wc7f793506b20.htm">WP</a>,
+		  <a class="link" href="Wc8493d9ed5ae.htm">CFG</a>,
+		  <a class="link" href="Wc97fc850c238.htm">NP</a>,
+		  <a class="link" href="Wc300bea47a1c7.htm">SAT</a><span class="separator"></span>ANTLR:
+		  <a class="link" href="Wc26bc632b26e0.htm">lexical</a>,
+		  <a class="link" href="Wcee0466f22aa1.htm">syntactic</a><span class="thick-separator"></span><a class="link" href="exam-list/default.htm">Exams</a>
+
+					</span>
+				</td>
+				<td class="user">
+					<a class="link" href="login/default.htm">log in</a>, <a class="link" href="register/default.htm">register</a>, <a class="link" href="guest/default.htm">become guest</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+			<div class="banner cookie">
+				This site uses cookies only for the purpose of identifying user sessions.
+				This is required to properly register actions.
+				<!-- By proceeding, you consent to this. -->
+			</div>
+		
+		
+	<div class="exercise">
+		<h2 class="exercise-intro">
+			
+				Exercise
+				<a href="Wc5f5a5b1b26c8.htm" title="Previous exercise" style="text-decoration:none"><sub>‹</sub></a>2<a href="Wc821b5605568f.htm" title="Next exercise" style="text-decoration:none"><sub>›</sub></a>:
+			
+		</h2>
+		<div class="exercise-title">Simplified grammar for C declarations</div>
+		
+			<div class="exercise-description">A declaration specifies the identifier, type, and other aspects of some
+element, such as a variables or function. Declarations in <span class="dltxfy-verbspan">C</span> have a very
+rich syntax, but we only consider a subset.
+
+<div class="dltxfy-paragraph"><br/></div>The set of tokens is <span title="\{"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo></mrow><annotation encoding="application/x-tex">\{</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span></span></span></span></span><span class="dltxfy-verbspan">IDENT</span>, <span class="dltxfy-verbspan">expr</span>, <span class="dltxfy-verbspan">;</span>, <span class="dltxfy-verbspan">,</span>,
+<span class="dltxfy-verbspan">=</span>, <span class="dltxfy-verbspan">(</span>, <span class="dltxfy-verbspan">)</span>, <span class="dltxfy-verbspan">[</span>, <span class="dltxfy-verbspan">]</span>, <span class="dltxfy-verbspan">{</span>, <span class="dltxfy-verbspan">}</span>, <span class="dltxfy-verbspan">*</span>,
+<span class="dltxfy-verbspan">enum</span>, <span class="dltxfy-verbspan">struct</span>, <span class="dltxfy-verbspan">union</span>, <span class="dltxfy-verbspan">type</span>, <span class="dltxfy-verbspan">TYPE_QUALIFIER</span>,
+<span class="dltxfy-verbspan">STORAGE_CLASS</span><span title="\}"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mclose">}</span></span></span></span></span>. The token <span class="dltxfy-verbspan">IDENT</span> represents any identifier
+(such as a variable or function name), that is, a non-empty sequence of
+alphanumeric characters and underscore, not starting by a digit. The token
+<span class="dltxfy-verbspan">expr</span> represents an arbitrary expression, such as <span class="dltxfy-verbspan">3+4</span> or
+<span class="dltxfy-verbspan">i++</span>. Thus, we do not need to parse expressions, as we already dispose of
+this &#x2018;token&#x2019;.
+
+<div class="dltxfy-paragraph"><br/></div>A declaration has three parts: the <em>declaration specifiers</em>, the list of
+<em>declarators</em>, and a terminating semicolon &#x201C;<span class="dltxfy-verbspan">;</span>&#x201D;.
+
+<div class="dltxfy-paragraph"><br/></div><b>Declaration specifiers</b>: they are keywords or fragments of code that
+specify some property about the declared variables. The declaration specifiers
+part of a declaration consists of one or more declaration specifiers.
+Semantically speaking, not all of them can appear together or in any order, but
+we defer this inspection for the semantical analysis. They can be classified as
+follows:
+<ul>
+<li> <b>Type</b>: defines the type of the variables. It includes keywords
+such as <span class="dltxfy-verbspan">int</span>, <span class="dltxfy-verbspan">float</span>, <span class="dltxfy-verbspan">void</span>, <span class="dltxfy-verbspan">unsigned</span>, and more. Most
+of these keywords are grouped into the <span class="dltxfy-verbspan">type</span> token (that is a literal word
+&#x201C;<span class="dltxfy-verbspan">type</span>&#x201D;, in order to simplify the exercise), with the exception of two
+type specifiers that require more complex parsing:
+<ul>
+<li> The enumerate type starts with the keyword <span class="dltxfy-verbspan">enum</span>, followed by an
+identifier and the list of enumerate elements. Either the identifier or the
+list can be missing, but not both. The list is delimited by curly brackets
+(<span class="dltxfy-verbspan">{</span>, <span class="dltxfy-verbspan">}</span>) and must contain one or more elements, separated by
+commas. Each enumerate element is an identifier that can be initialized. In
+that case, it is followed by the token <span class="dltxfy-verbspan">=</span> and an expression <span class="dltxfy-verbspan">expr</span>.
+For example:
+<ul>
+<li> <span class="dltxfy-verbspan">enum IDENT</span>
+</li><li> <span class="dltxfy-verbspan">enum {IDENT, IDENT=expr, IDENT}</span>
+</li><li> <span class="dltxfy-verbspan">enum IDENT {IDENT=expr, IDENT}</span>
+</li></ul>
+</li><li> The struct/union type starts with either the keyword <span class="dltxfy-verbspan">struct</span> or
+<span class="dltxfy-verbspan">union</span>, followed by an identifier and the list of struct elements.
+Either the identifier or the list can be missing, but not both. The list is
+delimited by curly brackets and must contain one or more elements. Each element
+is an arbitrary declaration. For example:
+<ul>
+<li> <span class="dltxfy-verbspan">struct IDENT</span>
+</li><li> <span class="dltxfy-verbspan">union {type IDENT;}</span>
+</li><li> <span class="dltxfy-verbspan">struct IDENT {type IDENT; type IDENT; type IDENT;}</span>
+</li></ul>
+and even expressions such as &#x201C;<span class="dltxfy-verbspan">struct {type IDENT = IDENT;}</span>&#x201D;, even though it
+is not semantically valid to initialize struct fields.
+</li></ul>
+</li><li> <b>Storage class</b>: defines the scope and life time of the variables.
+It can be any of the keywords <span class="dltxfy-verbspan">typedef</span>, <span class="dltxfy-verbspan">extern</span>, <span class="dltxfy-verbspan">static</span>,
+<span class="dltxfy-verbspan">auto</span>, or <span class="dltxfy-verbspan">register</span>. They are grouped into the <span class="dltxfy-verbspan">STORAGE_CLASS</span>
+token.
+</li><li> <b>Type qualifier</b>: it can be any of the keywords <span class="dltxfy-verbspan">const</span>,
+<span class="dltxfy-verbspan">restrict</span>, or <span class="dltxfy-verbspan">volatile</span>. They are grouped into the
+<span class="dltxfy-verbspan">TYPE_QUALIFIER</span> token.
+</li></ul>
+<b>List of declarators</b>: it consists of one or more declarators separated
+by commas. A declarator is the part of a declaration that specifies the name
+that is to be introduced into the program. Declarators can be initialized,
+which means that they can be followed by the symbol <span class="dltxfy-verbspan">=</span> and an
+<em>initializer</em>. An initializer is either an expression or an initializer
+list, which is a list of one or more initializers delimited by curly brackets
+and separated by commas. A declarator can be any of the following:
+<ul>
+<li> An identifier.
+</li><li> A pointer. It consists of a declarator preceeded by the token <span class="dltxfy-verbspan">*</span>.
+Pointers can be <em>qualified</em>, case in which the token <span class="dltxfy-verbspan">*</span> is followed
+by a type qualifier. For instance, the expressions &#x201C;<span class="dltxfy-verbspan">TYPE_QUALIFIER *IDENT;</span>&#x201D;
+and &#x201C;<span class="dltxfy-verbspan">* TYPE_QUALIFIER IDENT;</span>&#x201D; are both valid. In the first case, the type
+qualifier is a declaration specifier, whereas in the second it qualifies the
+pointer.
+</li><li> An array. It consists of a declarator followed by the token <span class="dltxfy-verbspan">[</span>, an
+optional expression, and the token <span class="dltxfy-verbspan">]</span>.
+</li><li> A function. It consists of a declarator followed by a list of zero or
+more parameter declarations, delimited by parentheses and separated by commas.
+A parameter declaration, in turn, is a regular declaration, except that it can
+have only one declarator, it cannot be initialized and it doesn&#x2019;t have the
+final semicolon.
+</li><li> A declarator inside parentheses.
+</li></ul>
+Examples of correct declarators are:
+<ul>
+<li> <span class="dltxfy-verbspan">IDENT</span>
+</li><li> <span class="dltxfy-verbspan">*IDENT</span>
+</li><li> <span class="dltxfy-verbspan">* TYPE_QUALIFIER * * TYPE_QUALIFIER IDENT</span>
+</li><li> <span class="dltxfy-verbspan">IDENT[expr]</span>
+</li><li> <span class="dltxfy-verbspan">IDENT()</span>
+</li><li> <span class="dltxfy-verbspan">IDENT(type IDENT, type IDENT, type IDENT)</span>
+</li><li> <span class="dltxfy-verbspan">IDENT()[expr](type IDENT)[expr]</span>
+</li><li> <span class="dltxfy-verbspan">*(*IDENT()[expr])[expr]</span>
+</li><li> <span class="dltxfy-verbspan">IDENT = expr</span>
+</li><li> <span class="dltxfy-verbspan">IDENT = {expr, expr, {expr, expr}}</span>
+</li></ul>
+Remarks about the AST construction:
+<ul>
+<li> A list of declaration specifiers must have a special node called
+<span class="dltxfy-verbspan">declarationSpecifiers</span> as root, with all the specifiers as children.
+</li><li> A list of declarators must have a special node named <span class="dltxfy-verbspan">declarators</span>
+as root, with all the declarators as children.
+</li><li> If a declarator is initialized, the token <span class="dltxfy-verbspan">=</span> must appear as root,
+with the declarator and the initializer as children.
+</li><li> A declaration must be represented by a special node named
+<span class="dltxfy-verbspan">declaration</span>, with the list of declaration specifiers as first child and
+the list of declarators as second child.
+</li><li> The enumerate type must have the token <span class="dltxfy-verbspan">enum</span> as root and the
+identifier and list of enumerate elements as children, when available. In turn,
+the list of enumerate elements must have a special node named
+<span class="dltxfy-verbspan">enumerators</span> as root, with all the elements as children. In case an
+enumerate element is initialized, the token <span class="dltxfy-verbspan">=</span> must appear as root, with
+the identifier and the expression as children.
+</li><li> The struct/union type must have either the token <span class="dltxfy-verbspan">struct</span> or
+<span class="dltxfy-verbspan">union</span> as root, and the identifier and list of declarations as children,
+when available. In turn, the list of declarations must have a special node
+named <span class="dltxfy-verbspan">structDeclarations</span> as root, with the declarations as children.
+</li><li> A pointer declarator must be represented by a subtree with the token
+&#x201C;<span class="dltxfy-verbspan">*</span>&#x201D; as root, and the type qualifier (if given) and the declarator as
+children. Note that the implicit parenthesisation of &#x201C;<span class="dltxfy-verbspan">*TYPE_QUALIFIER *IDENT</span>&#x201D;
+is &#x201C;<span class="dltxfy-verbspan">*(TYPE_QUALIFIER, *(IDENT))</span>&#x201D;.
+</li><li> An array declarator must be represented by a subtree with the token
+&#x201C;<span class="dltxfy-verbspan">[</span>&#x201D; as root, the declarator as first child and the size  expression,
+if given, as second child. Note that the implicit parenthesisation of
+<span class="dltxfy-verbspan">IDENT[][]</span> is <span class="dltxfy-verbspan">(IDENT[])[]</span>.
+</li><li> A fuction declarator must be represented by a subtree with the token
+&#x201C;<span class="dltxfy-verbspan">(</span>&#x201D; as root, the declarator as first child and the list of parameters
+as second child. The list of parameters must have a special node called
+<span class="dltxfy-verbspan">parameters</span> as root, even if there are no parameters, with one child per
