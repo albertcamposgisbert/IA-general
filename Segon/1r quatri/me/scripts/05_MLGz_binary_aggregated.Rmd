@@ -1,0 +1,169 @@
+---
+title: "ME - GIA. Binary (Disaggregated vs. Aggregated)"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  html_document:
+    code_folding: show
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+# Introduction
+
+**This script has the goal to see the differences between aggregated and 
+dissagregated data**
+
+The *Elections_92.RData*  file contains the results of a national sampling of potential voters. Specifically, it was a sample of 2198 nationwide voters in the United States on the act before the presidential elections in 1992. Available variables are:
+
+**Outcome:**
+
+- ***pres***:        whether the respondent voted for in the 1992 election (1 = yes, 0=no)
+- ***vota***:        whether the respondent voted for in the 1992 election (Pres-Yes, Pres-No)
+
+**Explanatory variables:**
+
+- ***age***:         respondent's age in years (numerical)
+- ***educ***:        respondent's years of education (numerical)
+- ***inter***:       interest in the election (none, some, high)
+- ***close***:       believes that the election will be close (yes, no)
+- ***sat***:         satisfied with the candidates (yes, no)
+- ***party***:       ideology (dem = democrat; ind = independent; rep = republican)
+- ***convictions***: convictions for the party (ind = indifferent; weak; strong)
+
+
+```{r, warning=FALSE, message=FALSE}
+load("../Dades/Eleccions_92.RData")
+```
+
+# Description of the data
+
+## Univariate descriptive
+
+```{r}
+summary(elecc92)
+```
+## Bivariate descriptive
+
+A graphical bivariate descriptive of all explanatory variables versus the outcome
+could serve to see potential relationships.
+
+It seems that all explanatory variables have some influence on the decision to vote. 
+*Close* and *sat* less influence than the others.
+
+```{r, fig.height=3}
+par(mfrow=c(1,2),las=1)
+boxplot(age ~vota, data=elecc92, col=2:3)
+boxplot(educ~vota, data=elecc92, col=2:3)
+```
+
+
+```{r, fig.height=6}
+par(mfrow=c(2,3),las=1)
+plot(vota~inter,       data=elecc92, col=3:2)
+plot(vota~close,       data=elecc92, col=3:2)
+plot(vota~sat,         data=elecc92, col=3:2)
+plot(vota~party,       data=elecc92, col=3:2)
+plot(vota~convictions, data=elecc92, col=3:2)
+```
+
+# Models
+
+## Disaggregated data
+
+Fit the model only with continuous variable *age*. Age have a positive influence on the vote. The older, the greater propensity to vote 
+
+```{r}
+m_age_dis <- glm(pres ~ age, data = elecc92, family = binomial(link= "logit"))
+summary(m_age_dis)
+```
+
+When disaggregated data is used then $m_i = 1$ and asymptotic theory does not 
+apply. Deviance and Pearson statistics do not follow a $\chi^2$ distribution
+under the $H_0$ of well-fitted model.
+
+As a rule of thumb at a fully disaggregated level for data, a model could be 
+good if Deviance statistic is similar to the degrees of freedom of the model. 
+Large values indicate a lack of fit of the model. 
+
+```{r}
+c('Deviance'           = m_age_dis$deviance,
+  'Degrees of freedom' = m_age_dis$df.res)
+```
+
+**Does the model fit well the data?**
+
+**Deviance >> Degrees of freedom $\rightarrow$ The model does not seem to fit well the data**.
+
+## Aggregated data
+
+An aggregated dataset is created using classes defined by age. We use the fucntion
+`aggregate`.
+**In this case, it is possible to aggregate by a continuous variable because it 
+is categorized and the sample size is large enough**.
+
+```{r}
+dfage <- with(elecc92, aggregate(cbind(ypos = pres, yneg = 1 - pres),
+                                 list("age" = age), sum))
+head(dfage,4)
+```
+
+Fit the model with aggregated data and compare with the model with disaggregated 
+data.
+
+```{r}
+m_age_agg <- glm(cbind(ypos,yneg) ~ age, data=dfage, family=binomial(link= "logit"))
+summary(m_age_agg)
+```
+
+In the model, the coefficients are the same that those ones with disaggregated 
+data, but not the deviance and degrees of freedom.
+
+```{r}
+data.frame(dis = round(c(coef(m_age_dis), deviance = m_age_dis$deviance, df = m_age_dis$df.residual),3),
+           agg = round(c(coef(m_age_agg), deviance = m_age_agg$deviance, df = m_age_agg$df.residual),3))
+```
+
+
+
+With aggregated data, we can use a formal test using the deviance statistic 
+to check if the model fits well the data.
+
+\begin{center}
+$\bigg\{ \begin{array}{l} H_0:\text{The current model fits properly the data} \\ H_1: \text{The current model does not fit properly the data} \end{array}$ 
+\end{center}
+
+```{r}
+deviance <- m_age_agg$deviance # deviance
+df       <- m_age_agg$df.res   # degrees of freedom
+1 - pchisq(deviance,df)        # p-value for hypothesis test
+```
+
+**Does the model fit well the data?**
+
+**p < 0.05 $\rightarrow$ The model does not seem to fit well the data**.
+
+## Comparison with null model
+
+The difference of deviances is the same in the two models. So the statistic 
+$\Delta D$ is appropriate to compare nested models using function `anova`.
+
+```{r}
+# Null model with disaggregated data
+m_age_dis0 <- glm(pres ~ 1,
+                  data   = elecc92, 
+                  family = binomial(link= "logit"))
+
+# Null model with aggregated data
+m_age_agg0 <- glm(cbind(ypos,yneg) ~ 1, 
+                  data   = dfage,   
+                  family = binomial(link= "logit"))
+
+# Comparison with null model
+anova(m_age_dis0,m_age_dis, test='Chisq')
+anova(m_age_agg0,m_age_agg, test='Chisq')
+```
+
+The statistic (**24.69**) and the p-value (**6.721e-07**) are the same.
+

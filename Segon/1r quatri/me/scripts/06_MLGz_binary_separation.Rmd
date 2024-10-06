@@ -1,0 +1,88 @@
+---
+title: "ME - GIA. Binary (Separation problem)"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  html_document:
+    code_folding: show
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo    = TRUE,  # Show code?
+                      warning = FALSE) # Show warnings?
+```
+
+# Introduction
+
+In this dataset, all individuals with more than 5 years of experience and an AI degree are classified as senior AI engineers. This perfect separation between the predictor variables and the outcome will lead to a separation problem when fitting a logistic regression model, as the model will not be able to estimate the coefficients correctly.
+
+**Outcome**:
+
+- ***Senior***: The binary target variable indicating whether the person holds a senior role in AI (1 = Senior AI Engineer, 0 = Junior AI Engineer).
+
+**Explanatory variables**:
+
+- ***Experience***: The number of years of experience a person has in AI (ranges from 0 to 10 years).
+- ***AIDegree***: Whether the person has an AI degree (1 = Yes, 0 = No).
+
+
+
+```{r, warning=FALSE, message=FALSE}
+library(car)
+library(logistf)      # Penalized regression
+```
+
+```{r}
+d <- read.csv("../Dades/ai_role_classification_data.csv")
+```
+
+
+# Separation problem
+
+The separation problem occurs in logistic regression when the predictor variables can perfectly predict the outcome, causing the model to have infinitely large or undefined coefficients. This prevents the model from converging and producing reliable estimates.
+
+Check if there is a **quasi- or separation** issue.
+
+```{r}
+## Quasi-Separation problem
+with(d,table(Senior, Experience, AIDegree))
+```
+# Models
+
+## GzLM model
+
+The GzLM using classic ML estimation does not converge (standard errors are too
+large).
+
+```{r}
+mod_glm <- glm(Senior ~ Experience + AIDegree, 
+               data = d, family = binomial(link="logit"))
+summary(mod_glm)
+```
+
+R returns some warnings that are not printed in the HTML version.
+
+## Penalized regression
+
+Firth model converges.
+
+```{r}
+mod_firth <- logistf(Senior ~ Experience + AIDegree, 
+                     data = d, pl = FALSE)
+options(digits=2)   # Reduce the number oof decimals
+summary(mod_firth)
+options(digits=7)
+```
+
+## Model Comparison
+
+We can calculate confidence intervals using penalized regression.
+
+```{r}
+confint(mod_glm)
+confint(mod_firth)
+```
+
