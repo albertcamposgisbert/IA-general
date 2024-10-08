@@ -1,0 +1,72 @@
+Domini:
+
+Busquem minimitzar el nombre d'operadors i el seu factor de ramificació, així com operadors amb paràmetres similars. Amb aquest objectiu si cal afegirem predicats o tipus extra per a fer de guia, i mirarem d'evitar l'ús de forall o exists per a reduir la càrrega computacional. 
+
+Podem fer servir un predicat que ens indiqui si per a un objecte s'ha complert el seu objectiu o no (evitem molta feina en el goal), i si una condició es binària (avions que marxen o arriben) podem crear un sol predicat (marxa) i fer que l'absència d'aqueset indiqui el contrari ((not marxa) => arriba). 
+
+No modelem res que no faci falta. 
+
+Podem fer servir tipus i objectes per facilitar predicats (enlloc de tenir un predicat per indicar que l'avió és a l'aire, tenir un objecte "aire" de tipus ubicació, que podem reaprofitar per a dir que l'avió està a l'aire, en una pista, porta..)
+
+(define(domain domain_name)
+	(:requirements :adl :typing)
+	(:types name_object - type
+		name_subobject - name_object
+	)
+    (:functions
+        function_to_minmaximize ?object - type
+    )
+	(:predicates
+		(predicate1 ?variable1 - type1 ?variable2 - type2)
+		(predicate ?variable)
+	)
+	(:action action1
+		:parameters (?variable1 - type1 ?variable2 - type2)
+		:precondition (
+			and 
+			(predicate1 ?variable1 ?variable2)
+			(not (predicate2 ?variable1))
+		)
+		:effect (
+			and
+			(not (predicate1 ?variable1))
+			(predicate3 ?variable2)	
+            (increase (function ?object) (ammount_or_variable))
+		)
+	)
+	...
+	(:action action_n
+	
+	)
+)
+
+Parlar de que significa cada predicat, que ens permet saber, que fa en el planificador (que ens permet restringir)...
+
+Parlar dels operadors que tenim - precondicions (minimitzen la quantitat d'objectes a provar?), factor de ramificació...
+
+
+
+Problema:
+
+Si volem indicar que un objecte de l'enunciat no s'utilitza, ho podem fer a través de la negació de predicats, o no declarant-lo en el problema. Minimitzar l'expressió del goal. 
+
+(define (problem problem_name)
+	(:domain domain_name)
+	(:objects object1 object2 - type1
+		object3 object4 - type2)
+	(:init
+		(predicate1 object1 object3)	
+		(predicate2 object2)
+	)
+	(:goal 
+		forall 
+		(?object - type)
+		(imply 
+			(predicate ?object)
+			(predicate2 ?object)
+		)
+	)
+)
+
+Noms per a facilitar la lectura/interpretabilitat. 
+Comentar que fa cada "bloc" de l'init ("el primero, en el que modelamos los vuelos de llegada; la ausencia de un predicado salida para los primeros cuatro vuelos indica que estos vuelos no son salidas, sino llegadas", "el segundo, en el que especificamos los vuelos de salida, diciendo en que puerta de embarque se encuentra"...), comentar els predicats del goal ("El estado objetivo usa el predicado servido en vez del predicado en para no tener que especificar para las llegadas en que puerta han de desembarcar (queremos que nos lo diga el planificador, no que se lo tengamos que decir")).

@@ -1,0 +1,75 @@
+Problema 5
+a) L'algorisme de Hill climbing es fa servir per a una cerca local. En aquest sentit, el plantejament inicial seria incorrecte, ja que no es parteix d'una solució inicial en un espai de solucions, sinó que es parteix d'una no solució en un espai de configuracions. Tot i això, el cost inicial és 0, i deixa espai a millora. Respecte a l'heurística, hi ha divereses mancançes, la més important d'entre d'elles que no es té en compte ni el pes ni el nombre de bombons de cada tipus, de manera que és molt probable que l'algorisme no sigui capaç de portar-nos a una solució a partir d'aquest heurístic.
+Pel que fa als operadors, són suficients per a portar-nos per tot l'espai de configuracions, tot i que donat l'heurístic, un cop col·locats un cert nombre de bombons, mai serà millor reduir-lo, de manera que l'operador dos no es faria servir mai.
+La ramificació seria de l'estil de O(k*n) per als dos operadors, on k és el nombre de categories, i n la quantitat de bombons màxima que és col·loquen, que correspon també al cost i té un rang de 0 < k*n < k*m on m és els espais que té la caixa, en aquest cas determinat pel pes (tot i que, novament, no es té en compte en l'heurístic.)
+
+b) En aquest cas, el problema es planteja correctament com a una cerca local, partint d'una solució. El cost de generació d'aquesta primera solució ha d'ordenar els k tipus de més beneficiosos a menys (n log n) i després ha de recorrer els k tipus en ordre per veure si compleixen les restriccions, de manera que té un cost de O(n^2) per a n tipus.
+Pel que fa als operadors, tot i que tenen en compte el pes màxim i mínim de la caixa, no tenen en compte el nombre de bombons de cada tipus, de manera que podriem sortir de l'espai de solucions i arribar a una configuració que sigui no solució si es treuen masses bombons d'un tipus encara que no es passi del pes, o si se'n possen masses. Tot i això, els dos operadors ens permeten accedir a la totalitat de l'espai de solucions, tot i que no a tot l'espai de configuracions. Les ramificacions dels operadors es mantenen respecte a l'apartat anterior, però el seu rang passa a estar limitat per la quantitat de bombons pel pes disponible.
+Al tenir en compte l'heurístic però, ens trobem amb el mateix problema que abans, ja que el preu d'un bombó dividit pel seu benefici serà sempre positiu (s'entén que no fabricarien bombons que perdin diners), fent per tant que l'operador de treure bombó quedi obsolet, i per tant limitant l'espai de solucions al qual tenim accés. Combinant això amb l'algorisme de generació, és fàcil que ens trobem amb un màxim local del qual hill climbing no pugui sortir.
+
+Aquest és l'únic algorisme dels que se'ns presenta que seria capaç de sortir d'un mínim local, donat que es generen mutacions aleatòries. Tot i això, novament no es té en compte el nombre màxim de bombons de cada tipus, que també haurien d'estar penalitzats amb +infinit igual que amb el pes. És una representació senzilla i vàlida, que ens pot portar a resultats bons amb una complexitat moderada.
+
+
+20) 
+a) Començant per la generació inicial, aquesta té un cost però també una bondat de 0, ja que és la solució buida. Això ens permet que l'algorisme utilitzat pugui arribar més fàcilment a tots els altres estats, però també fa que el cost d'executar-lo sigui més costós. 
+
+Els operadors són vàlids a nivell individual, però en el cas del segon operador, aquest mai es faria servir, ja que en qualsevol cas el seu ús ens reduïria el benefici.
+Sigui com sigui, qualsevol dels dos operadors té una ramificació de O(n*c) per a n ciutats i c centres, amb un rang de 0 < cost < n^2
+
+Pel que fa a l'heurístic, compleix correctament la seva funció, ja que maximitza ambdós criteris, donant (molta) prioritat a aquelles ubicacions que tenen més voluntaris disponibles.
+
+
+b) Aquesta segona proposta de generació té un cost més elevat, de l'estil O(n*c) per a n ciutats i c centres, però té una bondat molt més elevada (que dependrà però de cada execució). 
+Al canviar d'operadors, també ens permet sortir d'estats inicials que l'anterior no ens permetria. De fet, l'operador no només és vàlid, sinó que té un cost menor que els anteriors, sent de O(n) i no pas O(N^2) donat que simplement hem de comprovar per a cada centre el local més pròxim (que es pot calcular previament i deixar en cache en una taula de proximitats). L'heurístic és més balancejat que l'anterior, continua maximitzant ambdós paràmetres però no dona tanta importància a la quantitat de voluntaris.
+La combinació del generador i de l'operador però no ens permeten accedir per complet a tot l'espai de solucions. 
+
+c) En aquest cas, la generació inicial té un cost de n * L, fent-lo més costós, tot i tenir la mateixa bondat (novament, amb un factor aleatori). 
+
+
+Problema 10 - Cerca local
+a) L'algorisme de Hill climbing és una opció vàlida, ja que ens permet optimitzar els criteris a partir de moure'ns per l'espai de solucions, cosa que s'adapta al problema, sense necessitat d'obtenir l'òptim. 
+Tot i això, cal comptar que partim de fora de l'estat de solucions, ja que la solució buida com a estat inicial no forma part d'aquest conjunt: per a ser una solució qual que tingui suficients reserves per complir amb les restriccions que imposa el departament de sanitat. El cost de generar la solució inicial és 0, o O(n) si suposem que fem servir una codificació on hem d'inicialitzar un vector de reserves, de mida n * 15 on n és el nombre d'habitacions, que com a molt tindran 31 reserves diferents cadascuna. La bondat de la solució inicial és 0. Podriem fer servir aquesta solució si s'assegura que l'algorisme arribarà a una solució.
+El conjunt d'operadors ens permet moure'ns per tot l'espai de configuracions des de la solució buida, però no des d'altres. Afegir reserva té una ramificació de O(n), amb un rang de 0 <= afegir <= n * x c (0,30) * (30-x) * 3 ja que tenim tres tipus de reserva, i en qualsevol habitació n podem posar la reserva en un dia qualsevol i acabar-la en qualsevol altra. Cambiar-reserva també té una ramificació de O(n), ja que per a qualsevol habitació podem canviar una de les seves reserves, 0 < ramificació < n * 15. Els operadors permeten passar d'una solució a una no solució, ja que no es comproven les restriccions.
+Pel que fa a la funció heurística, té varis problemes. Primerament, al ser una multiplicació, podem obtenir els mateixos resultats de situacions radicalment diferents. A més, tan sols optimitza un dels criteris, maximitzar els beneficis, però no busca minimitzar els costos de neteja, ja que per a uns mateixos ingressos, afavoriria aquelles situacions amb més cost de neteja. L'heurístic també hauria d'incloure una penalització per a les no solucions, especialment tenint en compte l'algorisme de generació inicial.
+
+b) Novament, hill climbing és vàlid per les raons mencionades anteriorment. 
+Pel que fa a la generació inicial, aquesta tindrà una bondat molt millor que l'anterior, i una major possibilitat de deixar-nos dins de l'espai de solucions. Tot i això, aquesta última part no és segura, de manera que s'ha de tenir en compte alhora de crear les restriccions en l'heurístic. El cost de la generació inicial és de O(h*r), ja que per a cada habitació, mentres no estiguin plenes les reserves, hem de recorrer la llista de reserves per veure quina és la més pròxima a la data de fi, 0 < cost < h * 15 * r.
+L'operador que es proposa no ens permet moure'ns per tot l'espai de configuracions, ja que estem limitats al nombre de reserves inicial, i novament, no restringeix les reserves perquè no es solapin entre elles, ni té en compte que ens pot treure de l'espai de solucions. La ramificació de l'operador és O(h * r), ja que per a cada habitació podem canviar qualsevol de les reserves per una altra.
+La funció heurística és millor que l'anterior, ja que minimitza els costos i maximitza els beneficis, i al ser ambdues en euros és acceptable no fer servir cap ponderació. Tampoc ens trobariem en situacions tant extremes d'obtenció del mateix valor amb un gran desbalanceig. Tot i això, novament no compta amb cap mecanisme per mantenir l'algorisme dins de l'espai de solucions, o per dirigir-lo cap a ell en els casos que la generació inicial ens deixi fora. 
+
+c)
+Els algorismes genètics són un mètode vàlid per al problema que se'ns proposa, ja que novament ens permeten maximitzar i minimitzar els criteris en funció de l'heurístic, i no és necessari trobar la òptima.
+Per a generar la primera solució, tindrà una bondat que dependrà del factor aleatori, i és molt poc probable que ens situi en l'espai de solucions, cosa que novament s'ha de tenir en compte en l'heurístic. Té una complexitat de cost de O(n*r*h), ja que per a cada "individu" s'ha de recorrer el vector de reserves que depèn de r per a assignar-ne h. També té altres no solucions, com números d'habitació que no existeixen.
+Els operadors de creuament i mutació ens permeten moure'ns per tot l'espai de configuracions, ja que són aleatoris, i tenen una ramificació de O(n*r), on novament n és el nombre d'individus, i r la quantitat de reserves, però tant un com l'altre ens generaran solucions molt pròximes. Els operadors no tenen en compte cap de les dues restriccions, i per tant aquestes hauran de condicionar l'heurístic. 
+La funció heurística optimitza el que volem, però no incorpora cap de les comprovacions mencionades anteriorment, de manera que és la pitjor de les que hem vist fins ara.
+
+Exercicis parcial
+
+6.
+Inicialment, el Hill cimbing sembla un algorisme adequat, ja que és capaç d'optimitzar criteris movent-se per l'espai de solucions, i no se'ns demana trobar l'òptim, o sigui que amb un sub-òptim ja en tenim prou.
+
+La solució inicial té cost 0 (o el cost de generar un vector de locals, constant O(1)), però també té bondat 0, i tot i que és adequada per a l'algorisme utilitzat, ja que podem considerar cap centre com a una solució, també ens genera un estat del que és molt difícil sortir, especialment tenint en compte l'heurístic proposat.
+
+Pel que fa als operadors, a priori ens permeten moure'ns per tot l'espai de solucions, però en realitat, treure un centre és molt probable que no s'utilitzi mai degut a l'heurístic, ja que és difícil que s'apliqui sense abans fer un pas més dolent. No només això, sinó que partint de l'estat inicial, si considerem que la distància és inifinit, mai trobarem cap solució millor (i tindriem distància infinita per 0 voluntaris). Si considerem que la distància és 0, encara que col·loquem un primer centre, la puntuació de l'heurístic no canviarà, ja que tot i tenir voluntaris, no tindrà cap altre centre per mesurar la distància. La ramificació dels operadors és de O(l) (al ser centres indistingibles, tan sols hem de triar un local on col·locar-los) per a afegir centre i O(c) per a treure centre, ja que com a molt tindrem c centres. Això si es respecta la quantitat de centres disponibles, que l'operador de col·locar centre no sembla tenir en compte.
+
+Finalment, en l'heurístic trobem varies coses problemàtiques. Primerament, al fer una multiplicació, amb valors totalment dispars -i per tant, escenaris completament diferents- obtindriem el mateix valor, fent així que hi hagi un nombre indeterminat d'escenaris indistingibles entre ells però sense cap similitud. A més, no es té en compte les magnituds de les distàncies ni dels voluntaris, fet que podria desequilibrar el resultat, i en el cas de que algun dels dos sigui nul, com hem vist abans, porta el total a 0.
+
+b)
+Les consideracions respecte a l'algorisme es mantenen. 
+La solució inicial és bastant millor a nivell de bondat, però també té un cost més elevat de O(l),ja que hem d'anar pel vector de locals i decidir en cadascun si col·locar un centre o no, o per a cada centre triar un local O(C). Aquest generador ens deixa dins de l'espai de solucions, i això combinat amb l'operador que no treu ni col·loca cap centre, ens assegura que ens mourem sempre per l'espai de solucions. De fet, serem capaços d'explorar-lo completament amb l'operador proposat. Aquest té una ramificació de O(c), donat que tinguem "cuinada" una taula de distàncies. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

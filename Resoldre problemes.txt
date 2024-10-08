@@ -1,0 +1,24 @@
+L'algorisme és vàlid/no és vàlid perquè busca optimitzar els criteris.
+
+Algorisme genètic -> 
+Com de variades són les solucions inicials?
+Fan servir una funció de fitness, només poden maximimtzar. 
+Quins efectes tenen els operadors de mutació?
+
+Hill climbing: 
+Es manté dins l'espai de solucions/s'apliquen les penalitzacions correctes? 
+Els operadors es faran servir (augmenten el cost?)
+
+A*:
+Només minimitza, no permet costos negatius. 
+F = g + h; g és el que volem optimitzar? un pas sempre serà més costós que el decrement en h?
+No té sentit utilitzar negatius.
+
+Quan estem fent un heurístic amb el mateix tipus d'unitats, ponderar llavors et deforma la comparació.
+
+Satisfacció de restriccions:
+No maximitza ni minimitza. La representació (variables i dominis) és correcta?
+Quantes variables tenim (en funció de n)?
+Podem reduir les restriccions a associacions binàries? El que es proposa és una restricció de veritat, o un preprocessat?
+
+Podem arreglar els problemes d'alguna manera?

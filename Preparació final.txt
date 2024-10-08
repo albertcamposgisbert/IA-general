@@ -1,0 +1,527 @@
+Capítol 5 problema 6 - aeroport
+
+(define (domain airport)
+	(:requirements :adl :typing)
+	(:types
+		plane position - object
+		air runway gate - position
+	)
+	(:predicates 
+		(in ?plane - plane ?position - position)
+		(free ?position - position)
+		(to_land ?plane - plane)
+		(to_takeoff ?plane - plane)
+	)
+	(:action go_runway
+		:parameters (?plane - plane ?runway - runway ?gate - gate)
+		:precondition(
+			and 
+			(to_takeoff ?plane)
+			(in ?plane ?gate)
+			(free ?runway)
+		)
+		:effect(
+			and
+			(not (free ?runway))
+			(free ?gate)
+			(in ?plane ?runway)
+			(not (in ?plane ?gate))
+		)
+	)
+	(:action takeoff
+		:parameters (?plane - plane ?runway - runway ?air - air)
+		:precondition(
+			and
+			(in ?plane ?runway)
+			(to_takeoff ?plane)
+		)
+		:effect(
+			and
+			(not (in ?plane ?runway))
+			(free ?runway)
+			(in ?plane ?air)
+		)
+	)
+	(:action land
+		:parameters (?plane - plane ?runway - runway ?air - air)
+		:precondition(
+			and
+			(in ?plane ?air)
+			(to_land ?plane)
+			(free ?runway)
+		)
+		:effect(
+			and
+			(not (in ?plane ?air))
+			(not (free ?runway))
+			(in ?plane ?runway)
+		)
+	)
+)
+
+(define (problem problem1)
+	(:domain airplanes)
+	(:objects 
+		ps1 ps2 - runway
+		A1 A2 B1 B2 B3 - gate
+		IB BA AF AL IB1 VY KL LH - plane
+		air - air
+	)
+	(:init 
+		(to_land IB1)
+		(to_land VY)
+		(to_land KL)
+		(to_land LH)
+		(to_takeoff IB)
+		(to_takeoff BA)
+		(to_takeoff AF)
+		(to_takeoff AL)
+		(in IB A1)
+		(in BA B1)
+		(in AF B2)
+		(in AL B3)
+		(in IB1 air)
+		(in VY air)
+		(in KL air)
+		(in LH air)
+		(free ps2)
+		(free A2)
+	)
+	(:goal(
+		forall 
+	)
+	)
+
+
+
+)
+
+Capítol 4 problema 17
+
+
+Final de l'any passat
+1.
+a)
+Hill climbing és un algorisme adequat, ja que es busca minimitzar i maximitzar vàries mètriques, però no necessàriament trobar la solució òptima.
+
+Partir de la solució buida vol dir que partim d'una solució, però una de molt dolenta, i que per tant tot i que el cost inicial és constant, i que deixa marge de maniobra a l'algorisme, però que aquest haurà de fer molta feina. 
+
+Pel que fa als dos operadors, ens permeten accedir a tot l'espai de cerca, i en cap moment ens treuen de l'espai de solucions, ja que inclouen les restriccions necessàries. Tot i això, caldrà veure a partir de l'heurístic si realment s'aprofitarà el que treu un funcionari, sobretot tenint en compte que partim de la solució buida. 
+Ambdós operadors tenen una ramificació d' O(suma (fr * suma(xr))), ja que per a cada plaça d'un mateix rol de tots els jutjats, podem assignar o dessassignar qualsevol funcionari que tingui aquell rol. No es té en compte la distància màxima que un funcionari està disposat a recórrer.
+
+Pel que fa a la funció heurística, té varis inconvients. Si bé es cert que ens permet optimitzar tot el que ens demana l'enunciat (en aquest cas estariem minimitzant la funció h), d'una banda es fa una suma entre els sous (la unitat dels quals són euros) i les distàncies (que no queda clar en que estan, però segur que en euros no), fent que estiguem barrejant unitats sense cap tipus de ponderació. Això pot provocar que se li doni molta més importància a una o a l'altra en funció de les unitats de la distància. A més, s'està fent servir una divisió per a maximitzar la quantitat de places omplertes. Això, tot i ser correcte, fa que el cost sigui igual en situacions molt diferents, que l'algorisme no sabria distingir -per exemple, moltes places amb un sou alt i una gran distància a recòrrer tindrien el mateix valor que unes poques molt mal pagades i pròximes a on viuen els empleats-, deixant de banda que novament no s'està utilitzant cap tipus de ponderació. 
+
+Una mètrica millor seria minimitzar el nombre de places vacants, evitant així la divisió, i afegir ponderacions. 
+
+b)
+Novament, els algorismes genètics són adequats per al tipus de problema, ja que ens permeten maximitzar els criteris a partir de la funció de fitness. 
+
+Pel que fa a la solució inicial, tot i que el problema es podria beneficiar de tenir solucions diferents i variades, la generació d'aquesta té un cost molt elevat, ja que per a cada plaça ha de comprovar que el funcionari seleccionat aleatòriament no estés ja seleccionat en alguna de les anteriors. No només això, sinó que no s'especifica que es comprovi la restricció de que el funcionari i la plaça siguin compatibles. Així doncs, la complexitat pot arribar a O(suma(xk) * F), i fins i tot així no tenim cap garantia de que la solució sigui bona, ja que no es guia per cap criteri. 
+Pel que fa a la representació en si, aquesta ens permet representar un gran nombre de no estats, com per exemple tenir més d'un bit a 1 en l'espai d'una sola plaça, i calen restriccions importants. L'espai ocupat per a n individus seria de suma(xk) * F * n. 
+
+Pel que fa als operadors, l'operador de creuament pot tenir una certa utilitat sempre que es talli "correctament": si la divisió es fa entre la zona d'una plaça i d'una altra, aquest operador no ens treurà de l'espai de solucions si ens trobàvem en una solució, però si tallem pel mig d'una plaça  pot ser que sí. Pel que fa a l'operador de mutació, aquest ens garantitza que, tot i que la generació inicial ens col·loca en una solució, en sortirem ràpidament, i entrarem a l'espai de no solucions si no afegim més restriccions, ja que molt fàcilment obtindriem o bé una plaça sense funcionaris (que és solució, però volem maximitzar el nombre de places plenes), o bé una plaça amb més d'un funcionari, que és no-solució.
+
+Per a solucionar tots aquests problemes, caldria implementar vàries restriccions: en l'operador de creuament, tallar sempre entre plaça i plaça; en l'operador de mutació, sempre que es canvia un bit d'una plaça, canviar un altre bit d'aquesta. Això però, comportaria molta més feina, ja que en la majoria de casos (quan canviem un 0) hauríem de buscar on es troba el bit a 1. Fins i tot si canviem el 1 a 0 ens cal seleccionar un altre bit aleatòriament, doblant la quantitat de feina. Tampoc s'està tenint en compte la distància màxima que un funcionari està disposat a recórrer, o el sou mínim que accepta, i per tant en alguns casos una plaça podria quedar buida (i per tant la modificació de l'operador no seria vàlida).
+
+Pel que fa a l'heurístic en si, les dues parts de la suma busquen maximitzar, cosa que ens permet utilitzar la funció de fitness, i s'escala entre 0 i 1 a través de les màximes de les mètriques per a ponderar, cosa que l'apartat anterior no feia. Tot i això, s'estan maximitzant les mètriques incorrectes, ja que tant el sou dels funcionaris assignats com la distància que han de recórrer són mètriques que volem minimitzar. Per a solucionar-ho, ens caldria tan sols invertir les divisions, fent que minimitzant aquests valors obtinguèssim una h(n) més alta. Actualment, tampoc es té en compte la maximització de les places ocupades.
+
+Així doncs, està clar que aquest enfocament té un munt de problemes, i en comparació la versió anterior és molt millor. 
+
+c) (com si fos satisfacció de restriccions)
+La satisfacció de restriccions no és adequada per a aquest problema, ja que no ens permet optimitzar els valors que s'ens demanen, tan sols buscar una solució.  
+
+Pel que fa a les variables i el domini d'aquestes, les representacions dels dos són adequades; les variables tenen una representació compacta i, tot i que el seu domini és inicialment gran, aquest es pot reduir molt ràpidament amb les restriccions, ja que a diferència de les propostes anteriors, sí que es tenen en compte totes les restriccions de l'enunciat:
+
+R1 - No es pot assignar un mateix funcionari a diverses places. Aquesta es pot representar com a restricció binària, que ens permet propagar-la molt fàcilment entre variables.
+
+R2 - La distància ha de ser menor que la distància que accepta el funcionari; això en si no és una restricció (ja que no es pot aplicar retroactivament sobre la mateixa variable) sinó part del pre-processat que ens permet eliminar elements del domini abans d'escollir-ne un per a la variable.
+
+R3 - El sou ha de ser major que el sou mínim acceptat; novament, això no és una restricció sinó part del pre-processat. 
+
+Així doncs, sense tenir en compte la optimització, aquest seria un problema molt fàcil de resoldre per satisfacció de restriccions, ja que tan sols caldria fer un pre-processat i una propagació d'una restricció binària. 
+
+Per la natura del problema però, aquesta solució no és aplicable, i per tant seria preferible la primera opció, l'ús de l'algorisme de Hill Climbing.
+
+2.
+a)
+(define (domain packets)
+	(:requirements :adl :typing)
+	(:types packet - type 
+	dependency - packet
+	absolute_dependency - dependency)
+	(:predicates
+		(depends_on ?packet - packet ?dependency - dependency)
+		(installed ?packet - packet)
+		(to_install ?packet - packet)
+		(downloaded ?packet - packet)
+		(installed_previous_step ?packet - absolute_dependency)
+	)
+	(:action download_packet
+		:parameters (?packet - packet)
+		:precondition(
+			and
+			(not (downloaded ?packet))
+			(not (exists 
+				(?a_dependency - absolute_dependency) 
+				(installed_previous_step(absolute_dependency)
+				)
+			)
+		)
+		:effect (downloaded ?packet)
+	)
+	(:action install_packet
+		:parameters (?packet - packet)
+		:precondition (
+			and
+			(not (installed ?packet))	
+			(downloaded ?packet)	
+			(forall 
+				(?dependency - dependency)
+				(imply 
+					(depends_on ?packet ?dependency)
+					(installed)
+
+			)
+			(imply 
+				(exists 
+					(?a_dependency - absolute_dependency) 
+					(
+						(installed_previous_step(absolute_dependency))
+						(depends_on(?packet ?absolute_dependency))
+					)
+				)
+			)
+		)
+		:effect (
+			and 
+			(forall 
+				(?a_dependency - absolute_dependency)
+				(when
+					(installed_previous_step(?a_dependency))
+					(not (installed_previous_step(?a_dependency)))
+				)
+			)
+			(installed_previous_step(?packet)) # Si no és una dependència absoluta, això no afecta ja que el filtraran per tipus
+			(installed(packet))
+		)
+	)
+
+)
+
+Tenim tres tipus diferents, packet del qual tots formen part, dependency, i absolute dependency, cadascun dels últims més restrictius que l'anterior i que ens permet filtrar per reduir la ramificació.
+De predicats tenim:
+- depends_on: el paquet a depèn del b
+- installed
+- to_install: paquets objectius (les dependències no caldrà marcar-las per instal·lar ja que no és una restricció per a cap de les accions, i sinó ho fa no podrà avançar)
+- downloaded
+- installed_previous_step: es comprova únicament amb els paquets de tipus absolute dependency
+
+Accions: 
+Fem servir tan sols dues accions, una per baixar els paquets, on la única restricció és que no s'acabi d'instal·lar un paquet que sigui dependència absoluta (i que per tant forçaria a fer l'altra acció) i que no estigui baixat el paquet, convertint-lo en baixat;
+instal·lar paquet, que donat que un paquet no està instal·lat, però si baixat, l'instal·la. Si hi ha un paquet de tipus dependència absoluta acabat d'instal·lar, cal que el paquet a instal·lar sigui el que depèn d'ell.
+Com a efecte, el marca com a instal·lat i com a instal·lat en el pas anterior. 
+
+b)
+El goal del problema serà el següent:
+(:goal 
+	forall 
+		(?program - packet)
+		(imply 
+			(to_install ?packet)
+			(installed ?packet)
+		)
+)
+Ja que ens permetrà comprovar que tots els paquets que l'usuari vol instal·lats ho estan. 
+
+Així doncs, en la declaració d'objectes tindrem: els paquets que no són dependència de ningú, de tipus packet. Els que són dependència, de tipus dependency; i els que a més ho són de manera absoluta, de tipus absolute_dependency.
+
+Pel que fa a la inicialització, assignarem el predicat depends on per a cadascuna de les relacions entre els diversos packets. 
+Assignarem to install a aquells que l'usuari vulgui.
+Finalment, assignarem downloaded o installed en funció de la informació addicional que tinguem sobre l'estat inicial dels paquets (en aquest cas tant AppManager com AppStore estan instal·lats).
+
+Així doncs, obtindriem tres blocs principals de predicats.
+
+(define (problem problem_packets)
+    (:domain packets)
+    (:objects Browser PDFviewer - packet)
+        AppManager AppStore AntivirusDB - dependency
+        AntivirusCore PDFeditor - absolute_dependency
+    (:init
+        relacions
+
+        (to_install Browser)
+        (to_install PDFviewer)
+
+        (installed AppManager)
+        (installed AppStore)
+    )
+    (:goal 
+        forall 
+        (?program - packet)
+        (imply 
+            (to_install ?packet)
+            (installed ?packet)
+        )
+    )
+)
+
+
+Tema 4 - Problema 8
+Ajuntament bicing
+
+1. 
+L'algorisme A* és aplicable a la situació, ja que ens permet trobar un camí (de fet, l'òptim), a partir de la minimització d'un criteri, que en aquest cas és la distància màxima recorreguda. Es planteja com un camí, també adequat per a l'A*. 
+
+Pel que fa a l'operador, és correcte tenir-ne tan sols un, ja que a l'A* no li fa falta un operador per a "desfer" el camí. Aquest té una ramificació O(n) on n és el nombre d'estacions + 1, el final. Aquest operador, ens permet visitar tot l'espai de solucions. Com que considerem solució tan sols haver mogut totes les bicicletes que es demana, treballem inicialment fora de l'espai de solucions, i cal que l'heurística ens hi guiï. 
+
+En l'heurístic però, trobem diversos problemes. La restricció de que el camió no pot portar masses bicicletes és correcta. Tot i això, caldria afegir també una restricció que obligués a que la última estació fos la final, ja que sinó aquesta distància no es tindria en compte. 
+
+F = g + h: l'algorisme 
+
+2.
+Aplicar un algorisme de satisfacció de restriccions no és correcte, ja que se'ns demana trobar el camí més curt, i sense passar-nos de bicicletes. 
+
+La representació trobada per a les variables és en principi adequada, tot i que quadràtica, i tot i tenir un domini molt reduit, una vegada entrem més en detall podem veure que no ens permet comprovar en quin sentit es fa el recorregut.
+
+
+Tema 4 - Problema 20
+Empresa pesquera
+
+1.
+La búsqueda lcoal és una solució correcta per al problema plantejat, ja que ens permet minimimtzar una funció (en aquest cas el cost d'operació i el que obtenen, que per a que l'empresa no perdi diners, ha de ser negatiu), però no necessàriament trobar la solució òptima. 
+
+La solució inicial té tant una bondat com complexitat mitjanes, que dependran d'un factor aleatori, però que ens permet col·locar-nos sense un gran cost en l'espai de solucions (ja que tots els destins estan coberts). 
+
+Pel que fa als operadors, no ens permeten accedir a tot l'espai de solucions, i manquen restriccions importants, però són suficients per a trobar una millor solució amb unes petites modificacions. 
+Primerament, tenim l'operador d'intercanviar un vaixell entre destins. Aquest, tot i que ens permetria minimitzar en alguns casos el cost en funció del destí i del vaixell, té el problema de que ens pot treure fora de l'espai de solucions, i per tant caldria afegir o bé una restricció per a comprovar que no sigui l'únic vaixell que queda en una zona, o fer que s'intercanvii amb un altre vaixell, o modificar l'heurística per a que es tingui en compte. La ramificació de l'operador és O(v*d) on v és el nombre de vaixells i d el nombre de destins.
+Pel que fa al segon operador, intercanviar dos mariners entre vaixells, aquest tindria una complexitat d'O(v*mv), on mv és la suma dels mariners de tots els vaixells. Com podem veure, no ens permet accedir a tot l'espai de solucions, ja que aquells mariners que no hagin estat seleccionats inicialment, no podran ser mai intercanviats. Això es pot solucionar fàcilment fent que també es tinguin en compte.
+
+Pel que fa a la funció heurística, sempre que aquesta es minimitzi, funcionarà correctament, ja que estarem optimitzant el cost total del desplegament dels vaixells per a tot el viatge, així com el benefici que obtenim dels mariners assignats. 
+
+2. 
+La satisfacció de restriccions és un mètode adequat per al problema plantejat. Inicialment tenim d*m variables. 
+
+Inicialment, 
+
+Pel que fa a les restriccions:
+La primera, tot i ser una restricció, no ens permet fer una propagació de forma eficient, ja que cada vegada que fem una assignació, hem de comprovar si el vaixell al qual s'ha fet ha arribat a capacitat, comprovant totes les altres variables. Per a fer això de manera molt més eficient, mantenint la mateixa quantitat total de combinacions de variables i valors, podem fer servir com a variables les parelles de vaixell destí, que ens permetrien tenir com a domini qualsevol subconjunt de mariners. Tot i que inicialment l'espai és molt més gran, aquest es redueix ràpidament, i podem propagar els mariners emprats en una variable en forma de restricció binària. 
+També ens falta una restricció que ens indiqui -en la solució original- si hi ha alguna zona sense assignacions. 
+
+
+(define (domain stack)
+
+    (:predicates
+        (sobre ?got ?objecte)
+        (lliure ?objecte)
+        (objectiu ?got ?objecte)
+        (blanc ?objecte)
+    )
+    (:action agafar 
+        :parameters (?got ?objecte1 ?objecte2)
+        :precondition (
+            and 
+            (lliure ?got)
+            (lliure ?objecte2)
+            (sobre ?got ?objecte1)
+            (imply 
+                (blanc ?got)
+                (not (blanc ?objecte2))    
+            )
+            (imply 
+                (not (blanc ?got))
+                (blanc ?objecte2)   
+            )
+        )
+        :effect (
+            and
+            (lliure ?objecte1)
+            (not (lliure ?objecte2))
+            (not (sobre ?got ?objecte1))
+            (sobre ?got ?objecte2)
+        )
+    )
+    (:)
+)
+
+
+Planificació 
+Exercici 4
+(define (domain medical_transport)
+    (:requirements :adl :typing)
+    (:types vehicle box medical_center material - object)
+    (:predicates
+        (on ?material_or_box - object ?box_or_vehicle - object)
+        (loaded ?material - material)
+        (delivered ?material - material)
+        (wanted ?material ?medical_center)
+        (refrigerated ?thing - object)
+        (goes_to ?vehicle - vehicle ?place - medical_center)
+    )
+    (:action load_material
+        (:parameters ?material - material ?box - box)
+        (:precondition
+            and 
+            (not (loaded ?material))
+            (imply 
+                (refrigerated ?material)
+                (refrigerated ?box)
+            )
+        )
+        (:effect
+            and
+            (loaded ?material)
+            (on ?material ?box)
+        )
+    )
+
+    (:action go_to
+        (:parameters ?vehicle - vehicle ?box - box ?material - material ?center - medical_center)
+        (:precondition 
+            and
+            (loaded ?material) - retallem 
+            (wanted ?material ?center)
+            (on ?box ?vehicle) - retallem 
+            (on ?material ?box) 
+        )
+        (:effect 
+            and
+            (delivered ?material)
+            (goes_to ?vehicle ?center)
+        )
+    )
+)
+
+goal:
+forall (?material - material) (delivered ?material)
+
+on - el material x està en la caixa y, o bé la caixa x es troba en el vehicle y
+loaded - el material es troba en una caixa (permet evitar dos forall per comprovar si el material està ja en algun vehicle)
+delivered - d'igual manera, això ens permet marcar un material com a entregat, per facilitar el goal
+wanted - el material x està destinat al centre medic indicat
+attached_to - la caixa es troba en el vehicle indicat - això ens permet reduir molt la ramificació
+refrigerated - la caixa o material és refrigerat
+goes_to - el vehicle anirà al centre medic marcat
+
+podriem evitar una comprovació en cadena a l'hora de mirar si un element està en un vehicle si afegissim un predicat de on vehicle, però preferim evitar aquest
+
+
+Anàlisis de mètodes de cerca - Problema 12 - El mag Rincewind
+
+Objectius: fer el menor recorregut possible
+a) L'A* és un algorisme adequat per al problema, ja que no només ens permet minimitzar la distància, sinó que podrem trobar la solució òptima, que és el que volem. 
+Es parteix de la solució buida, i es modela la solució com un camí, ambdues coses adequades per a l'algorisme. 
+
+Només tenim un operador, que ens permet moure'ns per tot l'espai de solucions i per tant trobar la òptima (tot i que partim d'una no solució). No cal operador de treure torre, ja que això ja ho fa A*. La ramificació de l'operador és de (n-1), on n és el nombre de torres. 
+
+F = G + h: El cost en un cert punt és la distància que s'ha recorregut. En canvi, el cost d'arribar fins a la solució, es calcula com a la distància mitjana per les torres que queda, més una penalització addicional per les torres bloquejades. Per a que l'algorisme sigui admisible, cal que h(n)<h(n)*, cosa que no sempre passarà, ja que s'utilitza la distància mitjana -la qual cosa vol dir que la real pot ser més petita-, i la penalització per les torres bloquejades no funcionaria en cas de que la clau per a aquestes es trobi en una de les torres per la qual volíem passar igualment. 
+
+Un millor algorisme seria M*P, on M fos la distància mínima i no la mitjana. 
+
+b) D'entrada, hill climbing no és un algorisme adequat per a solucionar el problema que se'ns planteja, ja que tot i que permet minimitzar la distància recorreguda, no ens assegura l'optimalitat. 
+
+La solució inicial té un cost -però també una bondat- molt baixos. De fet, donat que el nom de les torres -en principi- no ens aporta cap informació, seria millor col·locar les torres tal com ens arriben per a no haver d'ordenar la llista (n log n per a n torres). No ens garantitza que ens trobem dins de l'espai de solucions, i pot no ser necessari que totes les torres estiguin col·locades inicialment. 
+
+Pel que fa a l'opoerador, no ens permet explorar tot l'espai de solucions, ja que ens caldria com a mínim un operador de treure torre (per evitar passar per torres innecessàries, i donat que partim sempre de totes les torres col·locades), però d'altra banda ens facilita entrar a l'espai de solucions ja que l'operador de swap comprova que les restriccions es compleixin (tot i que faria falta afegir un incentiu per a portar-nos-hi més ràpidament). La ramificació de l'operador és de O(n^2) per a n torres.
+
+L'heurístic és correcte, i ens permet minimitzar la distància recorreguda, però novament no podem evitar passar per torres que siguin innecessàries, i no es penalitza el fet de que no es compleixin les restriccions.
+
+c) 
+L'algorisme proposat no és correcte per al problema plantejat, ja que en principi no ens permet ni minimitzar ni trobar l'òptim, tan sols trobar una solució. 
+
+Tant les variables com els seus dominis són compactes, i permeten representar correctament tot l'espai de solucions. Tot i això, trobem el mateix problema que en l'anterior apartat, no hi ha manera d'evitar passar per totes les torres -tot i que en aquest cas l'afectació és menor encara, ja que no podem optimitzar els paràmetres-, de manera que podem trobar una solució per on passem per torres innecessàries.
+
+Pel que fa a les restriccions,
+R1: S'han de conservar els preordres establerts per els segells arcans - Això no seria ben bé una restricció, sinó un preprocessat que aplicariem abans d'executar cadascun dels passos. Si al principi, per exemple, assignèssim la posició 0 a una torre protegida, s'hauria d'aplicar la restricció a si mateixa, cosa que no és possible. 
+
+R2:  
+
+
+Planificació - 9 - Mag Rincewind
+(define (domain torres)
+    (:requirements :adl :typing :fluents)
+    (:types enchantment tower protection thaum person - object)
+    (:functions
+        (distance_between_towers ?tower1 - tower ?tower2 - tower)
+        (distance_done ?person - person)
+    )
+    (:predicates 
+        (counters ?protection - protection ?enchantment - enchantment)
+        (has_protection ?place_or_person - object ?protection - protection)
+        (has_trap ?place - tower ?trap - enchantment)
+        (has_thaum ?place_or_person - object ?thaum - thaum)
+        ( needs ?thaum - thaum) - ens permet simplificar el goal
+        on(?person - person ?tower - tower)
+    )
+    (:action go_to_tower
+        :parameters( ?person - person ?thaum - thaum ?trap - enchantment ?tower1 - tower ?tower2 - tower)
+        :precondition(
+            and
+            (on ?tower1 ?person)
+            (has_trap ?tower ?trap)
+            (has_protection ?person ?counter)
+            (counters ?counter ?trap)
+            (has_thaum ?tower ?thaum)
+        )
+            
+        :effect (
+            and
+            (not (on ?tower1))
+            (on ?tower2)
+            (imply 
+                (needs ?thaum)
+                (not (needs ?thaum))
+            )
+            (forall 
+                (?counter - protection)
+                (when 
+                    (has_protection ?tower ?counter)
+                    (has_protection ?person ?counter)
+                )
+            )
+            (increase (distance_done ?person) (dist ?tower1 ?tower2))
+        )
+        
+    )
+)
+
+
+Modelarem un objecte anomenat "None_X" que es farà servir quan la torre no tingui trampa, o contramesura. També quan la persona no tingui cap contramesura (None_x counters None_y).
+Això ens permet evitar moltes comprovacions i/o accions addicionals.
+
+De fet, com que l'efecte és not needs thaum, podem fer simplement que el goal sigui:
+
+(:goal exists (?thaum - thaum) (?needs - thaum))  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
