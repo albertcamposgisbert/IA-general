@@ -1,0 +1,82 @@
+---
+title: "ME - GIA. Count data (Offset)"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  html_document:
+    code_folding: show
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+
+# Introduction
+
+The ***Insurance*** data of the *MASS* package corresponds to the collection of the number of customer claims registered by an American vehicle insurer.
+
+**Outcome**
+
+- **_Claims_**: number of claims
+
+
+**Explanatory variables**
+
+- **_District_**: district (1:small city - 4:big city)
+
+- **_Group_**: type of car (< 1 litre; 1-1.5; 1.5-2; >2 litres)
+
+- **_Age_**: age (<25;25-29;30-35;>35)
+
+- **_Holders_**: number of holders
+
+```{r warning=FALSE, message=FALSE}
+library(MASS,warn.conflicts = FALSE,quietly = TRUE) # Insurance; glm.nb
+library(AER,warn.conflicts = FALSE,quietly = TRUE)  # dispersion.test
+
+# Load data from package MASS
+data(Insurance) 
+
+df       <- data.frame(Insurance , 
+                       logholders = log(Insurance$Holders))   # logholders --> offset
+df$Group <- factor(df$Group,ordered = FALSE)
+```
+
+
+# Descriptive analysis
+
+```{r}
+summary(Insurance)
+hist(Insurance$Claims, breaks = 20)
+```
+
+# Models
+
+
+## Poisson Model without offset
+
+```{r}
+mod_pois_1 <- glm(Claims ~ Group, 
+                    family = poisson, 
+                    data   = df)
+summary(mod_pois_1)
+```
+
+
+## Poisson Model with offset
+
+```{r}
+mod_pois_2 <- glm(Claims ~ Group + offset(logholders), 
+                  family = poisson, 
+                  data   = df)
+summary(mod_pois_2)
+```
+
+**Overdispersion**
+
+```{r}
+dispersiontest(mod_pois_1, trafo = 1)
+dispersiontest(mod_pois_2, trafo = 1)
+```
+
+

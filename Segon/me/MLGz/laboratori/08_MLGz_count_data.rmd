@@ -1,0 +1,260 @@
+---
+title: "ME - GIA. Count data (Models)"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  html_document:
+    code_folding: show
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+
+# Introduction
+
+## Example. Scientific articles
+
+The PhD Mentoring and Productivity Dataset originates from the study titled "Do Teachers' and Students' Characteristics Affect Productivity? The Role of Mentoring" by Ronald G. Ehrenberg, Daniel D. Goldhaber, and Dominic J. Brewer (1995). The dataset explores the factors influencing the academic productivity of Ph.D. students, specifically in the context of the number of articles they publish during the final three years of their doctoral studies.
+
+The key variables in the dataset include:
+
+**Outcome**
+
+- **art**: articles in last three years of PhD
+
+**Explanatory variables**
+
+- **fem**: coded one for females
+- **mar**: coded one if married
+- **kid5**: number of children under age six
+- **phd**: prestige of Ph.D. program
+- **ment**: articles by mentor in last three years
+    
+```{r load_data, echo=FALSE, warning=FALSE}
+options(warn = -1)
+suppressMessages(library(MASS,warn.conflicts = FALSE,quietly = TRUE))   # glm.nb
+suppressMessages(library(car,warn.conflicts = FALSE,quietly = TRUE))    # Anova
+suppressMessages(library(AER,warn.conflicts = FALSE,quietly = TRUE))    # dispersion.test
+suppressMessages(library(effects,warn.conflicts = FALSE,quietly = TRUE))# allEffects
+suppressMessages(library(pscl,warn.conflicts = FALSE,quietly = TRUE))   # zinfl
+suppressMessages(library(ggplot2,warn.conflicts = FALSE,quietly = TRUE))# per grafics
+suppressMessages(library(knitr,warn.conflicts = FALSE,quietly = TRUE))  # per grafics
+
+## Load data
+load('ab.Rdata')
+```
+
+# Descriptive analysis
+
+## Univariate exploratory data analysis
+
+```{r}
+summary(ab)
+```
+
+## Bivariate descriptive analysis
+
+```{r}
+vars <- colnames(ab)[-1] # all variables except outcome: -21
+
+par(mfrow=c(2,3), mar=c(3,3,3,1)) # 4x5 windows with margins 3,3,3,1
+
+# Plot if numeric and boxplot if categorical
+for (v in vars){
+  form <- as.formula(paste0("art~",v))
+  if (!is.factor(ab[,v])){
+    plot(form, data = ab, main = v, pch=19,col=rgb(0,1,1,0.1))
+    abline(lm(form,data = ab), col='blue')
+  }else{
+    boxplot(form, data = ab, main = v)
+  }
+}
+```
+
+# Models
+
+## Poisson model
+
+
+```{r mod_poisson, echo=TRUE, cache=TRUE, tidy=TRUE}
+mp <- glm(art ~ fem + mar + kid5 + phd + ment, family=poisson, data=ab)
+summary(mp)
+```
+
+
+###  Validation
+
+**Numeric validation**
+
+```{r}
+qchisq(0.95, df.residual(mp))
+```
+
+The model is not good enough since the residual deviation (\textbf{1634.4}) is clearly higher than the critical point ($\chi^2_{909}=980.3$)
+
+**Graphical validation**
+
+```{r}
+residualPlot(mp)
+```
+
+
+
+### Overdispersion
+
+**Pearson statistic**
+
+Person statistic divided by the degrees of freedom should be close to one.
+
+```{r}
+phi <- sum(residuals(mp, type = 'pearson')^2)/mp$df.residual
+```
+
+
+**Formal test**
+
+
+```{r AER, echo=TRUE, results='markup', cache=TRUE}
+dispersiontest(mp, trafo=1) # quasi-poisson  --> V = (1 + alpha) * mu = phi * mu
+dispersiontest(mp, trafo=2) # negative binom --> V = mu + alpha * mu^2 = mu + 1/theta * mu^2 
+```
+
+There is overdispersion that should be corrected. Both tests to check whether the variance depends linearly on the expectation (*trafo=1*) and to see if it depends quadratically (*trafo=2*) are significant:
+    - `trafo = 1` $\rightarrow V[Y_i|X_i] = (1+0.82) \cdot E[Y_i|X_i]$
+    - `trafo = 2` $\rightarrow V[Y_i|X_i] = E[Y_i|X_i] + 0.51 \cdot E[Y_i|X_i]^2$
+
+## Quasi-Poisson model
+
+```{r mod_qpoisson, echo=TRUE, cache=TRUE}
+summary(mq <- glm(art ~ fem + mar + kid5 + phd + ment, 
+                  family=quasipoisson, data=ab))
+```
+
+
+The AIC cannot be calculated because there is no complete probabilistic model. The quasi-poisson model uses the estimate by the Pearson statistic to correct the standard errors inflating them by **1.35** ($\hat{\phi}=\sqrt{1.82}$).
+
+
+
+## Quasi-Poisson vs. Poisson
+
+We can compare both models
+
+```{r, cache=TRUE}
+se <- function(model) sqrt(diag(vcov(model)))
+kable(round(data.frame(coef_pois = coef(mp),  coef_quasi = coef(mq), # Coefficients 
+                       se_pois   = se(mp),    se_quasi   = se(mq),   # Standard errors
+                       se_ratio  = se(mq)/se(mp)),                   # SE Ratio
+            4))      
+```
+
+
+The coefficients of the Poisson and Quasi-Poisson models are the same and the standard errors are multiplied by 1.35 which is obtained from the square root of the Pearson statistic divided by its degrees of freedom.
+
+
+## Negative Binomial
+
+```{r mod_negbinom, echo=TRUE, cache=TRUE, tidy=TRUE}
+summary(mnb <- glm.nb(art ~ fem + mar + kid5 + phd + ment, data=ab))
+```
+
+Estimate of $\theta$ and use in `glm`:
+
+```{r mod_negbinom2, echo=TRUE, cache=TRUE}
+1/mnb$theta
+summary(mnbg <- glm(art ~ fem + mar + kid5 + phd + ment,
+                    family = negative.binomial(mnb$theta), data=ab))
+```
+
+
+### Validation
+
+```{r}
+deviance(mnbg)
+qchisq(0.95,909) 
+```
+
+```{r}
+residualPlot(mq)
+```
+
+
+- The model does not fit the data well since the residual deviance is in the 
+non-acceptance region of $H_0$
+- The estimate of $\theta$ provided by the model ($2.26$) is similar to that provided by *dispersion.test* ($1.96 = 1/0.509$). 
+
+
+## Zero-inflated poisson
+
+In the zero-inflated Poisson model, we have 2 models in one:
+
+- A logit model (lower output of `zeroinfl`) to predict the probability of belonging to the structural zero class.
+- A Poisson model (upper output of `zeroinfl`) for the random zeros and the rest of the values.
+
+
+```{r mod_zip, echo=TRUE, cache=TRUE, tidy=TRUE, size='tiny'}
+summary(mzip <- zeroinfl(art ~ fem + mar + kid5 + phd + ment, data=ab))
+```
+
+### Validation
+
+```{r}
+## Residuals versus predicted
+res <- residuals(mzip, type = 'pearson')  # Residuals
+pre <- predict(  mzip, type = 'response') # Predicted
+plot(res~log(pre))
+abline(h = 0,lty = 2)
+lines(lowess(log(pre),res), col=2)
+```
+
+
+### Exercise
+
+1. What is the probability of structural zero for a **single woman** with 
+**no children under 6 years** in a program with **prestige=3** and 
+**1 published article** by her mentor?
+
+
+```{r mod_zip_1, echo=TRUE, cache=TRUE, tidy=TRUE, size='tiny'}
+# With function
+pr_func <- predict(mzip,
+                   newdata = data.frame(fem='Women',mar='Single',kid5=0,phd=3,ment=1),
+                   type    = 'zero')    
+
+# By hand
+co      <- coef(mzip)
+pl      <-     co['zero_(Intercept)']  +      
+               co['zero_femWomen']  + 
+           3 * co['zero_phd'] + 
+           1 * co['zero_ment']
+pr_hand <- exp(pl)/(1 + exp(pl))
+round(as.numeric(c(pr_func,pr_hand)),3)
+```
+
+
+2. What is the expected mean for this woman?
+
+```{r mod_zip_2, echo=TRUE, cache=TRUE, tidy=TRUE, size='tiny'}
+# With function
+mu_func <- predict(mzip, 
+                   newdata = data.frame(fem='Women',mar='Single',kid5=0,phd=3,ment=1),
+                   type    = 'response') 
+
+# By hand
+pl0     <-     co['count_(Intercept)'] + 
+               co['count_femWomen']    + 
+           3 * co['count_phd']         + 
+           1 * co['count_ment']
+
+mu2_0   <- exp(pl0)
+mu_hand <- (1 - pr_hand) * mu2_0
+round(as.numeric(c(mu_func, mu_hand)),3)
+```
+
+
+3. How much more likely is a woman to be a structural zero than a man?
+
+```{r mod_zip_3, echo=TRUE, cache=TRUE, tidy=TRUE, size='tiny'}
+round(as.numeric(exp(co['zero_femWomen'])),3)   # Odds ratio
+```
+

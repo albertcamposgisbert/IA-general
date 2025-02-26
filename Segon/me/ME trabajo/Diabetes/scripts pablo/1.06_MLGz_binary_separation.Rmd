@@ -1,0 +1,88 @@
+---
+title: "ME - GIA. Binary (Separation problem)"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  html_document:
+    code_folding: show
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo    = TRUE,  # Show code?
+                      warning = FALSE) # Show warnings?
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(car)
+library(logistf)      # Penalized regression
+
+```
+
+```{r}
+d <- read.csv("base_trabajo.csv")
+d$Cholesterol.Category <- ifelse(d$Cholesterol.Category == "High", 1, 0)
+
+
+```
+
+
+# Separation problem
+
+The separation problem occurs in logistic regression when the predictor variables 
+can perfectly predict the outcome, causing the model to have infinitely large or 
+undefined coefficients. This prevents the model from converging and producing 
+reliable estimates.
+
+Check if there is a **quasi-separation** or a **separation** issue.
+
+```{r}
+# Discretizar Blood.Glucose.Levels, BMI, y Blood.Pressure en intervalos
+d$GlucoseGroup <- cut(d$Blood.Glucose.Levels, breaks = 5) # Agrupa glucosa en 5 intervalos
+d$BMIGroup <- cut(d$BMI, breaks = 3)                      # Agrupa BMI en 3 intervalos
+d$PressureGroup <- cut(d$Blood.Pressure, breaks = 3)      # Agrupa presión arterial en 3 intervalos
+
+# Crear la tabla con las variables discretizadas
+table_discrete <- with(d, table(Cholesterol.Category, GlucoseGroup, BMIGroup, PressureGroup))
+print(table_discrete)
+
+```
+# Models
+
+## GzLM model
+
+The GzLM using classic ML estimation does not converge (standard errors are too
+large).
+
+```{r}
+mod_glm <- glm(Cholesterol.Category ~ . - Target - Cholesterol.Levels, 
+               data = d, family = binomial(link="logit"))
+summary(mod_glm)
+
+```
+
+R returns some warnings that are not printed in the HTML version.
+
+## Penalized regression
+
+Firth model converges.
+
+```{r}
+mod_firth <- logistf(Cholesterol.Category ~ . - Target - Cholesterol.Levels, 
+                     data = d, pl = FALSE)
+options(digits=2)
+summary(mod_firth)
+options(digits=7)
+```
+
+## Model Comparison
+
+We can calculate confidence intervals using penalized regression.
+
+```{r message=FALSE}
+confint(mod_glm)
+confint(mod_firth, method = "profile")
+```
+

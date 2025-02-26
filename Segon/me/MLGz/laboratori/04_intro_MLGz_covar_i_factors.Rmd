@@ -1,0 +1,478 @@
+---
+title: "ME - GIA. Introduccio MLGz (Factors i covariables. Interacció)"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    code_folding: show
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+## Introducció
+
+Es vol comparar les valoracions (_**V**_ o _**VV**_) de dos mètodes pedagògics 
+(_**M**_) en funció del coeficient d'intel·ligència (_**C**_) amb les dades del 
+fitxer `comrect.csv`. Plantegeu i ajusteu un model lineal generalitzat de les 
+valoracions *V* o *VV* en funció del factor M i de la covariable C. Valoreu 
+incloure els termes d'interacció i contesteu les preguntes següents: 
+
+a) Les dues rectes són iguals? o no? 
+
+b) Les dues rectes són paral·leles? o no? 
+
+c) Les dues rectes tenen el mateix terme independent? o no?
+
+d) Per cadascun dels valors 90, 105 i 120 de la variable *C*, quines diferències 
+hi ha en la valoració segons el mètode?
+
+
+```{r warning=FALSE, message=FALSE}
+# Carregar llibreries
+library(emmeans)
+library(car)
+
+# Llegir dades
+dd   <- read.csv2("../Dades/comrect.csv")
+dd$M <- factor(dd$M)
+```
+
+
+### Descriptiva
+
+Amb la resposta *V*, sembla que **NO** hi ha interacció:
+
+- L'efecte del mètode pedagògic **NO** depen del coeficient intelectual.
+
+```{r}
+scatterplot(V  ~ C|M, smooth = F, data = dd, main="V")
+```
+
+Amb la resposta *VV*, sembla que **SÍ** que hi ha interacció:
+
+- L'efecte del mètode pedagògic **SÍ** depen del coeficient intelectual.
+
+```{r}
+scatterplot(VV ~ C|M, smooth = F, data = dd, main="VV")
+```
+
+## Models amb *V* com resposta
+
+### Família normal amb link canònic (*identity*). Sense interacció
+
+#### Model
+
+- El Model sense interacció s'anomena **additiu** (*mvg*)
+- El model **nul** és aquell que no té cap variable explicativa (*mvg0*)
+
+```{r}
+# No fa falta link="identity" per ser link canònic veure ?family
+mvg  <- glm(V ~ M + C, family=gaussian, dd)
+mvg0 <- glm(V ~ 1,     family=gaussian, dd)
+```
+
+Resum del model
+
+```{r}
+summary(mvg)
+```
+
+- Per cada increment unitari del coeficient intelectual (*C*), la valoració *V*
+s'incrementa en **1.22 unitats**.
+
+- El mètode pedagògic 2 (*M2*), incrementa la valoració *V* en **14.6 unitats**.
+
+
+Resum gràfic del model (`emmip`del paquet `emmeans`). El resum gràfic del model 
+s'assembla molt al de les dades.
+
+```{r}
+emmip(mvg, M~C, CIs = T, at = list(C = c(90,105,120)))
+```
+
+**Test omnibus**. El test omnibus és aquell que compara el nostre model amb el 
+model nul mitjançant un test de deviànces.
+
+```{r}
+anova(mvg0, mvg, test = "F")
+```
+
+#### Interpretació
+
+Emprarem la funció `emmeans` per fer les estimacions als valors de C: 90, 105 i 120
+(també podriem fer servir *predict*)
+
+```{r}
+emmeans(mvg, ~M|C, at=list(C = c(90,105,120)))
+```
+
+Emprarem la funció `emtrends` per fer les estimacions dels pendents de les dues rectes
+
+```{r}
+emtrends(mvg, ~M, var="C")
+```
+
+
+#### Validació
+
+La **Linealitat** i la **Homoscedasticitat** semblen comportar-se prou bé.
+
+```{r}
+residualPlots(mvg)
+```
+
+**Valors estranys i influents**
+
+El individu **21** és el que té més influència sobre el model (major distància de Cook)
+i també el pitjor explicat (residu més gran).
+
+```{r}
+influencePlot(model = mvg)
+```
+
+#### Predicció 
+
+Calcularem els intervals de predicció per les dues rectes.
+
+```{r}
+CS <- min(dd$C):max(dd$C)
+
+P1 <- predict(mvg, data.frame(C=CS, M="1"), type = "response") # Point estimates M=1
+P2 <- predict(mvg, data.frame(C=CS, M="2"), type = "response") # Point estimates M=2
+
+disp      <- summary(mvg)$dispersion  # parametre de dispersio
+var_func1 <- family(mvg)$variance(P1) # funcio de variancia M=1
+var_func2 <- family(mvg)$variance(P2) # funcio de variancia M=2
+
+IP1 <- cbind(P1 - 2 * sqrt(disp * var_func1),
+             P1 + 2 * sqrt(disp * var_func1)) 
+IP2 <- cbind(P2 - 2 * sqrt(disp * var_func2),
+             P2 + 2 * sqrt(disp * var_func2))
+
+dd1 <- subset(dd, M=="1")
+dd2 <- subset(dd, M=="2")
+
+# Punts pels 2 metodes pedagogics
+plot  (V ~ C, dd1, pch=3, col="blue", xlim = range(CS), ylim = range(c(IP1,IP2)),
+       main="pred ± 2·S, V Normal identity")
+points(V ~ C, dd2, pch=3, col="red")
+
+# IP metode 1
+lines(CS, P1,      col="blue")
+lines(CS, IP1[,1], col="blue", lty=2)
+lines(CS, IP1[,2], col="blue", lty=2)
+
+# IP metode 2
+lines(CS, P2,      col="red")
+lines(CS, IP2[,1], col="red", lty=2)
+lines(CS, IP2[,2], col="red", lty=2)
+```
+
+
+### Família normal amb link *inverse*. Sense interacció
+
+Veurem que canviant el link, el model no ajusta bé.
+
+```{r}
+mvgl  <- glm(V ~ M + C, dd, family = gaussian(link=inverse))
+```
+
+
+#### Validació 
+
+**Linealitat i Homoscedasticitat**
+
+```{r}
+residualPlots(mvgl)
+```
+
+#### Predicció 
+
+```{r}
+CS <- min(dd$C):max(dd$C)
+
+P1 <- predict(mvgl, data.frame(C=CS, M="1"), type = "response")        # Point estimates M=1
+P2 <- predict(mvgl, data.frame(C=CS, M="2"), type = "response")        # Point estimates M=2
+
+disp      <- summary(mvgl)$dispersion  # parametre de dispersio
+var_func1 <- family(mvgl)$variance(P1) # funcio de variancia M=1
+var_func2 <- family(mvgl)$variance(P2) # funcio de variancia M=2
+
+IP1 <- cbind(P1 - 2 * sqrt(disp * var_func1),
+             P1 + 2 * sqrt(disp * var_func1)) 
+IP2 <- cbind(P2 - 2 * sqrt(disp * var_func2),
+             P2 + 2 * sqrt(disp * var_func2))
+
+# Punts pels 2 metodes
+plot  (V ~ C, dd1, pch=3, col="blue", xlim = range(CS), ylim = range(c(IP1,IP2)),
+       main="pred ± 2·S, V Normal identity")
+points(V ~ C, dd2, pch=3, col="red")
+
+# IP metode 1
+lines(CS, P1,      col="blue")
+lines(CS, IP1[,1], col="blue", lty=2)
+lines(CS, IP1[,2], col="blue", lty=2)
+
+# IP metode 2
+lines(CS, P2,      col="red")
+lines(CS, IP2[,1], col="red", lty=2)
+lines(CS, IP2[,2], col="red", lty=2)
+```
+
+
+
+### Família Gamma amb link *identity*. Sense interacció
+
+Veurem que canviant la família no es compleix la homoscedasticitat.
+
+```{r}
+mvgg  <- glm(V~M+C,family = Gamma(link = identity), dd)
+```
+
+#### Validació 
+
+**Linealitat i Homoscedasticitat**
+
+```{r}
+residualPlots(mvgg)
+```
+
+#### Predicció 
+
+```{r}
+CS <- min(dd$C):max(dd$C)
+
+P1 <- predict(mvgg, data.frame(C=CS, M="1"), type = "response")        # Point estimates M=1
+P2 <- predict(mvgg, data.frame(C=CS, M="2"), type = "response")        # Point estimates M=2
+
+disp      <- summary(mvgg)$dispersion  # parametre de dispersio
+var_func1 <- family(mvgg)$variance(P1) # funcio de variancia M=1
+var_func2 <- family(mvgg)$variance(P2) # funcio de variancia M=2
+
+IP1 <- cbind(P1 - 2 * sqrt(disp * var_func1),
+             P1 + 2 * sqrt(disp * var_func1)) 
+IP2 <- cbind(P2 - 2 * sqrt(disp * var_func2),
+             P2 + 2 * sqrt(disp * var_func2))
+
+# Punts pels 2 metodes
+plot  (V ~ C, dd1, pch=3, col="blue", xlim = range(CS), ylim = range(c(IP1,IP2)),
+       main="pred ± 2·S, V Normal identity")
+points(V ~ C, dd2, pch=3, col="red")
+
+# IP metode 1
+lines(CS, P1,      col="blue")
+lines(CS, IP1[,1], col="blue", lty=2)
+lines(CS, IP1[,2], col="blue", lty=2)
+
+# IP metode 2
+lines(CS, P2,      col="red")
+lines(CS, IP2[,1], col="red", lty=2)
+lines(CS, IP2[,2], col="red", lty=2)
+```
+
+## Models amb *VV* com resposta
+
+### Família normal amb link canònic (*identity*). Sense interacció
+
+#### Model
+
+- El Model sense interacció s'anomena **additiu** (*mvvg*)
+- El model **nul** és aquell que no té cap variable explicativa (*mvvg0*)
+
+```{r}
+mvvg  <- glm(VV ~ M+C, family=gaussian, dd)
+mvvg0 <- glm(VV ~ 1,   family=gaussian, dd)
+```
+
+Resum del model
+
+```{r}
+summary(mvvg)
+```
+Veient la descriptiva la següent interpretació és errònia ja que s'ha de considerar 
+la interacció:
+
+- Per cada increment unitari del coeficient intelectual (*C*), la valoració *VV*
+s'incrementa **1.63 unitats**.
+
+- El mètode pedagògic 2 (*M2*), incrementa la valoració *VV* **5.2 unitats**.
+
+
+Resum gràfic del model (`emmip` del paquet `emmeans`). No es correspon amb la realitat.
+
+```{r}
+emmip(mvvg, M~C, CIs=T, at=list(C=seq(90,120,5)))
+```
+
+**Test omnibus**. El test omnibus és aquell que compara el nostre model amb el model nul mitjançant 
+un test de deviànces.
+
+
+```{r}
+anova(mvvg0, mvvg, test = "F")
+```
+
+#### Interpretació
+
+Emprarem la funció `emmeans` per fer les estimacions als valors de C: 90, 105 i 120
+(també podriem fer servir *predict*)
+
+```{r}
+emmeans(mvvg, ~M|C, at=list(C=c(90,105,120)))
+```
+
+Emprarem la funció `emtrends` per fer les estimacions dels pendents de les dues rectes
+
+```{r}
+emtrends(mvvg, ~M, var="C")
+```
+
+#### Validació 
+
+La **Linealitat** i la **Homoscedasticitat** es podrien millorar.
+
+```{r}
+residualPlots(mvvg)
+```
+
+#### Prediccions
+
+Banda predicció ± 2·S
+
+```{r}
+CS <- min(dd$C):max(dd$C)
+
+P1 <- predict(mvvg, data.frame(C=CS, M="1"), type = "response")        # Point estimates M=1
+P2 <- predict(mvvg, data.frame(C=CS, M="2"), type = "response")        # Point estimates M=2
+
+disp      <- summary(mvvg)$dispersion  # parametre de dispersio
+var_func1 <- family(mvvg)$variance(P1) # funcio de variancia M=1
+var_func2 <- family(mvvg)$variance(P2) # funcio de variancia M=2
+
+IP1 <- cbind(P1 - 2 * sqrt(disp * var_func1),
+             P1 + 2 * sqrt(disp * var_func1)) 
+IP2 <- cbind(P2 - 2 * sqrt(disp * var_func2),
+             P2 + 2 * sqrt(disp * var_func2))
+
+# Punts pels 2 metodes
+plot  (VV ~ C, dd1, pch=3, col="blue", xlim = range(CS), ylim = range(c(IP1,IP2)),
+       main="pred ± 2·S, V Normal identity")
+points(VV ~ C, dd2, pch=3, col="red")
+
+# IP metode 1
+lines(CS, P1,      col="blue")
+lines(CS, IP1[,1], col="blue", lty=2)
+lines(CS, IP1[,2], col="blue", lty=2)
+
+# IP metode 2
+lines(CS, P2,      col="red")
+lines(CS, IP2[,1], col="red", lty=2)
+lines(CS, IP2[,2], col="red", lty=2)
+```
+
+### Família normal amb link canònic (*identity*). Amb interacció
+
+- El Model amb interacció s'anomena **factorial** (*mvvgl*)
+
+```{r}
+mvvgl  <- glm(VV ~ M*C, family=gaussian(link=identity),dd)
+```
+
+Resums dels models amb i sense interacció
+
+```{r}
+summary(mvvgl)
+summary(mvvg)
+```
+
+Resums gràfics (emmip)
+
+```{r}
+emmip(mvvgl, M~C, CIs=T,at=list(C=seq(90,120,5)))
+emmip(mvvgl, M~C, CIs=T,at=list(C=seq(90,120,5)),type = "response")
+emmip(mvvg,  M~C, CIs=T,at=list(C=seq(90,120,5)))
+```
+
+Comparem el model amb i sense interacció
+
+```{r}
+anova(mvvg, mvvgl,test = "F")
+```
+
+#### Interpretació
+
+Emprarem la funció `emmeans` per fer les estimacions als valors de C: 90, 105 i 120
+(també podriem fer servir *predict*)
+
+```{r}
+emmeans(mvvgl,~M|C, at = list(C=c(90,105,120)))
+emmeans(mvvg, ~M|C, at = list(C=c(90,105,120)))
+```
+
+Emprarem la funció `emtrends` per fer les estimacions dels pendents de les dues rectes
+
+```{r}
+emtrends(mvvgl,~ M, var="C")
+emtrends(mvvg, ~ M, var="C")
+```
+
+#### Validació 
+
+La **Linealitat** i la **Homoscedasticitat** semblen comportar-se prou bé.
+
+```{r}
+residualPlots(mvvgl)
+```
+
+**Valors estranys i influents**
+
+El individu **6** és el que té més influència sobre el model (major distància de Cook)
+i també el pitjor explicat (residu més gran).
+
+```{r}
+influencePlot(model = mvvgl)
+```
+
+#### Prediccions
+
+Banda predicció ± 2·S
+
+```{r}
+CS <- min(dd$C):max(dd$C)
+
+P1 <- predict(mvvgl, data.frame(C=CS, M="1"), type = "response")        # Point estimates M=1
+P2 <- predict(mvvgl, data.frame(C=CS, M="2"), type = "response")        # Point estimates M=2
+
+disp      <- summary(mvvgl)$dispersion  # parametre de dispersio
+var_func1 <- family(mvvgl)$variance(P1) # funcio de variancia M=1
+var_func2 <- family(mvvgl)$variance(P2) # funcio de variancia M=2
+
+IP1 <- cbind(P1 - 2 * sqrt(disp * var_func1),
+             P1 + 2 * sqrt(disp * var_func1)) 
+IP2 <- cbind(P2 - 2 * sqrt(disp * var_func2),
+             P2 + 2 * sqrt(disp * var_func2))
+
+# Punts pels 2 metodes
+plot  (VV ~ C, dd1, pch=3, col="blue", xlim = range(CS), ylim = range(c(IP1,IP2)),
+       main="pred ± 2·S, V Normal identity")
+points(VV ~ C, dd2, pch=3, col="red")
+
+# IP metode 1
+lines(CS, P1,      col="blue")
+lines(CS, IP1[,1], col="blue", lty=2)
+lines(CS, IP1[,2], col="blue", lty=2)
+
+# IP metode 2
+lines(CS, P2,      col="red")
+lines(CS, IP2[,1], col="red", lty=2)
+lines(CS, IP2[,2], col="red", lty=2)
+```
+
+## Conclusió
+
+- Per la valoració *V*, ens quedariem amb el model `mvg` amb la familia Normal,
+el link identitat i sense interacció.
+
+- Per la valoració *V*, ens quedariem amb el model `mvvgl` amb la familia Normal,
+el link identitat i amb interacció.

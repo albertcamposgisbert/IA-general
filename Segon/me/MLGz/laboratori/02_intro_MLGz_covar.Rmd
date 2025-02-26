@@ -1,0 +1,312 @@
+---
+title: "ME - GIA. Introduccio MLGz (Covariables)"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+---
+
+## Introducció
+
+En un estudi per estudiar el nivell de colesterol en sang, en persones en edat 
+de creixement (9-20 anys), s'ha plantejat un model per explicar el nivell de 
+colesterol (***C***) en funció del pes (***P***), edat (***E***) i alçada (***H***). 
+
+**És conegut que el pes és un dels factors que influeixen en l'augment del** 
+**nivell de colesterol**
+
+A l'enunciat hi ha una falta de precisió, no és el pes el que fa augmentar el 
+colesterol, si no que és l'excés de pes. Per definir l'excés de pes, EP, la 
+informació que tenim és que EP = max{0, 0.5H - 10}
+
+En aquest script es veuen els següents conceptes:
+
+- Model lineal general com **cas particular** del model lineal generalitzat
+- Com fer la **validació** del model lineal generalitzat
+- Com fer **prediccions** amb bandes de predicció
+- Com afecta la **funció link**  i la **familia**  a l'ajust
+
+
+```{r echo = FALSE, message=FALSE}
+# Carregar llibreries
+library(car)
+```
+
+
+```{r echo = FALSE, message=FALSE}
+dd    <- read.csv2("../Dades/col.csv") # Llegir dades 
+dd$EP <- pmax(0,dd$P-(dd$H/2-10))      # Exces de pes
+n     <- nrow(dd)                      # Nombre individus 
+```
+
+## Descriptiva prèvia
+
+**Colesterol en funció de l'excés de pes ajustat per l'edat**
+
+```{r}
+scatterplot(C ~ EP|E,smooth=F,boxplots=F,col=1:12,dd)
+```
+
+**Colesterol en funció de l'edat**
+
+```{r}
+scatterplot(C ~ E,   smooth=F,boxplots=F,col=1:12,dd[dd$EP==0,]) # Els que no tenen exces de pes
+```
+
+## Model lineal general com cas particular del model lineal generalitzat
+
+En aquest apartat veurem com el Model lineal general (MLG) és un cas particular del 
+model lineal generalitzat (MGLz) i que tot el que obtenim d'un és igual a l'altre.
+Començarem ajustant el model nul i el model amb *E* i *EP* emprant `lm` (MLG) i 
+`glm` (MLGz).
+
+```{r}
+# Models nuls
+mod0  <-  lm(C ~ 1, dd)
+modg0 <- glm(C ~ 1, dd, family = gaussian(link=identity))
+
+# Models amb exces de pes i edat
+mod   <-  lm(C ~ EP + E, dd)
+modg  <- glm(C ~ EP + E, dd, family = gaussian(link=identity))
+```
+
+**Comparativa dels coeficients dels models nuls**
+
+Observem que els models nuls són el mateix model.
+
+```{r}
+# Models nuls
+summary(mod0)
+summary(modg0)
+```
+
+**Comparativa dels coeficients dels models ajustats**
+
+Observem que els models amb les variables explicatives són el mateix model.
+
+```{r}
+# Models ajustats
+summary(mod)
+summary(modg)
+```
+
+**Comparativa dels VIFs**
+
+Les col·linealitats també coincideixen
+
+```{r}
+vif(mod)
+vif(modg)
+```
+
+**Comparativa del test Omnibus**
+
+Els tests omnibus també coincideixen
+
+```{r}
+anova(mod0, mod)
+anova(modg0,modg,test="F")
+```
+**Paràmetre de dispersió**
+
+La teoria ens diu que el paràmetre de dispersió del MLGz és la $\sigma^2$ 
+(variància residual) del MLG.
+
+```{r}
+summary(modg)$dispersion
+summary(mod)$sigma^2
+```
+
+**Comparativa de les prediccions**
+
+Coincideixen els valors predits entre MLG i MLGz (tant tipus response com link)
+
+```{r}
+pr_lm      <- predict(mod)                      # predict MLG 
+pr_lm_resp <- predict(modg, type = "response")  # predict mu
+pr_lm_link <- predict(modg, type = "link")      # predict eta (quan link=identity --> eta=mu)
+
+summary(pr_lm_resp - pr_lm)
+summary(pr_lm_link - pr_lm)
+```
+
+**Comparativa dels residus**
+
+Coincideixen tots els residus (per ser família normal)
+
+```{r}
+pr_raw      <- residuals(modg,type = "response") # residus crus
+pr_pearson  <- residuals(modg,type = "pearson")  # residus pearson
+pr_deviance <- residuals(modg,type = "deviance") # residus deviance  
+summary(pr_raw - pr_pearson)
+summary(pr_raw - pr_deviance)
+```
+
+## Validació del Model lineal generalitzat
+
+Emprem el gràfic de residus versus valors predits.
+
+```{r}
+# Plot residuals versus fitted
+residualPlot(modg)
+residualPlots(modg)
+```
+
+### Valors estranys
+
+```{r}
+influencePlot(model = modg)
+```
+
+## Predicció
+
+Per les següents persones: 
+
+- EP=0 ; E=15
+- EP=5 ; E=15
+
+Trobem el interval de confiança del 95%.
+
+```{r}
+# Calcul del IC95% "manual"
+pred <- predict(modg, data.frame(EP=c(0,5), E=c(15,15)), se.fit = T, type = "response")
+cbind(pred$fit,
+      pred$fit + qnorm(0.025) * pred$se.fit,
+      pred$fit + qnorm(0.975) * pred$se.fit)
+
+# Calcul del IC95% emprant funcio predict sobre model lineal
+predict(mod,data.frame(EP=c(0,5),E=c(15,15)),interval="confidence")
+```
+
+Trobem el pseudo-interval de prediccio del 95% i el interval de prediccio 
+assimptòtic (en el cas de la Normal, són equivalents).
+
+```{r}
+# pseudo-interval 
+cbind(pred$fit,
+      pred$fit - 2 * pred$residual.scale,
+      pred$fit + 2 * pred$residual.scale)               
+
+# asimptotic
+cbind(pred$fit,
+      qnorm(0.025, pred$fit, pred$residual.scale),
+      qnorm(0.975, pred$fit, pred$residual.scale))    
+```
+
+## Funció link i Familia
+
+### Link identitat i familia Normal
+
+La validació del model no és molt deficient però tampoc és òptima.
+
+```{r}
+residualPlot(modg)
+```
+
+### Altres funcions link
+
+Com el que falla és la tendència central, hem de provar altre funcions links.
+
+```{r}
+modg_inv  <- glm(C ~ EP + E, dd, family = gaussian(link="inverse"))
+modg_inv2 <- glm(C ~ EP + E, dd, family = gaussian(link="1/mu^2"))
+modg_log  <- glm(C ~ EP + E, dd, family = gaussian(link="log"))
+```
+
+Veiem el gràfic de rsidus versus valors predits dels 4 links.
+
+```{r}
+par(mfrow=c(2,2))
+residualPlot(modg ,    main='Identity')
+residualPlot(modg_inv, main='Inverse')
+residualPlot(modg_inv2,main='Inverse^2')
+residualPlot(modg_log, main='Log')
+```
+
+Sembla que la funció link *log*, millora una mica la tendencia central. Comparem 
+les prediccions del model amb link log i link identitat.
+
+
+```{r}
+##-- Valors a predir
+E   <- 9:20
+EP  <- 0
+df  <- data.frame(E=E, EP=EP)
+dd0 <- dd[dd$EP==0,]
+
+##-- Prediccions link identitat
+par(mfrow=c(1,2))
+PP    <- predict(modg, df , type = "response")
+disp  <- summary(modg)$dispersion
+V     <- 1
+ylim  <- range(PP) + c(-2,2) * sqrt(V*disp)
+plot(C ~ E, dd0, ylim=ylim, main="Prediccions (EP=0) link identitat")
+lines(E, PP)
+lines(E, PP + 2 * sqrt(V*disp), col="red",lty=2)
+lines(E, PP - 2 * sqrt(V*disp), col="red",lty=2)
+
+##-- Prediccions link log
+PP    <- predict(modg_log, df , type = "response")
+disp  <- summary(modg_log)$dispersion
+V     <- 1
+ylim  <- range(PP) + c(-2,2) * sqrt(V*disp)
+plot(C ~ E, dd0, ylim=ylim, main="Prediccions (EP=0) link log")
+lines(E, PP)
+lines(E, PP + 2 * sqrt(V*disp), col="green",lty=2)
+lines(E, PP - 2 * sqrt(V*disp), col="green",lty=2)
+```
+
+
+### Altres families
+
+La familia no l'hauriem de ajustar perquè sembla que no hi ha problemes de
+heteroscedasticitat. Igualment fem proves per veure com influeix. Mentenim el
+link "log"
+
+
+```{r}
+modg_nor <- glm(C ~ EP + E, dd, family = gaussian(link="log"))
+modg_gam <- glm(C ~ EP + E, dd, family = Gamma(link="log"))
+modg_iga <- glm(C ~ EP + E, dd, family = inverse.gaussian(link="log"))
+```
+
+Veiem el gràfic de residus versus valors predits de 3 families.
+
+```{r}
+par(mfrow=c(2,2))
+residualPlot(modg_nor, main='Normal')
+residualPlot(modg_gam, main='Gamma')
+residualPlot(modg_iga, main='Inverse Gaussian')
+```
+
+Amb la familia Normal sembla que va millor. Comparem prediccions amb Gamma
+
+**EP=0**
+
+```{r}
+##-- Prediccions familia Normal
+par(mfrow=c(1,2))
+PP    <- predict(modg_nor, df , type = "response")
+disp  <- summary(modg_nor)$dispersion
+V     <- 1
+ylim  <- range(PP) + c(-2,2) * sqrt(V*disp)
+plot(C ~ E, dd0, ylim=ylim, main="Prediccions (EP=0) fam. Normal")
+lines(E, PP)
+lines(E, PP + 2 * sqrt(V*disp), col="red",lty=2)
+lines(E, PP - 2 * sqrt(V*disp), col="red",lty=2)
+
+##-- Prediccions familia Gamma
+PP     <- predict(modg_gam, df , type = "response")
+disp   <- summary(modg_gam)$dispersion
+V      <- PP^2 # La funcio de variància en la gamma és mu^2
+ylim   <- range(c(PP - 2 * sqrt(V*disp), PP + 2 * sqrt(V*disp)))
+plot(C ~ E, dd0, ylim=ylim, main="Prediccions (EP=0) fam. Gamma")
+lines(E, PP)
+lines(E, PP + 2 * sqrt(V*disp), col="green",lty=2)
+lines(E, PP - 2 * sqrt(V*disp), col="green",lty=2)
+```
+
+Amb la familia Gamma, les bandes de predicció a les edats tempranes son massa 
+folgades.
+
+
