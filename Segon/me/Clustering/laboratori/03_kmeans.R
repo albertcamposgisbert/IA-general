@@ -35,34 +35,6 @@ pairs(iris1)               # Plots 2 by 2
 heatmap(as.matrix(iris1))  # Heatmap w/o scaling
 heatmap(as.matrix(iris2))  # Scaled Heatmap 
 
-# Asegúrate de que las columnas sean numéricas
-outliers_count <- sapply(iris[, sapply(iris, is.numeric)], function(col) {
-  Q1 <- quantile(col, 0.25)
-  Q3 <- quantile(col, 0.75)
-  IQR <- Q3 - Q1
-  lower_bound <- Q1 - 1.5 * IQR
-  upper_bound <- Q3 + 1.5 * IQR
-  sum(col < lower_bound | col > upper_bound)  # Cuenta los outliers
-})
-
-# Mostrar cantidad de outliers por columna
-outliers_count
-
-# Calcular el porcentaje de outliers por columna
-outliers_percentage <- outliers_count / nrow(iris) * 100
-outliers_percentage
-
-# Total de outliers en el dataset
-total_outliers <- sum(outliers_count)
-total_outliers
-
-# Porcentaje total de outliers en el dataset
-total_outliers_percentage <- sum(outliers_count) / nrow(iris) * 100
-total_outliers_percentage
-
-
-
-
 ################################################################################
 # Objects from K-means
 ################################################################################

@@ -20,13 +20,11 @@ rm(list=ls())
 ################################################################################
 library(cluster)
 library(clustMixType)
-library(flexclust)
-
 
 ################################################################################
 # Load the Database
 ################################################################################
-d <- read.csv("credscoDB.csv", sep=";", stringsAsFactors = TRUE)
+d <- read.csv("Dades/credscoDB.csv", sep=";", stringsAsFactors = TRUE)
 names(d)
 dim(d)
 summary(d)

@@ -29,7 +29,7 @@ library(dendextend) # tanglegram
 ################################################################################
 # 1. Read data
 ################################################################################
-wine <- read.table('wine.txt',sep=',',header=TRUE)
+wine <- read.table('Dades/wine.txt',sep=',',header=TRUE)
 
 ################################################################################
 # 2. Make a descriptive analysis without scaling

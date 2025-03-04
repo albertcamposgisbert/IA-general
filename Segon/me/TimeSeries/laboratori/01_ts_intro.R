@@ -67,7 +67,7 @@ pacf(d1d12lnairpass, ylim=c(-1,1), lagmax = 40)
 
 
 ##-- Lectura de la serie
-gnpsh <- read.table("gnpsh.dat")
+gnpsh <- read.table("GNPSH.DAT")
 gnpsh
 
 ##-- Indicacio d'any d'inici i periode i plot de la serie
@@ -100,6 +100,10 @@ pacf(lngnpsh,ylim=c(-1,1))
 
 ##-- Diferenciacio d'ordre 1 per eliminar la tendencia.
   d1lngnpsh <- diff(  lngnpsh, lag=1)
+  
+  acf(d1lngnpsh,ylim=c(-1,1))
+  pacf(d1lngnpsh,ylim=c(-1,1))
+  
 d1d1lngnpsh <- diff(d1lngnpsh, lag=1)
 var(  d1lngnpsh)
 var(d1d1lngnpsh)
@@ -107,10 +111,5 @@ var(d1d1lngnpsh)
 ##-- Representacio de l'ACF i PACF: podem identificar possibles models
  acf(d1lngnpsh,ylim=c(-1,1))
 pacf(d1lngnpsh,ylim=c(-1,1))
-
-acf(d1d1lngnpsh,ylim=c(-1,1))
-pacf(d1d1lngnpsh,ylim=c(-1,1))
-
-
 
 

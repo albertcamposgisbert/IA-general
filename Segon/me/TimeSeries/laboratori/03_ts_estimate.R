@@ -16,7 +16,7 @@
 #-------------------------------------------------------------------------------
 
 ##-- Legim la sèrie
-airpass <- read.table("airpass.dat")
+airpass <- read.table("../Dades/airpass.dat")
 airpass
 
 ##-- Creem l'objecte "ts" indicant inici i freqüència i el dibuixem

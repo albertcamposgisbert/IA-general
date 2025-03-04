@@ -16,7 +16,7 @@
 #-------------------------------------------------------------------------------
 
 ##-- Legim la sèrie (desestacionalitzada)
-gnpsh <- read.table("GNPSH.DAT")
+gnpsh <- read.table("../Dades/GNPSH.DAT")
 gnpsh
 
 ##-- Creem l'objecte "ts" indicant inici i freqüència i el dibuixem

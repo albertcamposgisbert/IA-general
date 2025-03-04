@@ -144,4 +144,3 @@ Mod(polyroot(c(1,-model.ar)))
 
 # Arrels del polinomi caracteristic de la part MA
 Mod(polyroot(c(1,model.ma)))
-
