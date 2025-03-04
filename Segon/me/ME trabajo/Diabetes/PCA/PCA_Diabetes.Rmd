@@ -1,0 +1,346 @@
+---
+title: "PCA_Diabetes"
+output: html_document
+date: "2024-11-13"
+---
+
+---
+title: "ME - GIA. PCA Introduction (2)"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  html_document:
+    toc: true
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+
+
+```{r message=FALSE,warning=FALSE}
+library(dplyr)
+library(kableExtra)
+library(HSAUR3)
+library(ggplot2)
+library(GGally)
+library(factoextra)
+##-- Load necessary libraries
+library(ggplot2)      # For advanced plotting
+library(FactoMineR)   # For PCA and supplementary variables
+library(factoextra)   # For PCA visualization
+
+# Load data
+Diabetes <- read.csv("C:/Users/veron/Documents/UNI/2º/Septiembre/ME/Practica/Trabajo/Diabetes_processed.csv")
+```
+
+```{r}
+##-- Inspect
+View(Diabetes)
+summary(Diabetes)
+```
+
+```{r}
+# Only numeric variables
+numeric_diabetes_data <- Diabetes[, sapply(Diabetes, is.numeric)]
+numeric_diabetes_data
+```
+
+```{r}
+##-- Step 1: Scale the data to ensure all features have equal weight in PCA
+Diabetes_data_scaled <- scale(numeric_diabetes_data)
+
+
+```
+
+```{r}
+##-- Step 2: Perform PCA using prcomp, with centering and scaling
+pca_result_D <- prcomp(Diabetes_data_scaled)
+
+```
+
+
+
+Let's print the table.
+
+```{r, include=TRUE}
+##-- Compare
+# VAPs
+pca_result_D$sdev
+sqrt(eigen(cov(Diabetes_data_scaled))$values)
+# VEPs
+pca_result_D$rotation[,1]
+eigen(cov(Diabetes_data_scaled))$vec[,1]
+```
+```{r}
+##-- Step 3: Scree Plot - visualizing the variance explained by each principal component
+plot(pca_result_D)             # first option
+plot(pca_result_D, type='l')   # second option
+# third option
+fviz_screeplot(pca_result_D, addlabels = TRUE, ylim = c(0, 50)) +
+  ggtitle("Scree Plot: Variance Explained by Each Component") +
+  xlab("Principal Component") +
+  ylab("Percentage of Variance Explained")
+
+# How many components?
+summary(pca_result_D) #Cogemos 3 componentes pq 75% ya esta bn y asi simplificamos mas
+```
+
+```{r}
+# Step 4: Graphical representation
+# Individuals
+fviz_pca_ind(pca_result_D, 
+             repel = TRUE,          # Avoid overlapping text labels
+             geom = c("point"),
+             col.ind = "red",       # Color of individuals
+             title = "Individuals") +
+  theme_minimal()
+```
+
+```{r}
+# Variables ; Las variables que tengan la flecha mas larga -> mejor representadas
+fviz_pca_var(pca_result_D, 
+             repel = TRUE,          # Avoid overlapping text labels
+             col.var = "blue",       # Color of individuals
+             title = "Individuals") + theme_minimal()           
+                        
+                                      
+
+```
+
+```{r}
+# Biplot - showing both variables and observations in PCA space
+fviz_pca_biplot(pca_result_D, 
+                repel = TRUE,          # Avoid overlapping text labels
+                geom = c("point"),
+                col.var = "blue",      # Color of variable arrows
+                col.ind = "red",       # Color of individuals
+                alpha.ind = 0.4,
+                title = "PCA Biplot of Wine Data") +
+  theme_minimal()
+```
+
+```{r}
+# Biplot - Axes 1 and 3 (Individuos+Variables)
+fviz_pca_biplot(pca_result_D,
+                axes = c(1, 3),
+                repel = TRUE,          # Avoid overlapping text labels
+                geom = c("point"),
+                col.var = "blue",      # Color of variable arrows
+                col.ind = "red",       # Color of individuals
+                alpha.ind = 0.4,
+                title = "PCA Biplot of Wine Data") +
+  theme_minimal()
+```
+
+```{r}
+# Biplot - Axes 2 and 3 (Individuos+Variables)
+fviz_pca_biplot(pca_result_D,
+                axes = c(2, 3),
+                repel = TRUE,          # Avoid overlapping text labels
+                geom = c("point"),
+                col.var = "blue",      # Color of variable arrows
+                col.ind = "red",       # Color of individuals
+                alpha.ind = 0.4,
+                title = "PCA Biplot of Wine Data") +
+  theme_minimal()
+```
+
+```{r}
+# Additional Step: Visualize the individual contributions of variables to each component
+fviz_pca_var(pca_result_D, col.var = "contrib", 
+             gradient.cols = c("blue", "yellow", "red"),
+             title = "Contribution of Variables to PCA Components") +
+  theme_minimal()
+```
+
+```{r}
+# Additional Step: Visualize the individual contributions of variables to each component
+fviz_pca_var(pca_result_D,axes = c(1, 3), col.var = "contrib", 
+             gradient.cols = c("blue", "yellow", "red"),
+             title = "Contribution of Variables to PCA Components") +
+  theme_minimal()
+```
+
+```{r}
+# Additional Step: Visualize the individual contributions of variables to each component
+fviz_pca_var(pca_result_D,axes = c(2, 3), col.var = "contrib", 
+             gradient.cols = c("blue", "yellow", "red"),
+             title = "Contribution of Variables to PCA Components") +
+  theme_minimal()
+```
+
+
+```{r}
+# New components
+pca_result$x
+pca_result$rotation
+```
+
+You can observe that the scores of the different events do not have the same direction: 
+
+- The events *hurdles, run200m, and run800m*, **the lower value the better**. 
+- The other events have a different direction, **the more, the better**.
+
+Thus, we change the direction of the *hurdles, run200m, and run800m* to have all 
+seven events in the same direction
+
+```{r, include=TRUE}
+heptathlon$hurdles <- with(heptathlon, max(hurdles) - hurdles)
+heptathlon$run200m <- with(heptathlon, max(run200m) - run200m)
+heptathlon$run800m <- with(heptathlon, max(run800m) - run800m)
+```
+
+Now we have all events in the same direction and all are numeric variables. Therefore, we can graph scatter plots in pairs. 
+
+```{r, include=TRUE}
+score <- which(colnames(heptathlon) == "score")
+plot(heptathlon[, -score])
+```
+
+The correlation matrix (all attributes are numeric)
+
+```{r, include=TRUE}
+round(cor(heptathlon[,-score]), 2) %>% 
+  kbl() %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r, include=TRUE, warning=FALSE}
+ggpairs(heptathlon[, -score], progress = FALSE)
+```
+
+Laura (PNG) (last row) is the outlier (values 0 in hurdles and run800m). Check also the left-skewed tails in the density plots. We remove it.
+
+```{r, include=TRUE}
+heptathlon <- heptathlon[-grep("PNG", rownames(heptathlon)), ]
+```
+
+And now check the scatter plots and correlation matrix again:
+```{r, include=TRUE, warning=FALSE}
+ggpairs(heptathlon[, -score], progress = FALSE)
+#Hay que eliminar a Laura pq es un outlier
+```
+
+
+## PCA using princomp
+
+Thus, we run the PCA using princomp and stating that we will use the correlation matrix. 
+
+```{r, include=TRUE}
+hept_def       <- scale(heptathlon[, -score])
+heptathlon_pca <- princomp(hept_def)
+```
+
+
+Let's check the results step by step. The coefficients (also called loadings or loading vector) for the first PC are obtained as:
+
+```{r, include=TRUE}
+a1 <- heptathlon_pca$loadings[,1]
+a1
+```
+
+
+#### The variance explained by the principal components
+
+The summary function reports the standard deviation, proportion of
+variance, and the cumulative proportion of variance
+
+```{r, include=TRUE}
+summary(heptathlon_pca)
+```
+
+#### Criteria for choosing the number of components
+
+We plot the *scree plot*.
+
+```{r, include=TRUE}
+screeplot(heptathlon_pca, type="l", main="Screeplot heptathlon")
+```
+
+#### Principal component scores
+
+The PC scores are the values of each PCs (linear combination of the original variables) evaluated in the data set.
+
+In this example, we can use the PCA scores to see if can predict well the total number of points in the heptathlon competition.
+
+```{r, include=TRUE}
+head(heptathlon_pca$scores) %>%
+  kbl(caption = "Heptathlon results in 1988 Olympics held in Seoul") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+We can check that the PCs are uncorrelated (all values are 0)
+
+```{r, include=TRUE}
+cor(heptathlon_pca$scores) %>%
+  kbl(caption = "Heptathlon results in 1988 Olympics held in Seoul") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+Let's finally graph if the first PC1 scores can predict the Olympic heptathlon total number of points. 
+
+
+```{r, include=TRUE}
+pc1.scores <- heptathlon_pca$scores[,1]
+plot(heptathlon$score, pc1.scores)
+```
+
+It predicts very well only with the first PC because PC1 explains quite a lot of the total of the original variance.
+
+#### PCA biplots
+
+```{r, include=TRUE, fig.height=8}
+biplot(heptathlon_pca)
+```
+
+It does not look very well because there is text overlapping. Let's improve the graph:
+
+```{r message=FALSE,warning=FALSE}
+fviz_eig(heptathlon_pca)
+fviz_pca_ind(heptathlon_pca,
+             col.ind = "contrib", # Color by the contribution 
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE,     # Avoid text overlapping
+             title="Athletes heptathlon - PCA")
+```
+
+
+Graph of variables (heptathlon events). Positive correlated variables point to the same side of the plot. Negative correlated variables point to opposite sides of the graph.
+
+```{r, include=TRUE}
+fviz_pca_var(heptathlon_pca,
+             col.var = "contrib", # Color by contributions to the PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE,     # Avoid text overlapping
+             title="Heptathlon events - PCA")
+```
+
+A variable (event) plot (a.k.a. **loading plot**) shows how strongly each event influences a principal component.
+
+What is graphed in the loading plot is the rescaled loadings
+```{r, include=TRUE}
+rbind(a1 * heptathlon_pca$sdev[1], a2 * heptathlon_pca$sdev[2])
+```
+
+PCA Biplot of heptathlon athletes and events simultaneously 
+
+```{r, include=TRUE}
+fviz_pca_biplot(heptathlon_pca, repel = TRUE,
+                col.var = "#2E9FDF", # Variables color
+                col.ind = "#696969",  # Individuals color
+             title="Heptathlon biplot - PCA")
+```
+
+A PCA biplot = PCA score plot + loading plot
+
+For example, look at the top left corner: the athletes Choubenkova (URSS), John (GDR), and Behmer (GDR), and the event run800m are depicted together. If we check the data we see that those three athletes stood out in that event. Or look on Joyner-Kersee (USA), who stood out in long jump (the top of all athletes).
+
+```{r, include=TRUE}
+heptathlon %>%
+  kbl(caption = "Heptathlon results in 1988 Olympics held in Seoul") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+

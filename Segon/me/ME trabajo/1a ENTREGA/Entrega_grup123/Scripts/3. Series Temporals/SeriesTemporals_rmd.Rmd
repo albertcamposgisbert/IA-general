@@ -1,0 +1,218 @@
+---
+title: "Sèries Temporals"
+output:
+  pdf_document: default
+  html_document: default
+date: "2024-11-02"
+---
+
+# Introducció
+
+L'objectiu d'aquesta anàlisi és descriure els patrons de la sèrie temporal, estimar i validar els paràmetres i fer una predicció dels valors futurs.\
+\
+La base de dades és una diferent de la que hem estat treballant fins ara, ja que no teníem cap variable temporal. La base de dades que utilitzem és una que està integrada en el mateix R anomenada a10. Tracta sobre la venda de drogues antidiabètiques, com és la insulina, a Austràlia des de 1992 fins a 2008. El conjunt de dades consta de dos columnes una de les dates, que són mensuals, i una altra de les vendes, hi ha un total de 204 files.
+
+# Creem l'objecte 'ts'
+
+```{r setup, include=FALSE}
+library(fpp)
+
+```
+
+```{r}
+Diabetes <- ts(a10,start = 1992, frequency = 12)
+plot(Diabetes)
+
+```
+
+Si analitzem la gràfica de les dades de la nostra sèrie temporal podem veure que no és estacionària, per tant, hem de fer alguns canvis perquè ho sigui. Primer de tot, hem de veure si la variància és constant. Si ens fixem veiem que els pics són cada vegada més grans això ens indica que la variància és creixent i per tant no és constant, així que apliquem el logaritme. La transformació logarítmica és la més directa per poder deixar la variància constant.
+
+# Transformació logaritme
+
+```{r}
+lndiabetes <- log(Diabetes)
+plot(lndiabetes)
+```
+
+## Dibuixem les components de la sèrie
+
+```{r}
+plot(decompose(lndiabetes)) 
+```
+
+Ara podem veure que els pics són del mateix tamany, és a dir, que la variància és constant. Però com podem veure les dades creixent i decreixent sempre de la mateixa manera, això significa que sempre hi ha alguns mesos on les vendes creixen i altres on disminueixen. Això ens indica que hi ha un patró estacional. És per això, que fem de fer una diferenciació d'ordre 12, per treure l'estacionalitat. És d'ordre 12 perquè les nostres dades són mensuals i llavors la freqüència de les dades és de 12.
+
+## ACF i PACF
+
+```{r}
+par(mfrow=c(1,2))
+acf(lndiabetes, ylim=c(-1,1), lag.max = 40)
+pacf(lndiabetes, ylim=c(-1,1), lag.max = 40)
+```
+
+Una altre manera de veure si les dades són estacionaries o no és mirant la gràfica ACF. Si l'ACF es redueix gradualment des de l'1 fins al 0 vol dir que no és estacionària.
+
+# Diferenciació d'ordre 12
+
+```{r}
+par(mfrow=c(1,1))
+d12lndiabetes <- diff(lndiabetes, lag=12)
+plot(d12lndiabetes)
+```
+
+Per últim, mirem si la mitjana és constant o no, com podem veure no ho és perquè les dades no segueixen una linia recta. Per tant fem una altra diferenciació per fer-la constant, i amb això haurem acabat de preparar les nostres dades per començar a preparar el model.
+
+## ACF i PACF
+
+```{r}
+par(mfrow=c(1,2))
+acf(d12lndiabetes, ylim = c(-1,1), lag.max = 40)
+pacf(d12lndiabetes, ylim = c(-1,1), lag.max = 40)
+```
+
+En l'ACF i PACF ens podem fixar quins coeficients són significatius, si sobrepassen les línies són significatius. Volem que hi hagi la quantitat més gran possible de línies que estiguin dins de l'interval de confiança, que és l'espai entre les dues discontínues blaves.
+
+# Diferenciació d'ordre 1
+
+```{r}
+d1d12lndiabetes <- diff(  d12lndiabetes)
+plot(d1d12lndiabetes)
+
+```
+
+```{r}
+par(mfrow=c(1,2))
+plot(Diabetes)
+plot(d1d12lndiabetes)
+
+```
+
+Finalment, hem acabat d'arreglar el nostre model, ha passat de ser no estacionari a estacionari. Amb aquests dos gràfics podem veure els canvis que li hem fet, ara te variància i mitjana constant i no té patrons estacionals.
+
+## ACF i PACF
+
+```{r}
+par(mfrow=c(1,2))
+acf(d1d12lndiabetes, ylim=c(-1,1), lag.max = 48) #es mira q i Q
+pacf(d1d12lndiabetes, ylim=c(-1,1), lag.max = 48) #es mira p i P
+
+
+```
+
+Si ens fixem ara tenim en el PACF línies que estan més a prop de l'interval de confiança encara que segueixen havent-hi algunes que són significatives.
+
+# Ajustar el model
+
+Ara començarem a ajustar el model, més concretament un model ARIMA. Per saber quins paràmetres afegir ens fixarem en les gràfiques ACF i PACF. De l'ACF extraurem la q i la Q i del PACF la p i P, a més, com hem fet diferenciació d'ordre 1 i 12 la d i D seran 1. La q s'extreu mirant la quantitat de les primeres línies que soprepassen l'interval de confiança excloent la primera que és sempre 1.La Q s'extreu mirant quantes línies per cada any són significatives és a dir que contes de dotze en dotze i si la línia que és el dotze és significativa llavors sumes un. La p i la P són el mateix però en el PACF.
+
+## Model 1
+
+```{r}
+diabetes.arima1a <- arima(lndiabetes,
+                        order    = c(2,1,1), 
+                        seasonal = list(order = c(0,1,3), 
+                                        period = 12))
+
+##Significatius
+
+ratios <- round(abs(diabetes.arima1a$coef/sqrt(diag(diabetes.arima1a$var.coef))),2)
+ratios
+ratios>2
+```
+
+Després de crear el model hem de mirar si els paràmetres són significatius i si no ho són, els anem ajustant fins que ho siguin. Per saber si són significatius calculem els ràtios com podem veure a sobre, hem d'aconseguir que tots el ràtios siguin majors a 2, és a dir que tots siguin TRUE. Com podem veure ar1 i ar2 són FALSE així que haurem de canviar el paràmetre corresponent, agafarem el que tingui el número més alt i el disminuirem en 1.
+
+## Model 2
+
+```{r}
+diabetes.arima2 <- arima(lndiabetes,
+                          order    = c(1,1,1), 
+                          seasonal = list(order = c(0,1,3), 
+                                          period = 12))
+
+##Significatius
+
+ratios <- round(abs(diabetes.arima2$coef/sqrt(diag(diabetes.arima2$var.coef))),2)
+ratios
+ratios>2  
+
+```
+
+Com podem veure tot els paràmetres són significatius així que aquest serà el model definitiu.
+
+```{r}
+##Model definitiu -----------------------------------------------------------
+AIC(diabetes.arima1a)
+AIC(diabetes.arima2)  #AIC quant més baix millor
+
+mod_deff <- diabetes.arima2
+
+```
+
+# Validació
+
+Una vegada tenim el model definitiu prosseguim amb la validació del model i de les seves dades, analitzarem l'homoscedasticitat, la normalitat i la independència.
+
+## Homoscedasticitat
+
+```{r}
+residd <- mod_deff$residuals
+par(mfrow=c(1,2), mar=c(3,3,3,3))
+plot(residd, main="Residuals")
+abline(h = c(0 , -3*sd(residd), 3*sd(residd)), lty = c(1,3,3), col=c(1,4,4))
+scatter.smooth(sqrt(abs(residd)), 
+               main="Square Root of Absolute residuals",
+               lpars = list(col=2))
+
+```
+
+Com podem veure la variància és més o menys constant si no tenim en compte el primer any, que és aquesta bola conjunta de dades que està a la cantonada de baix a l'esquerra. Una manera de poder solucionar aquest problema fàcil i ràpidament seria eliminant tot el primer any. Les dades no tenen homoscedasticitat però no és tant preocupant perquè es podria arreglar eliminant el primer any.
+
+## Normalitat
+
+```{r}
+par(mfrow=c(1,2), mar=c(3,3,3,3))
+qqnorm(residd)
+qqline(residd,col=2,lwd=2)
+hist(residd, breaks = 10, freq=F)
+curve(dnorm(x, mean = mean(residd), sd = sd(residd)), col=2, add=T)
+```
+
+Com podem veure les dades als extrems del q-q plot estan molt separades de la recta, el qual és un problema greu, ja que ens indica que les dades no segueixen una distribució normal.
+
+## Independència
+
+```{r}
+tsdiag(mod_deff, gof.lag = 40)
+```
+
+On es pot veure clarament si les dades són independents o no és a l'últim gràfic. La línia discontínua blava és la línia del p-value 0.05, si els punts estan per sota d'aquesta línia llavors es nega la hipòtesi 0, H0, i per tant les dades no són independents.\
+\
+Després d'analitzar aquests gràfics de validació podem donar per fet que les nostres dades no són vàlides, ja que no són independents, normals ni tenen homoscedasticitat. Encara i així podem seguir i fer la predicció, no obstant això, com les dades no són vàlides no podem assegurar que la predicció sigui correcta.
+
+# Predicció
+
+```{r}
+# Calcul de les prediccions i de l'error estandard
+predd   <- predict(mod_deff, n.ahead=24) #24 es 2 años
+pr_logd <- predd$pred
+se_logd <- predd$se
+
+# Intervals de logs
+li_logd <- pr_logd - 1.96 * se_logd # limit inferior log
+ls_logd <- pr_logd + 1.96 * se_logd # limit superior log
+
+# Desfer logaritmes
+li <- ts(exp(li_logd), start = 2009, freq=12)
+pr <- ts(exp(pr_logd), start = 2009, freq=12)
+ls <- ts(exp(ls_logd), start = 2009, freq=12)
+
+# Grafic
+par(mfrow=c(1,1))
+ts.plot(Diabetes,
+        li, ls, pr,
+        lty  = c(1,2,2,1), col=c("black","blue","blue","red"),
+        xlim = c(1992,2011))
+```
+
+En conclusió, aquesta seria la predicció de les vendes de medicaments antidiabètics a Austràlia dos anys en el futur, és a dir 2009 i 2010. Com podem veure seguiria la tendència de creixement de les ventes i segueix també amb el patró estacional. Però, com ja hem explicat abans, no podem assegurar que aquesta predicció sigui correcta, ja que el nostre model no és vàlid.

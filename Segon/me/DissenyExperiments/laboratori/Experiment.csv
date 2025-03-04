@@ -1,0 +1,13 @@
+A;B;C;Accuracy
+SVM;Grid Search;PCA;69.57
+Random Forest;Grid Search;PCA;79.99
+Logistic Regression;Grid Search;PCA;76.41
+SVM;Random Search;PCA;67.47
+Logistic Regression;Random Search;PCA;72.11
+SVM;Random Search;RFE;83.26
+Logistic Regression;Random Search;RFE;62.87
+SVM;Grid Search;None;72.86
+Random Forest;Grid Search;None;81.33
+Logistic Regression;Grid Search;None;70.67
+SVM;Random Search;None;71.61
+Logistic Regression;Random Search;None;74.53

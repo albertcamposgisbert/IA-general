@@ -1,0 +1,181 @@
+---
+title: "ME - GIA. Binary (Disaggregated vs. Aggregated)"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  html_document:
+    code_folding: show
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+
+```{r, warning=FALSE, message=FALSE}
+data <- read.csv("base_trabajo.csv")
+
+data$Blood.Pressure <- as.numeric(as.character(data$Blood.Pressure))
+data$Insulin.Levels <- as.numeric(as.character(data$Insulin.Levels))
+data$Blood.Glucose.Levels <- as.numeric(as.character(data$Blood.Glucose.Levels))
+data$BMI <- as.numeric(as.character(data$BMI))
+data$Cholesterol.Category <- as.factor(data$Cholesterol.Category)
+data$Cholesterol.Category <- relevel(data$Cholesterol.Category, ref = "Low")
+data$Cholesterol.Category <- ifelse(data$Cholesterol.Category == "High", 1, 
+                                ifelse(data$Cholesterol.Category == "Low", 0, NA))
+
+library(car)
+
+
+
+```
+
+
+```{r}
+summary(data)
+```
+
+
+```{r, fig.height=3}
+par(mfrow=c(1,2),las=1)
+boxplot(Age ~Cholesterol.Category, data=data, col=2:3)
+boxplot(Blood.Glucose.Levels~Cholesterol.Category, data=data, col=2:3)
+```
+
+
+```{r, fig.height=6}
+par(mfrow=c(2,2),las=1)
+plot(Cholesterol.Category~Blood.Pressure,       data=data, col=3:2)
+plot(Cholesterol.Category~Insulin.Levels,       data=data, col=3:2)
+plot(Cholesterol.Category~Blood.Glucose.Levels,       data=data, col=3:2)
+plot(Cholesterol.Category~BMI,       data=data, col=3:2)
+plot(Cholesterol.Category~Age,       data=data, col=3:2)
+
+
+
+```
+
+
+# Models
+
+## Disaggregated data
+
+```{r}
+#m_Age_dis <- glm(Cholesterol.Category ~ Age, data = data, family = binomial(link= "logit"))
+#summary(m_Age_dis)
+#residualPlot(m_Age_dis)
+
+m_extended <- glm(Cholesterol.Category ~ Age * Blood.Pressure + Age * BMI + Age * Insulin.Levels, data = data, family = binomial(link = "logit"))
+summary(m_extended)
+residualPlot(m_extended)
+
+#anova(m_Age_dis, m_extended, test = "Chisq")
+# Comparación de AIC
+#AIC(m_Age_dis, m_extended)
+
+```
+
+When disaggregated data is used then $m_i = 1$ and asymptotic theory does not 
+apply. Deviance and Pearson statistics do not follow a $\chi^2$ distribution
+under the $H_0$ of well-fitted model.
+
+As an informal rule of thumb at a fully disaggregated level for data, a model 
+could be good if Deviance statistic is similar to the degrees of freedom of the 
+model. Large values indicate lack of fit. 
+
+```{r}
+c('Deviance'           = m_extended$deviance,
+  'Degrees of freedom' = m_extended$df.res)
+```
+
+**Does the model fit well the data?**
+
+**Deviance >> Degrees of freedom $\rightarrow$ The model does not seem to fit well the data**.
+
+## Aggregated data
+
+An aggregated dataset is created using classes defined by age. We use the fucntion
+`aggregate`.
+**In this case, it is possible to aggregate by a continuous variable because it 
+is discretized and the sample size is large enough**.
+
+```{r}
+dfAge <- with(data, aggregate(x = cbind(ypos = Cholesterol.Category, yneg = 1 - Cholesterol.Category),
+                               by = list(Insulin.Levels = Insulin.Levels, Age = Age, BMI = BMI, Blood.Pressure = Blood.Pressure),
+                               FUN = sum))
+
+tail(dfAge,4)
+
+```
+
+Fit the model with aggregated data and compare with the model with disaggregated 
+data.
+
+```{r}
+m_Age_agg_interactions <- glm(cbind(ypos, yneg) ~ Age * Blood.Pressure + Age * BMI + Age * Insulin.Levels, 
+                                  data = dfAge, 
+                                  family = binomial(link= "logit"))
+summary(m_Age_agg_interactions)
+
+# Ver el resumen del modelo para evaluar la significancia de las variables
+
+# Graficar los residuos para evaluar el ajuste del modelo
+residualPlot(m_Age_agg_interactions)
+
+
+
+```
+
+In the model, the coefficients are the same that those ones with disaggregated 
+data, but not the deviance and degrees of freedom.
+
+```{r}
+data.frame(
+  dis = round(c(coef(m_extended),
+                deviance = m_extended$deviance,
+                df = m_extended$df.residual), 3),  # Modelo disaggregated (dis)
+  agg = round(c(coef(m_Age_agg_interactions),
+                deviance = m_Age_agg_interactions$deviance,
+                df = m_Age_agg_interactions$df.residual), 3)  # Modelo con interacciones (agg)
+)
+```
+
+
+
+With aggregated data, we can use a formal test using the deviance statistic 
+to check if the model fits well the data.
+
+\begin{center}
+$\bigg\{ \begin{array}{l} H_0:\text{The current model fits properly the data} \\ H_1: \text{The current model does not fit properly the data} \end{array}$ 
+\end{center}
+
+```{r}
+deviance <- m_Age_agg_interactions$deviance # deviance
+df       <- m_Age_agg_interactions$df.res   # degrees of freedom
+1 - pchisq(deviance,df)        # p-value for hypothesis test
+```
+
+**Does the model fit well the data?**
+
+**p < 0.05 $\rightarrow$ The model does not seem to fit well the data**.
+
+## Comparison with null model
+
+The difference of deviances is the same in the two models. Thus, the statistic 
+$\Delta D$ is appropriate to compare nested models using function `anova`.
+
+```{r}
+# Null model with disaggregated data
+m_Age_dis0 <- glm(Cholesterol.Category ~ 1,
+                  data   = data, 
+                  family = binomial(link= "logit"))
+
+# Null model with aggregated data
+m_Age_agg0 <- glm(cbind(ypos,yneg) ~ 1, 
+                  data   = dfAge,   
+                  family = binomial(link= "logit"))
+
+# Comparison with null model
+anova(m_Age_dis0, m_extended, test='Chisq')
+anova(m_Age_agg0, m_Age_agg_interactions, test='Chisq')
+```
+

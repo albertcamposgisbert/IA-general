@@ -1,0 +1,332 @@
+---
+title: "ME - GIA. Introduccio MLGz (Factors)"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+---
+
+## Introducció
+
+En l'elaboració de formatges, el rendiment és la relació entre el pes del 
+formatge obtingut i el de la llet utilitzada. Es vol veure, per separat en llet 
+de **ovella i de vaca**; com canvia el rendiment amb un tractament tèrmic 
+(**crua/pasteuritzada**) i amb l'addició de CaCl2 (**si/no**). Les dades són al 
+fitxer `formatges.csv`. Per cadascun dels tipus de llet per separat, ajustarem
+un model lineal generalitzat.
+
+En aquest document, veurem:
+
+- Per la llet de vaca, necessitem el model _**factorial**_ (amb interacció)
+- Per la llet de ovella, ens serveix el model _**additiu**_ (sense interacció)
+
+
+Aspectes previs: Directori, Paquets, Llegir dades, definir variables, factors ...
+
+```{r message=FALSE}
+# Carregar llibreries
+library(tables)   # tabular
+library(emmeans)  # emmeans
+library(car)      # residualPlot
+library(RcmdrMisc)#
+library(multcomp) # cld  
+
+# Llegir dades
+dd <- read.csv2("../Dades/formatges.csv", stringsAsFactors = TRUE)
+```
+
+
+
+## Llet de vaca
+
+### Descriptiva
+
+Les següents taules, mostren la *n*, la *mitjana* i la *desviació estàndard* per
+cada combinació de nivells.
+
+```{r}
+print(tabular((n=1) * VACA * (TERMIC+1) ~ (CaCl2+1), dd),html=FALSE) # n
+print(tabular( mean * VACA * (TERMIC+1) ~ (CaCl2+1), dd),html=FALSE) # mitjana
+print(tabular(   sd * VACA * (TERMIC+1) ~ (CaCl2+1), dd),html=FALSE) # desv. est.
+```
+
+Els següents gràfics mostren la presència d'interacció:
+
+- El que afecta el tipus de llet a la quantitat de formatge depen de si porta CaCl2 
+- El que afecta el fet d'afegir CaCl2 a la quantitat de formatge depen de si porta tipus de llet
+
+```{r}
+par(mfrow=c(1,2))
+with(dd, plotMeans(VACA, TERMIC, CaCl2, error.bars="conf.int", level=0.95, connect=TRUE))
+with(dd, plotMeans(VACA, CaCl2, TERMIC, error.bars="conf.int", level=0.95, connect=TRUE))
+```
+
+
+### Ajust model factorial
+
+Ajustem els models factorials amb la família normal i el link canònic (identity).
+
+```{r}
+mv   <-  lm(VACA ~ TERMIC * CaCl2, dd)
+mvg  <- glm(VACA ~ TERMIC * CaCl2, dd, family=gaussian)
+```
+
+Els dos models són equivalents:
+
+```{r}
+summary(mv)
+summary(mvg)
+```
+
+### Interpretació del model
+
+**Resum gràfic del model** (`emmip` del paquet `emmeans`): la interacció és marcada.
+
+```{r}
+emmip(mvg,TERMIC ~ CaCl2, CIs=T)
+```
+
+**Mitjanes marginals** (`emmeans` del paquet `emmeans`)
+
+```{r}
+(emmg <- emmeans(mvg, ~ TERMIC * CaCl2, type = "response"))
+(emmc <- emmeans(mvg, ~ TERMIC | CaCl2, type = "response"))
+(emmt <- emmeans(mvg, ~ CaCl2  | TERMIC,type = "response"))
+```
+
+Comparacions múltiples (`cld` de del paquet `multcomp`):
+
+```{r}
+cld(emmg)
+cld(emmc)
+```
+
+### Validació
+
+```{r}
+residualPlot(mvg)
+```
+
+### Link en el model factorial
+
+Comprovem que canviant el link, el model ajusta igual (ja que és factorial). Per exemple passem del `link=identity` al `link=log`
+
+```{r}
+mvg_log  <- glm(VACA ~ TERMIC*CaCl2, dd, family = gaussian(link=log))
+```
+
+Els coeficients, óbviament, canvien:
+
+```{r}
+summary(mvg)
+summary(mvg_log)
+```
+
+Però les estimacions no canvien:
+
+```{r}
+emmeans(mvg,     ~ TERMIC * CaCl2, type='response')
+emmeans(mvg_log, ~ TERMIC * CaCl2, type='response')
+```
+
+
+### Familia en el model factorial
+
+Canviar la família pot afectar a la homoscedasticitat. Per exemple 
+passem de la família Gaussiana a la Inversa Gaussiana mantenint el link identitat.
+
+```{r}
+mvg_iga  <- glm(VACA~TERMIC*CaCl2,family=inverse.gaussian(link=identity),dd)
+```
+
+#### Validació
+
+**Gràfic de residus**
+
+```{r}
+par(mfrow=c(1,2))
+residualPlot(mvg,     main = "Normal")
+residualPlot(mvg_iga, main = "Inversa Gaussiana")
+```
+
+**Homoscedasticitat**
+
+No hi ha diferències signifcatives entre nivells en cap de les 2 families.
+
+```{r}
+# Nivells i residus
+dd$levels  <- factor(paste0(dd$TERMIC,'-',dd$CaCl2))
+dd$res_nor <- resid(mvg)
+dd$res_iga <- resid(mvg_iga)
+
+# Variancies
+with(dd,tapply(res_nor, levels, var))
+with(dd,tapply(res_iga, levels, var)) * 10^4
+
+# test var
+leveneTest(res_nor ~ levels, dd)
+leveneTest(res_iga ~ levels, dd)
+```
+
+
+
+## Llet d'ovella
+
+### Descriptiva
+
+Les següents taules, mostren la *n*, la *mitjana* i la *desviació estàndard* per
+cada combinació de nivells.
+
+```{r}
+print(tabular( mean * OVELLA * (TERMIC+1)~(CaCl2+1),dd),html=FALSE)
+print(tabular(   sd * OVELLA * (TERMIC+1)~(CaCl2+1),dd),html=FALSE)
+print(tabular((n=1) * OVELLA * (TERMIC+1)~(CaCl2+1),dd),html=FALSE)
+```
+
+Els següents gràfics mostren l'absència d’interacció:
+
+- El que afecta el tipus de llet a la quantitat de formatge NO depen de si porta CaCl2 
+- El que afecta el fet d'afegir CaCl2 a la quantitat de formatge NO depen de si 
+quin tipus de llet porta
+
+```{r}
+par(mfrow=c(1,2))
+with(dd, plotMeans(OVELLA, TERMIC, CaCl2, error.bars="conf.int", level=0.95, connect=TRUE))
+with(dd, plotMeans(OVELLA, CaCl2, TERMIC, error.bars="conf.int", level=0.95, connect=TRUE))
+```
+
+### Ajust model additiu
+
+Ajustem els models factorials amb la família normal i el link canònic (identity).
+
+```{r}
+mo  <-  lm(OVELLA ~ TERMIC + CaCl2, dd)
+mog <- glm(OVELLA ~ TERMIC + CaCl2, family=gaussian,dd)
+```
+
+Els dos models són equivalents:
+
+```{r}
+summary(mo)
+summary(mog)
+```
+
+
+### Interpretació del model
+
+**Resum gràfic del model** (`emmip` del paquet `emmeans`)
+
+```{r}
+emmip(mog,TERMIC~CaCl2,CIs=T)
+```
+
+
+**Mitjanes marginals** (`emmeans` del paquet `emmeans`)
+
+```{r}
+(emmg <- emmeans(mog, ~TERMIC * CaCl2))
+(emmc <- emmeans(mog, ~TERMIC | CaCl2))
+(emmt <- emmeans(mog, ~CaCl2  | TERMIC))
+```
+
+Comparacions múltiples:
+
+```{r}
+cld(emmg)
+cld(emmc)
+```
+
+
+### Validació
+
+```{r}
+residualPlot(mog)          
+```
+
+Comprovem que no fa falta la interacció.
+
+```{r}
+mog_int <- glm(OVELLA ~ TERMIC * CaCl2, family = gaussian, dd)
+anova(mog_int, mog)
+```
+
+### Link en el model additiu
+
+Comprovem que canviant el link, el model no ajusta igual (ja que no és factorial). Per exemple passem del `link=identity` al `link="1/mu^2"`
+
+Models additius
+
+```{r}
+mog_inv2 <- glm(OVELLA ~ TERMIC + CaCl2, family=gaussian(link="1/mu^2"), dd)
+```
+
+Estimació dels valors esperats marginals, emmeans dels 4 tractaments. Canvien les estimacions al canviar el link.
+
+```{r}
+(emmgll <- emmeans(mog,     ~ TERMIC*CaCl2, type="response"))
+(emmglr <- emmeans(mog_inv2,~ TERMIC*CaCl2, type="response"))
+```
+
+Comparem els residus.
+
+```{r}
+par(mfrow=c(1,2))
+residualPlot(mog)
+residualPlot(mog_inv2)          
+```
+
+
+Fa falta la interacció amb el nou link?
+
+```{r}
+mog_inv2_int <- glm(OVELLA~TERMIC*CaCl2, family=gaussian(link="1/mu^2"),dd)
+anova(mog_inv2_int,mog_inv2)
+```
+Sembla que sí que fa falta
+
+```{r}
+par(mfrow=c(1,3))
+residualPlot(mog)
+residualPlot(mog_inv2)
+residualPlot(mog_inv2_int)
+```
+
+### Familia en el model additiu
+
+Canviar la família pot afectar a la homoscedasticitat. Per exemple 
+passem de la família Gaussiana a la Inversa Gaussiana amb el link identitat.
+
+```{r}
+mog_iga <- glm(OVELLA ~ TERMIC + CaCl2, 
+               family=inverse.gaussian(link=identity), dd)
+```
+
+#### Validació
+
+**Gràfic de residus**
+
+```{r}
+par(mfrow=c(1,2))
+residualPlot(mog,     main = "Normal")
+residualPlot(mog_iga, main = "Inversa Gaussiana")
+```
+
+**Homoscedasticitat**
+
+En els dos casos, hi ha diferències significatives entre nivells en cap de les 2 families.
+
+```{r}
+# Nivells i residus
+dd$levels  <- factor(paste0(dd$TERMIC,'-',dd$CaCl2))
+dd$res_nor <- resid(mog)
+dd$res_iga <- resid(mog_iga)
+
+# Variancies
+with(dd,tapply(res_nor, levels, var))
+with(dd,tapply(res_iga, levels, var)) * 10^4
+
+# test var
+leveneTest(res_nor ~ levels, dd)
+leveneTest(res_iga ~ levels, dd)
+```
+

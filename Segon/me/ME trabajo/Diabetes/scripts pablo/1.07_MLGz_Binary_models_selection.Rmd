@@ -1,0 +1,378 @@
+---
+title: "ME - GIA. Binary (Model selection)"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  html_document:
+    code_folding: show
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo=TRUE,     # Show code?
+                      fig.width=10,  # Fig.width
+                      fig.height=9)  # Fig.height
+```
+
+
+
+```{r, warning=FALSE, message=FALSE}
+# Load packages
+library(effects)
+library(car)           # function Anova
+library(emmeans)       # function emmeans
+library(multcomp)      # function cld
+library(multcompView)  # function cld    
+library(dplyr)         # data management
+library(logistf)
+
+```
+
+```{r, warning=FALSE, message=FALSE}
+# Read data
+base <- read.csv("C:/Users/Pablo/Desktop/Carpetas/Uni/3r cuatri/ME/trabajo/base_trabajo.csv")
+base <- base %>%  
+  mutate(Cholesterol.Category = as.factor(Cholesterol.Category))
+base$Physical.Activity <- as.factor(base$Physical.Activity)
+base$Dietary.Habits <- as.factor(base$Dietary.Habits)
+base$Ethnicity <- as.factor(base$Ethnicity)
+base$Socioeconomic.Factors <- as.factor(base$Socioeconomic.Factors)
+base$Smoking.Status <- as.factor(base$Smoking.Status)
+base$Alcohol.Consumption <- as.factor(base$Alcohol.Consumption)
+base$History.of.PCOS <- as.factor(base$History.of.PCOS)
+base$Previous.Gestational.Diabetes <- as.factor(base$Previous.Gestational.Diabetes)
+base$Liver.Function.Tests <- as.factor(base$Liver.Function.Tests)
+base$Urine.Test <- as.factor(base$Urine.Test)
+base$Early.Onset.Symptoms <- as.factor(base$Early.Onset.Symptoms)
+base$Target <- as.factor(base$Target)
+base$Environmental.Factors <- as.factor(base$Environmental.Factors)
+base$Genetic.Markers <- as.factor(base$Genetic.Markers)
+base$Autoantibodies <- as.factor(base$Autoantibodies)
+base$Family.History <- as.factor(base$Family.History)
+base$Cholesterol.Category <- relevel(base$Cholesterol.Category, ref = "Low")
+base$Cholesterol.Category <- ifelse(base$Cholesterol.Category == "High", 1, 0)
+
+
+head(base)
+
+
+```
+
+# Descriptive analysis
+
+## Univariate exploratory data analysis
+
+```{r}
+summary(base)
+table(base$Cholesterol.Category)
+```
+
+## Bivariate descriptive analysis
+
+```{r}
+vars <- colnames(base)[-which(colnames(base) == "Cholesterol.Category")] 
+par(mfrow=c(4,5), mar=c(3,3,3,1)) # 4x5 windows with margins 3,3,3,1
+colors <- c(2,3)                  # colors: red (2) and green (3)
+
+for (v in vars) {
+  tryCatch({
+    if (!is.factor(base[[v]])) {
+      form <- as.formula(paste0(v, "~Cholesterol.Category"))
+      boxplot(form, base, main = v, col = colors, horizontal = TRUE)
+    } else {
+      tab <- prop.table(table(base$Cholesterol.Category, base[[v]]), 2)
+      barplot(tab, main = v, col = colors)
+    }
+  }, error = function(e) {
+    message("Error en la variable: ", v, " - ", e$message)
+  })
+}
+
+
+```
+
+# Variable selection (VS)
+
+## VS using Deviance test
+
+Deviance test using `Anova`function.
+
+```{r}
+m0 <- glm(Cholesterol.Category ~ .-Target-Cholesterol.Levels, base, family = binomial(link = 'logit'))
+summary(m0)
+
+```
+
+**Interpretation of the coefficients**:
+
+- Positive coefficients in a category of a **factor** indicate a higher 
+probability of positive response compared to the reference and vice versa.
+- Positive coefficients in a **covariate** indicate a higher probability of 
+positive response with higher values and vice versa
+
+The function `Anova` compares the full model with the full model without each
+variable using the Deviance test (=`LR`), i.e, for assess `sex`variable, the next 
+two models are compared:
+
+**M1**: `Y ~  age + race + height + weight + waist + SBP + DBP + siblings +` 
+        `     household + income + insurance + arrested + sleep + glasses + fastfood +` 
+        `     caffeine + sugar + cigars + TV + Phealth`
+
+**M2**: `Y ~  age + race + height + weight + waist + SBP + DBP + siblings +` 
+        `     household + income + insurance + arrested + sleep + glasses + fastfood +` 
+        `     caffeine + sugar + cigars + TV + Phealth + sex`          
+
+```{r}
+# Marginal contribution of each variable
+Anova(m0, test.statistic = 'LR')
+```
+
+**Most variables are significant. We could keep in the model all variables that are significant**.
+However is a best option to remove variables one by one. 
+
+```{r}
+summary(m0.1 <- glm(Cholesterol.Category ~ log(Age + 1) * BMI + log(Blood.Pressure + 1) *
+                                 Waist.Circumference + Insulin.Levels + log(Blood.Glucose.Levels + 1) +
+                                 Pancreatic.Health + Birth.Weight,
+                                 data = base, family = binomial(link = 'logit')))
+
+# Marginal contribution of each variable
+Anova(m0.1, test.statistic = 'LR')
+```
+
+## VS using AIC/BIC
+
+We can perform automatic variable selection using the `step` function and **BIC** 
+criterion. We will compare with the previous model.
+
+***We can use automatic selection because there are no missing values in the data. We use BIC because it penalizes the addition of more parameters to the model, which is desirable since we have many covariates***
+
+```{r warning=FALSE}
+m0.2 <- step(m0, direction="both", 
+             k = log(nrow(base)), 
+             trace = FALSE)
+summary(m0.2)
+cat('no. coefficients m0.1:', length(coef(m0.1)),'\n')
+cat('no. coefficients m0.2:', length(coef(m0.2)),'\n')
+```
+
+We can compare the two initial models with a deviance test because they are nested models.
+`m0.1` model improves the `m0.2` model. We select **`m0.1`** model.
+
+```{r warning=FALSE}
+anova(m0.2, m0.1, test = 'Chisq')
+```
+
+
+## Validation
+
+Standard model diagnostics using `residualPlots`
+
+```{r warning=FALSE}
+residualPlot (m0.1)
+residualPlots(m0.1, layout = c(4,3), ask = FALSE, tests = FALSE)
+```
+
+***The obtained model is quite good, but we will try to improve it.***
+
+# Improve the model: *waist*
+
+## Aggregation
+
+We did an aggregation using variable **`waist`**
+
+```{r warning=FALSE}
+
+# Agregación con múltiples variables
+dfbase <- with(base, aggregate(x = cbind(ypos = Cholesterol.Category, yneg = 1 - Cholesterol.Category),
+                               by = list(Insulin.Levels = Insulin.Levels, Age = Age, BMI = BMI, Blood.Pressure = Blood.Pressure),
+                               FUN = sum))
+
+```
+
+## Simple Model
+
+Model with variable *waist* using aggregate data:
+
+```{r}
+m_extended <- glm(cbind(ypos, yneg) ~ Age * Blood.Pressure + Age * BMI + Age * Insulin.Levels, 
+                  data = dfbase, family = binomial(link = 'logit'))
+summary(m_extended)
+```
+
+### Validation
+
+We use **`residualPlots`**
+
+```{r}
+residualPlots(m_extended)
+```
+
+***The test indicates that the presence of a quadratic term is necessary***
+
+## Model with polynomial terms
+
+We fit the models up to order 4 and compare them using the deviance test, AIC, and BIC.
+
+```{r}
+m_extended.1 <- glm(cbind(ypos, yneg) ~ Insulin.Levels + Age + BMI + Blood.Pressure, 
+                    data = dfbase, family = binomial(link = 'logit'))
+
+m_extended.2 <- glm(cbind(ypos, yneg) ~ poly(Insulin.Levels, 2) + Age + BMI + Blood.Pressure, 
+                    data = dfbase, family = binomial(link = 'logit'))
+
+m_extended.3 <- glm(cbind(ypos, yneg) ~ poly(Insulin.Levels, 3) + Age + BMI + Blood.Pressure, 
+                    data = dfbase, family = binomial(link = 'logit'))
+
+m_extended.4 <- glm(cbind(ypos, yneg) ~ poly(Insulin.Levels, 4) + Age + BMI + Blood.Pressure, 
+                    data = dfbase, family = binomial(link = 'logit'))
+
+# Pruebas de devianza
+anova(m_extended.1, m_extended.2, test = "Chisq")
+anova(m_extended.2, m_extended.3, test = "Chisq")
+anova(m_extended.3, m_extended.4, test = "Chisq")
+
+# Comparación de AIC y BIC
+cbind(
+  AIC = AIC(m_extended.1, m_extended.2, m_extended.3, m_extended.4),
+  BIC = BIC(m_extended.1, m_extended.2, m_extended.3, m_extended.4)[, 2]
+)
+```
+
+***According to deviance and AIC, we would choose the 4th-order polynomial. According to BIC, the 3rd-order polynomial***
+
+### Validation
+
+We check 3rd and 4th order polynomial
+
+```{r warning=FALSE}
+residualPlots(m_extended.3, layout=c(1, 2))
+residualPlots(m_extended.4, layout=c(1, 2))
+```
+
+## Model with 2 slopes
+
+We fit a model with two slopes
+
+***We are testing this model because the graph gives the impression that this pattern exists. The model provides a better BIC compared to the previous models***
+
+```{r}
+dfbase$Iwaist = as.factor(ifelse(dfbase$waist<=105,0,1))
+summary(dfbase$Iwaist)
+
+##-- Interaction with waist (two slopes?)
+m_waist.5 <- glm(cbind(ypos, yneg) ~ waist * Iwaist, 
+                 data = dfbase, family = binomial)  
+m_waist.6 <- glm(cbind(ypos, yneg) ~ Iwaist + waist:Iwaist + poly(waist,4), 
+                 data = dfbase, family = binomial)
+
+anova(m_waist.1, m_waist.5,test='Chisq')
+anova(m_waist.5, m_waist.6,test='Chisq')
+
+cbind(AIC = AIC(m_waist.3, m_waist.4, m_waist.5, m_waist.6),
+      BIC = BIC(m_waist.3, m_waist.4, m_waist.5, m_waist.6)[,2])
+```
+
+### Validation
+
+Best diagnosis
+
+```{r warning=FALSE}
+residualPlots(m_waist.5)
+```
+
+Effect using `allEffects` to see the two slopes
+
+```{r warning=FALSE}
+plot(allEffects(m_waist.5))
+```
+
+## Full model including waist with 2 slopes
+
+```{r}
+base$Iwaist = as.factor(ifelse(base$waist<=105,0,1))
+
+m1 <- update(m0.1, . ~ . + Iwaist + waist:Iwaist)
+```
+
+### Validation
+
+```{r}
+residualPlots(m1)
+```
+
+# Improve the model: cigars
+
+## Aggregation
+
+We did an aggregation using variable **`cigars`**
+
+```{r warning=FALSE}
+dfbase1 <- with(base,aggregate(cbind(ypos = Phealth, yneg = 1-Phealth),
+                               list(cigars=cigars),
+                               sum))
+```
+
+## Simple Model
+
+Model with variable *cigars* using aggregate data:
+
+```{r}
+m_cigars <- glm(cbind(ypos,yneg) ~ cigars, data=dfbase1, family=binomial(link='logit'))
+summary(m_cigars)
+```
+
+### Validation
+
+We use **`residualPlots`**
+
+```{r}
+residualPlot(m_cigars)
+```
+
+## Models with polynomial terms
+
+We fit the models up to order 4 and compare them using the deviance test, AIC, and BIC.
+
+```{r}
+m_cigars.1 <- glm(cbind(ypos,yneg) ~ cigars,        data=dfbase1,family=binomial)
+m_cigars.2 <- glm(cbind(ypos,yneg) ~ poly(cigars,2),data=dfbase1,family=binomial)
+m_cigars.3 <- glm(cbind(ypos,yneg) ~ poly(cigars,3),data=dfbase1,family=binomial)
+m_cigars.4 <- glm(cbind(ypos,yneg) ~ poly(cigars,4),data=dfbase1,family=binomial)
+
+# Deviance test
+anova(m_cigars.1, m_cigars.2, test="Chisq")
+anova(m_cigars.2, m_cigars.3, test="Chisq")
+anova(m_cigars.3, m_cigars.4, test="Chisq")
+
+# AIC and BIC
+cbind(      AIC(m_cigars.1,m_cigars.2,m_cigars.3,m_cigars.4),
+      BIC = BIC(m_cigars.1,m_cigars.2,m_cigars.3,m_cigars.4)[,2])
+```
+
+***According to deviance and AIC, we would choose the 4th-order polynomial. According to BIC, the 3rd-order polynomial***
+
+### Validation
+
+We check 3rd and 4th order polynomial
+
+```{r warning=FALSE}
+summary(m_cigars.3)
+summary(m_cigars.4)
+residualPlots(m_cigars.3, layout = c(1, 2))
+residualPlots(m_cigars.4, layout = c(1, 2))
+```
+
+## Full model including cigars with polynomial term
+
+```{r}
+m2 <- update(m0.1, . ~ . + Iwaist + waist:Iwaist - cigars + poly(cigars,4))
+```
+
+### Validation
+
+```{r}
+residualPlots(m2)
+```

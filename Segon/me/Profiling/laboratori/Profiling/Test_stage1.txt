@@ -1,0 +1,120 @@
+============  Antiguedad.Trabajo  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 362.45, df = 2, p-value < 2.2e-16
+
+
+============  Vivienda  ================
+
+	Pearson's Chi-squared test
+
+data:  current_var and d[, "cluster"]
+X-squared = 1184, df = 12, p-value < 2.2e-16
+
+
+============  Plazo  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 15.141, df = 2, p-value = 0.0005155
+
+
+============  Edad  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 1058.6, df = 2, p-value < 2.2e-16
+
+
+============  Estado.civil  ================
+
+	Pearson's Chi-squared test
+
+data:  current_var and d[, "cluster"]
+X-squared = 4418.6, df = 10, p-value < 2.2e-16
+
+
+============  Registros  ================
+
+	Pearson's Chi-squared test
+
+data:  current_var and d[, "cluster"]
+X-squared = 3666.7, df = 2, p-value < 2.2e-16
+
+
+============  Tipo.trabajo  ================
+
+	Pearson's Chi-squared test
+
+data:  current_var and d[, "cluster"]
+X-squared = 164.98, df = 8, p-value < 2.2e-16
+
+
+============  Gastos  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 1309.5, df = 2, p-value < 2.2e-16
+
+
+============  Ingresos  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 136.81, df = 2, p-value < 2.2e-16
+
+
+============  Patrimonio  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 283.36, df = 2, p-value < 2.2e-16
+
+
+============  Cargas.patrimoniales  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 82.894, df = 2, p-value < 2.2e-16
+
+
+============  Importe.solicitado  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 50.16, df = 2, p-value = 1.282e-11
+
+
+============  Precio.del.bien.financiado  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 63.027, df = 2, p-value = 2.06e-14
+
+
+============  Estalvi  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 1.6324, df = 2, p-value = 0.4421
+
+
+============  RatiFin  ================
+
+	Kruskal-Wallis rank sum test
+
+data:  current_var by d[, "cluster"]
+Kruskal-Wallis chi-squared = 12.275, df = 2, p-value = 0.00216
+
+

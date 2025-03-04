@@ -1,0 +1,117 @@
+---
+title: "MLGz - Numerical response"
+output: 
+  html_document:
+date: "2024-11-02"
+---
+
+
+## Introducció
+
+Comprendre els factors que influeixen en els nivells d'insulina és essencial per poder avançar en eines de diagnòstic i tractament de la diabetes. Per a això, aquesta part del projecte es centra en evaluar com les diferents variables (tan observacions clíniques com d'estil de vida) afecten a aquests mitjançant la creació d'un model lineal generalitzat (MLGz). I tot i que aquest és l'objectiu principal, això també podria ser utilitzat com a base per a averiguar el tipus de diabetes que pateix el pacient en futures investigacions, donat que cadascún afecta als nivells d'insulina d'una manera diferent
+
+
+## Creació del model
+
+### Selecció de les variables per al model
+```{r, echo=FALSE, message=FALSE}
+# Llegir dades i carregar llibreries
+ddiab   <- read.csv("diabetes_data.csv")
+library(car)
+```
+
+Primer, realitzarem un model lineal generalitzat amb el nivell d'insulina com a variable resposta i totes les variables (havent descartat prèviament les que no ens interessaven al pre-processing) com a explicatives, extreient també la variable 'Target', ja que el tipus de diabetes que és té determina els nivells d'insulina.
+
+Aquest model l'utilitzarem per dictar quines variables es relacionen o no amb la resposta mitjançant l'observació del p-valor sobre cada paràmetre, mirant així si aquesta es influent (<<0.05) o no.
+
+```{r, message=FALSE}
+dmlgz_t  <- glm(Insulin.Levels ~ . -Target, family=gaussian, ddiab)
+summary(dmlgz_t)
+```
+
+Primerament, veiem que el model amb variables explica més que el nul (NUll deviance >> Residual Deviance), per tant, deduim que diverses d'aquestes influeixen sobre el resultat de la variable objectiu.
+
+Observem que l'edat, el BMI, la pressió arterial, els nivells de colesterol, la circumferència de la cintura, els nivells de glucosa en sang i el pes al nèixer han obtingut uns p-valor molt significants, indicant que influeixen molt al resultat.
+
+Per això, durem a terme un MLGz amb les variables més significatives:
+
+```{r, message=FALSE} 
+dmlgz_v  <- glm(Insulin.Levels ~ Age + BMI + Blood.Pressure + Cholesterol.Levels + Waist.Circumference + Blood.Glucose.Levels + Birth.Weight, family=gaussian, ddiab)
+summary(dmlgz_v)
+```
+
+Una vegada realitzat aquest, passarem a comprovar les possibles interaccions entre les nostres variables.
+
+### Model amb interacció
+Ara durem a terme un model amb totes les interaccions per veure si l'efecte de les variables sobre la resposta depenen del valor d'altres, això ho farem mitjançant l'observació del p-valor de cadascuna i així comprovant si es rellevant incloure-les al model:
+
+```{r}
+dmlgz_int  <- glm(Insulin.Levels ~ (Age + BMI + Blood.Pressure + Cholesterol.Levels + Waist.Circumference + Blood.Glucose.Levels + Birth.Weight)^2, family=gaussian, ddiab)
+```
+
+
+Execuntat-lo observem que la majoria de les nostres variables interactuen entre elles (la seva influència en la variable resposta depèn de les altres), per tant, inclourem les interaccions més significatives (p-valor <<< 0.05) al model, comprovant a la deviància residual que això ha millorat el nostre model:
+
+```{r}
+dmlgz_i  <- glm(Insulin.Levels ~ Age + BMI + Blood.Pressure + Cholesterol.Levels + Waist.Circumference + Blood.Glucose.Levels + Birth.Weight + Age*BMI + Age*Blood.Pressure + Age*Cholesterol.Levels + Age*Waist.Circumference + Age*Blood.Glucose.Levels + Age*Birth.Weight + BMI*Blood.Pressure + BMI*Waist.Circumference + BMI*Birth.Weight + Blood.Pressure*Waist.Circumference + Blood.Pressure*Blood.Glucose.Levels + Blood.Glucose.Levels*Waist.Circumference + Blood.Glucose.Levels*Birth.Weight, family=gaussian, ddiab)
+```
+
+```{r, echo=FALSE}
+cat("Deviancia residual sense interacció:", dmlgz_v$deviance, "\n")
+cat("Deviancia residual amb interacció:", dmlgz_i$deviance, "\n")
+```
+
+
+### Elecció de la familia i link
+
+A continuació, determinarem la familia i funció link a utilitzar, provant amb la Gaussiana, la Gamma i la inversa Gaussiana
+
+```{r echo=FALSE}
+dmlgz_gaus  <- glm(Insulin.Levels ~ Age + BMI + Blood.Pressure + Cholesterol.Levels + Waist.Circumference + Blood.Glucose.Levels + Birth.Weight + Age*BMI + Age*Blood.Pressure + Age*Cholesterol.Levels + Age*Waist.Circumference + Age*Blood.Glucose.Levels + Age*Birth.Weight + BMI*Blood.Pressure + BMI*Waist.Circumference + BMI*Birth.Weight + Blood.Pressure*Waist.Circumference + Blood.Pressure*Blood.Glucose.Levels + Blood.Glucose.Levels*Waist.Circumference + Blood.Glucose.Levels*Birth.Weight, family=gaussian, ddiab)
+
+dmlgz_gam  <- glm(Insulin.Levels ~ Age + BMI + Blood.Pressure + Cholesterol.Levels + Waist.Circumference + Blood.Glucose.Levels + Birth.Weight + Age*BMI + Age*Blood.Pressure + Age*Cholesterol.Levels + Age*Waist.Circumference + Age*Blood.Glucose.Levels + Age*Birth.Weight + BMI*Blood.Pressure + BMI*Waist.Circumference + BMI*Birth.Weight + Blood.Pressure*Waist.Circumference + Blood.Pressure*Blood.Glucose.Levels + Blood.Glucose.Levels*Waist.Circumference + Blood.Glucose.Levels*Birth.Weight, family=Gamma, ddiab)
+
+dmlgz_invgaus  <- glm(Insulin.Levels ~ Age + BMI + Blood.Pressure + Cholesterol.Levels + Waist.Circumference + Blood.Glucose.Levels + Birth.Weight + Age*BMI + Age*Blood.Pressure + Age*Cholesterol.Levels + Age*Waist.Circumference + Age*Blood.Glucose.Levels + Age*Birth.Weight + BMI*Blood.Pressure + BMI*Waist.Circumference + BMI*Birth.Weight + Blood.Pressure*Waist.Circumference + Blood.Pressure*Blood.Glucose.Levels + Blood.Glucose.Levels*Waist.Circumference + Blood.Glucose.Levels*Birth.Weight, family=inverse.gaussian(), ddiab)
+
+residualPlot(dmlgz_gaus,    main='Gaussian')
+residualPlot(dmlgz_gam,    main='Gamma')
+residualPlot(dmlgz_invgaus,    main='Inverse Gaussian')
+```
+
+La familia Gamma es la que dóna millors resultats, donat que és la que millor cumpleix la linealitat i homocedasticitat. Per tant, ens quedarem amb la Gamma, comprovant abans que no ens hem deixat cap variable o interaccions importants:
+
+```{r}
+dmlgz_gam_t  <- glm(Insulin.Levels ~ . -Target, family=Gamma, ddiab)
+summary(dmlgz_gam)
+```
+
+Observem que amb la familia Gamma la deviància residual millora molt, passant d'uns 4.000.000 a uns 10.000. 
+A més, observem la salut del pàncreas passa a tenir un efecte significatiu, així que l'afegirem al model i ara comprovarem les interaccions:
+```{r, message=FALSE}
+dmlgz_gamv  <- glm(Insulin.Levels ~ (Age + BMI + Blood.Pressure + Cholesterol.Levels + Waist.Circumference + Blood.Glucose.Levels + Birth.Weight + Pancreatic.Health)^2, family=Gamma, ddiab)
+summary(dmlgz_gamv)
+```
+
+Executant-lo,  veiem algunes més de significatives i algunes que deixen de ser-ho, per tant, ajustarem el model tenint-ho en compte:
+
+```{r}
+dmlgz_def  <- glm(Insulin.Levels ~ Age + BMI + Blood.Pressure + Cholesterol.Levels + Waist.Circumference + Blood.Glucose.Levels + Birth.Weight + Pancreatic.Health + Age*BMI + Age*Blood.Pressure + Age*Cholesterol.Levels + Age*Waist.Circumference + Age*Blood.Glucose.Levels + Age*Birth.Weight + Age*Pancreatic.Health  + BMI*Cholesterol.Levels + BMI*Blood.Pressure + BMI*Waist.Circumference + Blood.Pressure*Blood.Glucose.Levels + Blood.Pressure*Pancreatic.Health + Blood.Glucose.Levels*Waist.Circumference + Blood.Glucose.Levels*Pancreatic.Health, family=Gamma, ddiab)
+```
+
+```{r, echo=FALSE}
+cat("Deviancia residual amb les interaccions pertanyents a la familia Gamma:", dmlgz_def$deviance, "\n")
+```
+
+D'aquest manera, veiem que hem aconseguit disminuir força la deviància residual, passant de ~10.000 a ~9.000. 
+
+
+## Validació final i conclusions
+
+Emprenem el gràfic de residus en funció del predictor lineal per a iniciar la validació del model:
+```{r}
+residualPlot(dmlgz_def)
+```
+
+Donat que hem resolt prèviament els problemes de linealitat i homocedasticitat, els gràfics residuals confirmen que el model és vàlid. Tot i això, l'AIC del model és d'aproximadament 400.000, un valor elevat que podria deure's a una variabilitat no explicada o a la naturalesa complexa de les dades. Tot i així, la validació indica que el model és robust i les prediccions són fiables. 
+
+

@@ -1,0 +1,318 @@
+---
+title: "Análisis Descriptivo de Datos"
+date: "2024-10-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+library(summarytools)
+library(ggplot2)
+library(ggcorrplot)
+library(GGally)
+library(FactoMineR)
+library(factoextra)
+library(purrr)
+library(knitr)
+
+```
+
+# Introducción
+
+Este análisis descriptivo tiene como objetivo proporcionar una visión general de los datos, identificar patrones y destacar aspectos importantes respecto a los múltiples factores que influyen en la diabetes.
+
+# Metodología
+
+Los datos fueron analizados usando varias técnicas descriptivas y multiples librerias para la visualización de gráficos (barplots, boxplots, histogramas) , métricas clave además de un estudio PCA para discernir que variables conforman el mayor peso en la base de datos.
+
+# Análisis Descriptivo
+
+## Visualización y descripción general de datos
+
+El conjunto de datos consta de 70,000 filas y 25 columnas. incluyen una mezcla de variables categóricas (por ejemplo, historial familiar, estado de autoanticuerpos) y numéricas (por ejemplo, niveles de insulina, edad, IMC). Consta concretamente de 16 columnas de tipo carácter (11 binarias y 3 ternarias) y 9 de tipo numérico.
+
+El conjunto de datos no presenta ningún valor faltante.
+
+```{r}
+data <- read_csv("./base_principal_processed.csv")
+head(data)
+str(data)
+print(dfSummary(data, method = 'render', file = "dfSummary.html"))
+
+```
+
+## Estadísticas Descriptivas
+
+Las estadisticas de a continuación ponen el foco en las variables numéricas clave que proporcionan una visión general de las caracteristicas de las personas representadas en el dataset.
+
+En primer lugar, tenemos la distribución de la edad, con una media de 32 años y una desviación estándar de 21. El rango de edad es bastante amplio, desde recién nacidos hasta personas mayores de 79 años, con una mediana de 31 años, lo que refleja una notable diversidad que permitirá clasificar los resultados en función de esta caracteristica teniendo muestras de cada rango de edad.
+
+En cuanto al peso al nacer, la media es de 3097.06 gramos, con una desviación estándar de 713.84. Los valores oscilan entre 1500 y 4499 gramos, y la mediana se sitúa en 3103 gramos.
+
+Pasando a los niveles de glucosa en sangre, encontramos una media de 160.70 mg/dL y una desviación estándar de 48.17. Los niveles de glucosa varían significativamente, desde 80 hasta 299 mg/dL, con una mediana de 152 mg/dL.
+
+La presión arterial muestra una media de 111.34 mm/Hg y una desviación estándar de 19.94. Los valores de presión arterial varían considerablemente, desde 60 hasta 149 mm/Hg, con una mediana de 113 mm/Hg.
+
+El índice de masa corporal (IMC) tiene una media de 24.78 y una desviación estándar de 6.01. Los valores de IMC varían de 12 a 39, con una mediana de 25, lo que indica una población ligeramente por encima del rango normal, influenciando así el estudio de enfermedades metabólicas.
+
+En cuanto a los niveles de colesterol, la media es de 194.87 mg/dL, con una desviación estándar de 44.53. Los niveles varían entre 100 y 299 mg/dL, con una mediana de 191 mg/dL.
+
+Los niveles de insulina presentan una media de 21.61 µU/mL y una desviación estándar de 10.79, con valores que oscilan entre 5 y 49 µU/mL, y una mediana de 19 µU/mL. La salud pancreática se refleja en una media de 47.56, con una desviación estándar de 19.98 y valores que varían de 10 a 99, con una mediana de 46.
+
+Finalmente, la circunferencia de la cintura tiene una media de 35.05 cm y una desviación estándar de 6.80, con un rango de 20 a 54 cm y una mediana de 34 cm.
+
+Por lo tanto, los datos parecen contener un amplio espectro de valores como carácter general.
+
+```{r}
+descr(data)
+```
+
+## Visualizaciones
+
+### Histogramas
+
+```{r}
+
+numeric_cols <- data %>% select_if(is.numeric) %>% colnames()
+print(numeric_cols)
+
+plot_histogram <- function(col, binwidth = 1, fill_color = "#ADD8E6", title = NULL) {
+  ggplot(data, aes_string(x = col)) +
+    geom_histogram(binwidth = binwidth, fill = fill_color, color = "Black") +
+    theme_minimal() +
+    ggtitle(ifelse(is.null(title), paste("Histogram of", col), title))
+}
+
+for (col in numeric_cols) {
+  print(plot_histogram(col, binwidth = 2, fill_color = "#ADD8E6"))
+}
+
+
+```
+
+-   **Insulin.Levels:** El mayor pico se observa en el rango de 10 a 20, el gráfico conserva la gran mayoria de sus valores alrededor de la media, y que los valores descienden de forma paultatina conforme en gráfico muestra los valores más extremos.
+
+-   **Age:** Muestra una distribución sesgada a la izquierda. El mayor pico se observa en recién nacidos, el gráfico muestra una disminución gradual en la frecuencia conforme aumenta la edad, con algunos picos menores en los rangos de 10 a 20 y 30 a 40, y una disminución más pronunciada después de los 60 años. Cabe destacar que de los 0 a 5 años, hay una baja representación, aunque en general hay mas o menos la misma muestra para cada rango de edad.
+
+-   **BMI:** Muestra una distribución normal, con los valores mas altos alrededor de la mediana, y un descenso paulatino conforme tiende a valores mas cercanos al 0 o valores mas altos.
+
+-   **Blood.Pressure:** Los niveles de presión arterial se muestran escalonados, con unos rangos bien definidos, y con un pico mayoritario entre los 110 y 120 mmHg. La frecuencia disminuye gradualmente a medida que los valores se alejan de este rango central. Hay cierto numero de outliers, sobretodo en el rango que comprende los 10 mmHg y los 85 mmHg.
+
+-   **Cholesterol.Levels:** El histograma de los niveles de colesterol muestra una distribución casi normal pero no perfecta ya que la mayor parte de los datos se concentra entre 150 y 250 mg/dL, con un pico notable en torno a 190-200 mg/dL, lo cual indica la moda y a medida que nos alejamos de este rango, la frecuencia disminuye gradualmente, pero no de forma simétrica.
+
+-   **Waist.Circumference:** Muestra una distribución aproximadamente normal, con la mayor parte de las mediciones concentradas entre 27,5 y 35. la moda se encuentra alrededor de los 30.
+
+-   **Blood.Glucose.Levels:** La moda se encuentra claramente alrededor de los 125 mg/dL. La frecuencia de observaciones disminuye de forma suavemente escalonada medida que los niveles de glucosa aumentan mas allá de los 135 mg/dl, sugiriendo que los niveles más altos de glucosa son menos frecuentes.
+
+-   **Pancreatic.Health:** Tiene una distribución relativamente uniforme, con un pico en el rango de 30 a 35. Muestra algunos outliers en el rango que comprende los 80 a los 100. La distribución disminuye gradualmente hacia los valores más altos disminuyendo drasticamente en los valores máximos.
+
+-   **Birth.Weight:** El histograma del peso al nacer muestra una distribución principalmente entre 2500 y 4000 gramos, con picos notables en torno a los 3000 y 3500 gramos. La distribución sigue un patrón aproximadamente normal, con la mayoría de los valores centrados alrededor de la media y una disminución gradual hacia los extremos. No se observan outliers notables.
+
+### Boxplots
+
+```{r}
+plot_boxplot <- function(col, title = NULL, fill_color = "#ADD8E6") {
+  ggplot(data, aes_string(y = col)) + 
+    geom_boxplot(fill = fill_color, color = "black") + 
+    scale_fill_brewer(palette="Pastel1") + 
+    theme_minimal() + 
+    ggtitle(ifelse(is.null(title), paste("Boxplot of", col), title))
+}
+
+map(numeric_cols, ~plot_boxplot(.x, fill_color = "#ADD8E6"))
+
+```
+
+-   **Age**: El boxplot de la distribución de edad muestra que la mayoría de las edades están concentradas entre los 20 y los 40 años, con una mediana en los 30 años.
+
+-   **BMI:** Muestra una distribución principalmente entre 20 y 30, con la mediana en 25.
+
+-   **Waist.Circumference:** Muestra una distribución con algunos outliers por encima del rango intercuartil, con la mediana centrada dentro del rango intercuartil.
+
+-   **Insulin.Levels, Blood.Pressure, Cholesterol.Levels, Blood.Glucose.Levels, Pancreatic.Health, Birth.Weight:** La mediana esta centrada en el rango intercuartil.
+
+En general no se observan practicamente outliers notables.
+
+### Barplots para Variables Categóricas
+
+```{r}
+categorical_cols <- data %>% select_if(is.character) %>% colnames()
+print(categorical_cols)
+
+plot_barplot <- function(col, fill_color = "#ADD8E6", title = NULL) {
+  ggplot(data, aes_string(x = col)) +
+    geom_bar(fill = fill_color, color = "black") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 0.8, size = 8)) +
+    geom_text(stat='count', aes(label=..count..), vjust=-0.5)
+}
+
+# Evita usar un for
+walk(categorical_cols, ~print(plot_barplot(.x, fill_color = "#ADD8E6")))
+
+```
+
+En cuanto a los barplots, se puede observar que de un total de 16 variables categoricas mostradas hay un total de 11 que se muestran binarias, y todas y cada una de ellas muestran un equilibrio casi igual entre los valores binarios.
+
+Y en general, las 5 variables categoricas restantes muestran una estratificación de las clases de datos casi perfecta, como se puede observar en el barplot de la variable "target" donde el equilibrio es muy exacto con una dispersion de 5220 a 5470.
+
+Por tanto, todas las clases estan proporcionalmente bien representadas en el dataset.
+
+# Análisis Bivariante
+
+## Análisis Categórico y numérico
+
+```{r}
+
+numeric_vars <- data %>% select_if(is.numeric)
+categorical_vars <- data %>% select_if(is.character)
+
+# Chi-cuadrado
+cat_names <- colnames(categorical_vars)
+chi_squared_results <- list()
+
+for (i in 1:(ncol(categorical_vars)-1)) {
+  for (j in (i+1):ncol(categorical_vars)) {
+    table <- table(categorical_vars[[i]], categorical_vars[[j]])
+    chi_test <- chisq.test(table)
+    chi_squared_results[[paste(cat_names[i], "vs", cat_names[j], sep = " ")]] <- chi_test
+  }
+}
+
+compact_results <- data.frame(
+  Variables = character(),
+  P_Value = numeric(),
+  Significance = character(),
+  stringsAsFactors = FALSE
+)
+
+for (result in names(chi_squared_results)) {
+  p_value <- chi_squared_results[[result]]$p.value
+  significance <- ifelse(p_value < 0.05, "Significant", "Not Significant")
+  if (significance == "Significant") {
+    compact_results <- rbind(compact_results, data.frame(
+      Variables = result, 
+      P_Value = p_value, 
+      Significance = significance
+    ))
+  }
+}
+
+print(compact_results)
+
+
+# Heatmap
+cor_matrix <- cor(numeric_vars)
+ggcorrplot(cor_matrix,
+           hc.order = TRUE,
+           type = "lower",
+           lab = TRUE,
+           lab_size = 3,
+           tl.cex = 1.2,
+           method = "circle",
+           colors = c("tomato2", "white", "springgreen3"),
+           title = "Mapa de Calor de Correlaciones",
+           ggtheme = theme_bw()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+        axis.text.y = element_text(size = 12))
+
+
+```
+
+Los test de chi-cuadrado muestran que de entre todas las variables categóricas hay 4 combinaciones que sí que parecen tener un patrón en común, lo que parece indicar una baja asociación en general entre las variables categóricas:
+
+```         
+- Target vs Genetic.Markers con **
+- Autoantibodies vs Early.Onset.Symptoms *
+- Environmental.Factors vs Smoking.Status * 
+- Previous.Gestational.Diabetes vs Urine.Test **
+```
+
+En cuanto al mapa de calor muestran en general correlaciones moderadas, excluyendo las dos variables con menor correlación general (Pancreatic.Health y Birth.Weight) las variables que muestran con el resto una mejor correlacion son Age, Waist.Circumference, Cholesterol.Levels y BMI y unos 5 puntos por debajo de correlación positiva Insulin.Levels. Cabe destacar la bajísima correlacion de Blood.Glucose.Levels, la cual llega a tener incluso una correlación negativa con Pancreatic.Health y Birth.weight.
+
+## Análisis cruzado
+
+```{r}
+
+numeric_vars <- colnames(numeric_vars)
+
+combinations <- list(
+  c("Target", "Genetic.Markers"),
+  c("Autoantibodies", "Early.Onset.Symptoms"),
+  c("Environmental.Factors", "Smoking.Status"),
+  c("Previous.Gestational.Diabetes", "Urine.Test")
+)
+
+anova_results <- data.frame(
+  Combination = character(),
+  Numerical_Variable = character(),
+  P_Value = numeric(),
+  Significance = character(),
+  stringsAsFactors = FALSE
+)
+
+for (comb in combinations) {
+  cat_var <- comb[2]
+  for (num_var in numeric_vars) {
+    formula <- as.formula(paste(num_var, "~", cat_var))
+    anova_result <- tryCatch(aov(formula, data = data), error = function(e) NULL)
+    
+    if (!is.null(anova_result)) {
+      p_value <- summary(anova_result)[[1]]["Pr(>F)"][1,1]
+      
+      significance <- ifelse(p_value < 0.001, "***", 
+                             ifelse(p_value < 0.01, "**", 
+                                    ifelse(p_value < 0.05, "*", "Not Significant")))
+      
+      anova_results <- rbind(anova_results, data.frame(
+        Combination = paste(comb[1], "vs", comb[2]),
+        Numerical_Variable = num_var,
+        P_Value = p_value,
+        Significance = significance
+      ))
+    }
+  }
+}
+
+print(anova_results)
+
+
+```
+
+En el análisis cruzado de las combinaciones binarias de variables categóricas que han demostrado tener cierta correlación mediante el test de chi-cuadrado junto con las 8 variables numéricas sujetas a estudio, solo una de todas las combinaciones hechas para el método estadístico usado (ANOVA, análisis de varianza) ha resultado tener un p-value válido aunque no muy significante (p \< 0,05), lo que podría significar un resultado aislado y anecdótico.
+
+# Análisis PCA
+
+## Resultados del PCA
+
+```{r}
+data_numeric <- data %>% select_if(is.numeric)
+pca_result <- PCA(data_numeric, graph = FALSE)
+fviz_eig(pca_result)
+fviz_pca_ind(pca_result, geom.ind = "point", col.ind = "cos2", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
+fviz_pca_var(pca_result, col.var = "contrib", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
+```
+
+Las variables que componen dim1 y dim2 son las 8 variables numéricas que se han analizado previamente.
+
+-   **Scree plot:**
+
+El gráfico revela que la primer componente principal explica el mayor porcentaje de varianza, aproximadamente el 55%. El segundo componente principal explica alrededor del 15% de la varianza. Los componentes restantes explican porcentajes progresivamente menores de la varianza, siendo el tercero alrededor del 10% y los demás explicando menos del 10% cada uno. Por tanto, se podria obtener un porcentaje muy alto conservando las 5 primeras componentes (alrededor del 85%) ya que de la 6 a la 9 la varianza disminuye de forma constante mostrando gran estabilidad.
+
+-   **Individuals - PCA:** Estan representados los valores de las dos componentes principales, que componen un 70% de la variabilidad total de los datos. Como aspectos clave cabe destacar:
+
+Agrupación Central: Hay una densa agrupación de puntos alrededor del centro, indicando que muchos individuos comparten características similares que son captadas por Dim1 y Dim2. Cabe destacar que conforme mas caracteristicas tienen comunes los individuos simultaneamente de las dos dimensiones, menor es el valor del cos2 tal como muestra el gradiente del color azul intenso del nucleo. Esto puede indicar que para representar correctamente este estrato de los datos seria necesario incluir otras componentes del dataset.
+
+Clusters: Se observan dos agrupaciones hacia los lados izquierdo y derecho del gráfico, lo que puede parece indicar cierta estratificación de los datos entre los individuos de la muestra.
+
+En resumen, se observa una buena representacion general, con una division clara de dos clusters y una baja calidad en la representacion de los casos en que los individuos comparten caracteristicas de dim1 y dim2.
+
+-   **Variables - PCA;** El estudio de correlación de variables con las componentes muestra que:
+
+Las variables que muestran una menor contribución (Por el gradiente de colores) en dim1 y dim2 son Pancreatic Health, Birth Weight, BMI y Insulin Levels. Y las que mas són Blood Pressure y Age. Por otro lado, en general todas tienen una buena representación en las componentes ya que todas comparten mas o menos una longitud en su vector parecida, siendo la variable mas diferencial Blood Glucose Levels.
+
+Las variables que muestran una menor correlacion con dim2 son precisamente aquellas con un menor valor del gradiente, es decir las que menos contribución aportan, Birth Weight y Pancreatic Health. El resto de variables muestran una buena correlación con dim1, con un intervalo del 0,5 al 0,75 a excepción de Blood Glucose Levels, la cual es la única variable en tener una correlación negativa con dim1 y una muy elevada (alrededor de 0,85) con dim2.
+
+En resumen, podemos concluir que Blood Glucose Levels es la única variable que muestra una gran discordancia con respecto a las demás variables que oscilan en intervalos del eje XY claramente delimitados.

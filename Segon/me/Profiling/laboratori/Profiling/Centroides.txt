@@ -1,0 +1,101 @@
+
+ Descriptive statistics by group 
+group: 1
+                           vars    n    mean      sd  median trimmed     mad   min
+Antiguedad.Trabajo            1 2831    9.31    8.60    7.00    8.15    7.41   0.0
+Plazo                         2 2831   46.63   14.60   48.00   48.60   17.79   6.0
+Edad                          3 2831   39.60   10.55   38.00   39.06   11.86  19.0
+Gastos                        4 2831   60.11   18.55   60.00   58.74   22.24  35.0
+Ingresos                      5 2831  135.94   84.77  125.00  129.17   59.30   0.0
+Patrimonio                    6 2831 5735.16 9995.30 4000.00 3937.57 5189.10   0.0
+Cargas.patrimoniales          7 2831  363.57 1116.45    0.00   76.88    0.00   0.0
+Importe.solicitado            8 2831 1030.52  455.14 1000.00 1008.03  444.78 100.0
+Precio.del.bien.financiado    9 2831 1467.57  611.29 1415.00 1424.15  413.65 175.0
+RatiFin                      10 2831   71.83   20.54   76.47   73.70   20.06   6.7
+                              max    range  skew kurtosis     se
+Antiguedad.Trabajo             48     48.0  1.17     1.19   0.16
+Plazo                          72     66.0 -0.79    -0.39   0.27
+Edad                           68     49.0  0.39    -0.72   0.20
+Gastos                        173    138.0  0.77     1.09   0.35
+Ingresos                      905    905.0  1.88     8.87   1.59
+Patrimonio                 200000 200000.0  7.36    90.64 187.86
+Cargas.patrimoniales        21400  21400.0  6.23    69.48  20.98
+Importe.solicitado           4500   4400.0  0.96     3.50   8.55
+Precio.del.bien.financiado  11140  10965.0  3.50    36.87  11.49
+RatiFin                       100     93.3 -0.74    -0.21   0.39
+---------------------------------------------------------------- 
+group: 2
+                           vars   n    mean       sd median trimmed     mad    min
+Antiguedad.Trabajo            1 644    8.23     8.18    5.0    7.01    5.93   0.00
+Plazo                         2 644   47.62    14.53   48.0   49.79   17.79   6.00
+Edad                          3 644   40.10     9.22   39.0   39.65   10.38  22.00
+Gastos                        4 644   61.72    21.31   60.0   59.76   22.24  35.00
+Ingresos                      5 644  138.04    99.33  124.5  130.21   74.87   0.00
+Patrimonio                    6 644 6270.69 12297.75 3000.0 3751.21 4447.80   0.00
+Cargas.patrimoniales          7 644  435.14  1438.06    0.0   92.38    0.00   0.00
+Importe.solicitado            8 644 1175.08   583.51 1100.0 1125.46  444.78 200.00
+Precio.del.bien.financiado    9 644 1618.38   797.48 1500.0 1528.35  492.22 200.00
+RatiFin                      10 644   74.45    19.61   80.0   76.42   17.02  16.11
+                              max     range  skew kurtosis     se
+Antiguedad.Trabajo             43     43.00  1.32     1.61   0.32
+Plazo                          60     54.00 -0.88    -0.23   0.57
+Edad                           65     43.00  0.41    -0.48   0.36
+Gastos                        180    145.00  1.11     2.37   0.84
+Ingresos                      959    959.00  1.82     9.90   3.91
+Patrimonio                 110000 110000.00  5.05    31.99 484.60
+Cargas.patrimoniales        20000  20000.00  7.15    74.94  56.67
+Importe.solicitado           5000   4800.00  1.50     5.36  22.99
+Precio.del.bien.financiado   6802   6602.00  2.38    10.23  31.42
+RatiFin                       100     83.89 -0.85     0.02   0.77
+---------------------------------------------------------------- 
+group: 3
+                           vars   n    mean       sd  median trimmed    mad    min
+Antiguedad.Trabajo            1 980    4.00     5.00    2.00    2.97   2.97   0.00
+Plazo                         2 980   45.12    14.81   48.00   46.78  17.79   6.00
+Edad                          3 980   27.82     7.82   26.00   26.52   5.93  18.00
+Gastos                        4 980   38.40     7.74   35.00   36.58   0.00  35.00
+Ingresos                      5 980  109.72    78.20   97.00  101.29  48.93   0.00
+Patrimonio                    6 980 3617.99 14566.24    0.00 1418.91   0.00   0.00
+Cargas.patrimoniales          7 980  216.74  1432.13    0.00    0.00   0.00   0.00
+Importe.solicitado            8 980  974.18   430.65 1000.00  957.70 444.78 100.00
+Precio.del.bien.financiado    9 980 1347.13   517.23 1330.00 1323.77 398.82 105.00
+RatiFin                      10 980   73.64    20.32   77.56   75.67  20.48  11.49
+                              max     range  skew kurtosis     se
+Antiguedad.Trabajo             35     35.00  2.14     5.16   0.16
+Plazo                          60     54.00 -0.63    -0.64   0.47
+Edad                           65     47.00  1.77     3.69   0.25
+Gastos                        105     70.00  3.54    17.59   0.25
+Ingresos                      857    857.00  2.59    14.51   2.50
+Patrimonio                 300000 300000.00 14.37   259.02 465.30
+Cargas.patrimoniales        30000  30000.00 14.64   265.36  45.75
+Importe.solicitado           4000   3900.00  0.75     2.57  13.76
+Precio.del.bien.financiado   4904   4799.00  1.16     5.35  16.52
+RatiFin                       100     88.51 -0.77    -0.11   0.65
+
+============  Vivienda  ================
+    Vivienda cluster
+1 escriptura       1
+2 escriptura       2
+3      pares       3
+
+
+============  Estado.civil  ================
+  Estado.civil cluster
+1        casat       1
+2        casat       2
+3       solter       3
+
+
+============  Registros  ================
+  Registros cluster
+1    reg_no       1
+2    reg_si       2
+3    reg_no       3
+
+
+============  Tipo.trabajo  ================
+  Tipo.trabajo cluster
+1         fixe       1
+2         fixe       2
+3         fixe       3
+

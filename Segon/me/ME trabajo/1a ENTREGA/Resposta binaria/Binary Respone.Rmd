@@ -1,0 +1,220 @@
+---
+title: "Binary Response"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    extra_dependencies: ["ragged2e"]
+date: "2024-11-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+\justifying
+
+
+## Introducció
+La finalitat d'aquest script és el de trobar un model que s'adjusti a les nostres dades i validar ho.  
+La variable a predir és Cholesterol.Category, una variable binaria amb dues categories, una per als individus amb valors de colesterol   considerats per sota del llindar de risk; i un altre per a tots aquells individus valors que superen aquest llindar.  
+Volem veure com les següents variables afecten al valor d'aquesta variable resposta:  
+- Age  
+- Blood.Pressure  
+- BMI  
+- Insulin.Levels  
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(car)
+library(logistf)
+library(pROC)
+
+data <- read.csv("base_trabajo.csv")
+data$Blood.Pressure <- as.numeric(as.character(data$Blood.Pressure))
+data$Insulin.Levels <- as.numeric(as.character(data$Insulin.Levels))
+data$BMI <- as.numeric(as.character(data$BMI))
+data$Cholesterol.Category <- as.factor(data$Cholesterol.Category)
+
+data$Cholesterol.Category <- relevel(data$Cholesterol.Category, ref = "Low")
+
+data$Cholesterol.Category <- ifelse(data$Cholesterol.Category == "High", 1, 
+                                    ifelse(data$Cholesterol.Category == "Low", 0, NA))
+```
+
+
+
+
+## Model amb dades desagregades
+Creem un primer model amb dades desagregades en el que intentem predir la variable Cholesterol.Category a partir de les nostres variables.  
+La predicció es realitza mitjançant la unió de la interacció de cadascuna de les variables que tenim amb la variable Age.
+
+```{r}
+m_desagregades <- glm(Cholesterol.Category ~  Age * Blood.Pressure + Age * BMI
+                                                + Age * Insulin.Levels,
+                      data = data,
+                      family = binomial(link = "logit"))
+summary(m_desagregades)
+```
+
+Podem veure com els p-valors de cadascuna de les variables i interaccions són inferior a 0.05. Això ens deixa veure que aquestes variables són significatives a l'hora de determinar el valor de la nostra variable resposta.  
+Veiem que mentres que les variables de manera individual mostren coeficients positius, fent que el valor de la variable resposta augmenti quan el seu ho fa, les 3 interaccions proposades tenen coeficients negatius, mostrant una relació inversa amb el creixement de Cholesterol.Category.  
+Per altra banda, el valor de la Deviancia Residual és considerablement inferior al de la Deviancia Nula. Això deixa veure que el model que té en compte les variables s'adjusta millor que el model nul.  
+El nostre model té una deviancia de 37847 i un total de 69992 graus de llibertat.  
+El valor del AIC ens permetrà comparar el nostre model amb un altre, sabent que com més petit el AIC, millor és l'adjust del model. 
+
+```{r, echo=FALSE}
+residualPlot(m_desagregades)
+```
+
+Tot i els bons resultats numérics proporcionats per el summary anterior, que mostren una considerable significacncia de les variables i un ajust correcte del model, amb aquest gràfic podem veure que aquest ajust no es bo.  
+Per començar, hauriem de veure com els residus es distribueixen al voltant de la linea horitzontal del 0. Tot i que en part del gràfic és així, es pot veure una corba clara, cosa que suggereix que el model no s'ajusta bé a totes les observacions.  
+A més, la forma de ventall, on els valors s'obren a mesura que augmenten, demostra heterocedasticitat, que la variància dels residus no és constant.  
+
+Per a intentar solucionar aquest problema hem tractat tant de incrementar el nombre de variables predictores com de disminuir-ho, així com aplicar transformacions a les variables per tractar de capturar millor la relació amb la resposta. De tota manera, cap de les opcions que hem considerat i intentat aplicar ha resultat per a eliminar el patró que es pot distinigir en el gràfic.  
+També hem considerat la opció de que l'error es trobi en la pròpia estructura de la nostra base de dades.  
+
+
+
+
+## Model amb dades agregades
+Creem un nou model amb dades agregades en el que intentem predir la variable Cholesterol.Category a partir de les nostres variables, però ara agregarem les dades respecte a les variables que utilitzarem.  
+La predicció es realitza mitjançant la unió de la interacció de cadascuna de les variables que tenim amb la variable Age.  
+
+```{r}
+dfAgreg <- with(data, aggregate(x = cbind(ypos = Cholesterol.Category, yneg = 
+                                            1 - Cholesterol.Category),
+                               by = list(Insulin.Levels = Insulin.Levels, 
+                                         Age = Age, BMI = BMI, 
+                                         Blood.Pressure = Blood.Pressure),
+                               FUN = sum))
+
+m_agregades <- glm(cbind(ypos, yneg) ~ Age * Blood.Pressure + Age * BMI 
+                                        + Age * Insulin.Levels, 
+                                  data = dfAgreg, 
+                                  family = binomial(link= "logit"))
+summary(m_agregades)
+```
+En aquest cas també podem veure com tots els valors són significatius, ja que tenen p-valors inferiors a 0.05  
+Les variables tenen coeficient positius i les interaccions negatius, igual que en el model desagregat. Aquests coeficients són exactament iguals que en el model de dades desagregat.  
+```{r, echo=FALSE}
+data.frame(
+  des = round(coef(m_desagregades), 3),  # Modelo desagregado (dis)
+  agr = round(coef(m_agregades), 3)      # Modelo agregado (agg)
+)
+```
+
+
+La única diferència que podem identificar en aquest model és una disminució de la Deviancia Residual respecte a la del model amb dades desagregades i els graus de llibertat:  
+
+```{r, echo=FALSE}
+c('D_Deviance'           = m_desagregades$deviance,
+  'D_Degrees of freedom' = m_desagregades$df.res)
+c('A_Deviance'           = m_agregades$deviance,
+  'A_Degrees of freedom' = m_agregades$df.res)
+```
+
+També podem comparar els valors AIC:  
+```{r, echo=FALSE}
+daic_value <- m_desagregades$aic
+cat("Valor AIC per al model desagregat:", daic_value, "\n")
+aaic_value <- m_agregades$aic
+cat("Valor AIC per al model agregat:", aaic_value, "\n")
+```
+
+Tot i que la diferencia és mínima, com que el valor AIC del model amb dades agregades és inferior al de les dades desagregades, considerem que el model amb dades agregades s'ajusta millor a les nostres dades que el model desagregat.  
+
+```{r}
+residualPlot(m_agregades)
+```
+
+En aquest gràfic ens tornem a trobar amb el fet de que el model podria no estar captant tota la informació de les dades, ja que es podria no estar ajustant correctament.  
+Podem veure que a la part dreta del gràfic, hi ha una gran concentració de residus que es desvien de la línea del 0.  
+A més, es detecta una possible heterocedasticitat, ja que els residus semblen mostrar una distribució més dispersa cap a un costat del gràfic, indicant una variació no constant al llarg dels valors predits.  
+Per tant obtenim les mateixes conclusions que amb el gràfic del model amb dades desagregades.
+
+
+Amb el model de dades agregades podem utilitzar un test amb l'estadístic de la deviancia per a comprobar si el nostre model s'adjusta a les dades.  
+
+\begin{center}
+$\bigg\{ \begin{array}{l} H_0:\text{El model s'adjusta a les dades} \\ H_1: \text{El model no s'adjusta a les dades} \end{array}$ 
+\end{center}
+
+```{r}
+deviance <- m_agregades$deviance # deviance
+df       <- m_agregades$df.res   # degrees of freedom
+1 - pchisq(deviance,df)        # p-value for hypothesis test
+```
+Aquest valor de 1 podria no ser real i no representar realment l'ajust del model.  
+Primerament, podria ser que aquest 1 es degués al fet de que la base de dades tingui un volum tan gran de dades (70000).  
+A més, un p-valor proper a 1 indica que la deviance del model és tan baixa que és molt improbable que la diferència respecte al model nul sigui significativa. En altres paraules, suggereix que el model no és millor que l'atzar.  
+Finalment, aquest 1 podria ser interpretat com que el model s'ajusta extremadament be a les dades, mentre que les proves anteriors deixen veure que no és així.  
+
+
+
+
+## Model penalitzat Firth
+Degut al fet de que ni el model de dades desagregades ni el de agregades han estat capaços d'ajustar correctament le dades, recurrirem a un model penalitzat Firth per a tractar d'obtenir un model que ens permeti predir la nostra variable resposta. Per fer-ho, primer creem el nostre model:  
+
+```{r}
+m_firth <- logistf(Cholesterol.Category ~ Age * Blood.Pressure + Age * BMI 
+                                            + Age * Insulin.Levels, data = data)
+summary(m_firth)
+```
+Els p-valors (p) i Chisq tenen valors extrems, 0 per els primers y Infinit per als segons. Això és altament probable que sigui degut al gran nombre d'observacions de la nostra base de dades, per lo que no representa una incoherència o un problema.  
+
+Un cop tenim el nostre model creat, fem una serie de prediccions de la variable reposta amb el nostre model penalitzat.  
+```{r}
+prediccions_firth <- predict(m_firth, newdata = data, type = "response")
+head(prediccions_firth)
+```
+Observem algunes d'aquestes prediccions.  
+Un valor de 0.7, per exemple, ens està explicant que el model assigna una probabilitat del 70% a què una observació específica pertanyi a la categoria positiva, en aquest cas, pertanyer a la categoria corresponent a High.  
+
+
+
+
+## Validació
+Com que aquest model sembla correcte y no ens causa cap incoheréncia, procedirem a validarlo com el nostre model per a predir la variable Cholesterol.Levels.  
+
+Primerament, emplearem una corba ROC (Receiver Operating Characteristic) i el seu AUC (Area Under the Curve) per a comprobar la qualitat de les prediccions del model:  
+
+```{r}
+roc_curve <- roc(data$Cholesterol.Category, prediccions_firth)
+plot(roc_curve, main = "ROC Curve - Model de Firth")
+```
+
+Veiem que la corba s'apropa a l'angle superior esquerre del gràfic, cosa que indica que el model té una bona capacitat de discriminació entre les dues categories.  
+Com més lluny estigui la corba de la línia diagonal (línia de l'atzar), millor és el rendiment del model.  
+
+Veirem ara el valor AUC: 
+
+```{r}
+auc(roc_curve)
+```
+Aquest valor s'interpreta com un molt bon (quasi excel·lent (<0.9)) rendiment.  
+
+
+Tenint en compte això, el model de Firth sembla tenir un bon rendiment, ja que la corba ROC es troba ben per sobre de la línia de l'atzar i l'AUC és elevada. Això indica que el model pot distingir de manera efectiva entre les dues categories de la variable de resposta (High i Low).  
+
+Comprobarem també el gràfic següen per a donar més suport a la validació del nostre model:  
+```{r}
+plot(prediccions_firth, main = "Prediccions del Model de Firth",
+                        ylab = "Probabilitats Predites")
+```
+Eix X (Index): Representa l'índex de les observacions al conjunt de dades. Cada punt en l'eix X és una observació diferent.  
+Eix Y (Probabilitats predites): Representa la probabilitat predita que cada observació pertanyi a la categoria High en la variable Cholesterol.Category.  
+
+El gràfic mostra una gran dispersió de les probabilitats entre 0 i 1, amb una major concentració de punts a la part inferior del gràfic (prop de 0). Això indica que per moltes observacions, el model prediu una baixa probabilitat d'estar en la categoria High. Aquesta característica podria ser donada pel fet de que a la nostra base de dades, hi ha una quantitat significativament major de valors Low que dels que hi ha de High per a la variable Cholesterol.Category.  
+
+
+
+
+## Conclusions
+1. Els models de dades desagregades i agregades presenten una sèrie de problemes que deixen veure una molt possible falta d'ajust del model a les dades. Principalment, els ResidualPlots de ambdos models deixan veure un cert patró i un problema de falta de linealitat i homocedasticitat. A més, els resultats dels tests de bondat de l'ajust, com la deviance i els p-valors, mostren incoherències, com ara valors extrems o p-valors que suggereixen un model molt ajustat o massa permissiu, fets que es contrdiuen amb els resultats del gràfics, que pot ser degut a la grandària de la mostra o a possibles problemes de separació de dades.  
+
+2. Com a solució, el model penalitzat Firth que s'ha proposat sembla donar un ajust considerable a les dades, deixant enrera el molt probable error de separació que es presentava en els models anteriorment tractats i que, molt probablement, podia ser degut a la estructura de la propia variable resposta o del conjunt de la base de dades. Els resultats de la corba ROC i l'AUC respalden el fet de que el model de Firth té una bona capacitat discriminativa. A més, tenint en compte la distribució de les categories de la variable resposta, els resultats gràfics que obtenim mostren coheréncia.  
+
+
+
+
+
+
+
